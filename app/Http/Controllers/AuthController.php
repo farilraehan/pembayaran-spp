@@ -2,49 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // TAMPILKAN FORM LOGIN
     public function index()
     {
         return view('auth.login');
     }
 
-    // PROSES LOGIN
     public function login(Request $request)
-    {
-        // Validasi input
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+{
+    $request->validate([
+        'username' => 'required',
+        'password' => 'required',
+    ]);
 
-        // Coba login
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+    $user = User::where('username', $request->username)
+                ->where('password', $request->password)
+                ->first();
 
-            // Setelah login, arahkan ke dashboard
-            return redirect()->intended('/app/dashboard');
-        }
-
-        // Kalau gagal
-        return back()->withErrors([
-            'email' => 'Email atau password salah.',
-        ])->onlyInput('email');
+    if (!$user) {
+        return redirect()->back()->with('error', 'Username atau password salah');
     }
 
-    // LOGOUT
-    public function logout(Request $request)
+    Auth::login($user);
+
+    return redirect('/app/dashboard')->with(
+        'success',
+        'Selamat datang ' . ($user->nama ?? $user->name ?? 'Pengguna')
+    );
+}
+
+
+    public function logout()
     {
         Auth::logout();
+        session()->flush();
+        session()->regenerate();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        // Setelah logout, kembali ke halaman login
-        return redirect('/auth');
+        return response()->json([
+            'success' => true,
+            'msg' => 'Anda telah berhasil keluar',
+            'redirect' => url('/auth'),
+        ]);
     }
 }
