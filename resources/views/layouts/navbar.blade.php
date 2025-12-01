@@ -102,10 +102,28 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item d-flex align-items-center">
-                <a href="/pages/sign-in.html" class="nav-link text-body font-weight-bold px-0">
+            <li class="nav-item dropdown pe-3 d-flex align-items-center">
+                <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                     <i class="material-symbols-rounded">account_circle</i>
                 </a>
+                <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+                    <li class="mb-2">
+                        <a class="dropdown-item border-radius-md d-flex align-items-center" href="/profil">
+                            <i class="material-symbols-rounded me-2">person</i>
+                            <span>Profil</span>
+                        </a>
+                    </li>
+                    <li>
+                        <form action="/logout" method="POST">
+                            @csrf
+                            <button type="submit" class="dropdown-item border-radius-md d-flex align-items-center">
+                                <i class="material-symbols-rounded me-2">logout</i>
+                                <span>Logout</span>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
