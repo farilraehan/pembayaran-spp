@@ -7,54 +7,27 @@
             </a>
         </li>
         <li class="nav-item">
+            <a class="nav-link text-dark" href="../pages/virtual-reality.html">
+                <i class="material-symbols-rounded opacity-5">view_in_ar</i>
+                <span class="nav-link-text ms-1">Daftar Siswa</span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link text-dark" href="../pages/tables.html">
                 <i class="material-symbols-rounded opacity-5">table_view</i>
-                <span class="nav-link-text ms-1">Tables</span>
+                <span class="nav-link-text ms-1">Jenis Biaya</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" href="../pages/billing.html">
                 <i class="material-symbols-rounded opacity-5">receipt_long</i>
-                <span class="nav-link-text ms-1">Billing</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" href="../pages/virtual-reality.html">
-                <i class="material-symbols-rounded opacity-5">view_in_ar</i>
-                <span class="nav-link-text ms-1">Virtual Reality</span>
+                <span class="nav-link-text ms-1">Pembayaran Siswa</span>
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark" href="../pages/rtl.html">
                 <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
-                <span class="nav-link-text ms-1">RTL</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" href="../pages/notifications.html">
-                <i class="material-symbols-rounded opacity-5">notifications</i>
-                <span class="nav-link-text ms-1">Notifications</span>
-            </a>
-        </li>
-        <li class="nav-item mt-3">
-            <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Account pages</h6>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" href="../pages/profile.html">
-                <i class="material-symbols-rounded opacity-5">person</i>
-                <span class="nav-link-text ms-1">Profile</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" href="../pages/sign-in.html">
-                <i class="material-symbols-rounded opacity-5">login</i>
-                <span class="nav-link-text ms-1">Sign In</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark" href="../pages/sign-up.html">
-                <i class="material-symbols-rounded opacity-5">assignment</i>
-                <span class="nav-link-text ms-1">Sign Up</span>
+                <span class="nav-link-text ms-1">Laporan Keuangan</span>
             </a>
         </li>
     </ul>
