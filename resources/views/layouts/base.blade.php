@@ -142,6 +142,8 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/assets/js/core/popper.min.js"></script>
     <script src="/assets/js/core/bootstrap.min.js"></script>
     <script src="/assets/js/plugins/perfect-scrollbar.min.js"></script>
@@ -393,6 +395,38 @@
     </script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="/assets/js/material-dashboard.min.js?v=3.2.0"></script>
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: "{{ session('success') }}",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        </script>
+    @endif
+    <script>
+        $('.btn-logout').on('click', function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: "Keluar dari aplikasi?",
+                text: "Anda akan logout dari sistem.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Ya, logout",
+                cancelButtonText: "Batal",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#formLogout').submit();
+                }
+            });
+        });
+    </script>
     @yield('script')
 </body>
 

@@ -115,9 +115,10 @@
                         </a>
                     </li>
                     <li>
-                        <form action="/logout" method="POST">
+                        <form id="formLogout" action="/app/logout" method="POST">
                             @csrf
-                            <button type="submit" class="dropdown-item border-radius-md d-flex align-items-center">
+                            <button type="button"
+                                class="dropdown-item border-radius-md d-flex align-items-center btn-logout">
                                 <i class="material-symbols-rounded me-2">logout</i>
                                 <span>Logout</span>
                             </button>

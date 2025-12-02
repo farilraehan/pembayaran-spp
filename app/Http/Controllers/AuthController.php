@@ -15,39 +15,35 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $request->validate([
-        'username' => 'required',
-        'password' => 'required',
-    ]);
+    {
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
 
-    $user = User::where('username', $request->username)
-                ->where('password', $request->password)
-                ->first();
+        $user = User::where('username', $request->username)
+                    ->where('password', $request->password)
+                    ->first();
 
-    if (!$user) {
-        return redirect()->back()->with('error', 'Username atau password salah');
+        if (!$user) {
+            return redirect()->back()->with('error', 'Username atau password salah');
+        }
+
+        Auth::login($user);
+
+        return redirect('/app/dashboard')->with(
+            'success',
+            'Selamat datang ' . ($user->nama ?? $user->name ?? 'Pengguna')
+        );
     }
-
-    Auth::login($user);
-
-    return redirect('/app/dashboard')->with(
-        'success',
-        'Selamat datang ' . ($user->nama ?? $user->name ?? 'Pengguna')
-    );
-}
 
 
     public function logout()
-    {
-        Auth::logout();
-        session()->flush();
-        session()->regenerate();
+{
+    Auth::logout();
+    session()->invalidate();
+    session()->regenerateToken();
+    return redirect('/')->with('success', 'Anda telah berhasil keluar');
+}
 
-        return response()->json([
-            'success' => true,
-            'msg' => 'Anda telah berhasil keluar',
-            'redirect' => url('/auth'),
-        ]);
-    }
 }
