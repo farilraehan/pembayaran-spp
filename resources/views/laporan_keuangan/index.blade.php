@@ -61,8 +61,12 @@
             });
         });
 
-        flatpickr(".datepicker", {
+        flatpickr('.datepicker', {
             dateFormat: "Y-m-d"
+        });
+
+        $('.datepicker').on('change', function() {
+            $(this).parent().addClass('is-filled');
         });
     </script>
 @endsection
