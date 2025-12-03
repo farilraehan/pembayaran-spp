@@ -3,6 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\KeuanganBayarController;
+use App\Http\Controllers\KeuanganJenisController;
+use App\Http\Controllers\SiswaController;
+use App\Http\Controllers\LaporanController;
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
 
@@ -10,5 +15,16 @@ Route::post('/auth/login', [AuthController::class, 'login'])->name('auth.login')
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::get('/profile', [ProfilController::class, 'index']);
+
+    Route::resource('/keuangan-bayar', KeuanganBayarController::class);
+
+    Route::resource('/keuangan-jenis', KeuanganJenisController::class);
+
+    Route::resource('/siswa', SiswaController::class);
+
+    Route::get('/laporan-keuangan', [LaporanController::class, 'index']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
 });

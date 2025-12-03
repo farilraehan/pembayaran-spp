@@ -12,7 +12,9 @@ class SiswaController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Siswa1';
+
+        return view('siswa.index', compact('title'));
     }
 
     /**

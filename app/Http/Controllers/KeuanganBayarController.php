@@ -12,7 +12,8 @@ class KeuanganBayarController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Pembayaran SPP - Keuangan Bayar';
+        return view('pembayaran.index', compact('title'));
     }
 
     /**

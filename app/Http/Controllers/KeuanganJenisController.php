@@ -12,7 +12,9 @@ class KeuanganJenisController extends Controller
      */
     public function index()
     {
-        //
+        $title = 'Jenis Keuangan';
+
+        return view('jenis_keuangan.index', compact('title'));
     }
 
     /**

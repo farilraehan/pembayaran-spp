@@ -109,7 +109,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
                     <li class="mb-2">
-                        <a class="dropdown-item border-radius-md d-flex align-items-center" href="/profil">
+                        <a class="dropdown-item border-radius-md d-flex align-items-center" href="/app/profile">
                             <i class="material-symbols-rounded me-2">person</i>
                             <span>Profil</span>
                         </a>
