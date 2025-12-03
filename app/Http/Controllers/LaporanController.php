@@ -8,6 +8,7 @@ class LaporanController extends Controller
 {
     public function index()
     {
+        $title = 'Laporan Keuangan';
         return view('Laporan_Keuangan.index');
     }
 }
