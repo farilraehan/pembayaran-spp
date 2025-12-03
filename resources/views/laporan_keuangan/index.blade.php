@@ -1,58 +1,87 @@
 @extends('layouts.base')
 @section('content')
-    <div class="row">
-        <div class="ms-3">
-            <h3 class="mb-0 h4 font-weight-bolder">Laporan Keuangan</h3>
-        </div>
-        <div class="col-12">
-            <div class="card my-4">
-                <div class="card-body px-0 pb-2">
-                    <div class="table-responsive p-3">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <label class="form-label">Periode Laporan</label>
-                                <div class="d-flex gap-2">
-                                    <div class="input-group input-group-outline mb-3">
-                                        <label class="form-label">tanggal awal</label>
-                                        <input type="text" class="form-control datepicker">
-                                    </div>
-                                    <span class="d-flex align-items-center">s.d</span>
-                                    <div class="input-group input-group-outline mb-3">
-                                        <label class="form-label">tanggal akhir</label>
-                                        <input type="text" class="form-control datepicker">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Tahun Akademik</label>
-                                <select class="form-control select2" name="state">
-                                    <option value="AL">Alabama</option>
-                                    ...
-                                    <option value="WY">Wyoming</option>
-                                </select>
-                            </div>
+    <div class="card">
+        <div class="card-body">
+            <form action="/pelaporan/preview" method="GET" target="_blank">
+                <div id="laporanRow" class="row g-3 align-items-end mt-2">
+                    <div class="row g-3">
+                        {{-- Tahun --}}
+                        <div class="col-md-4">
+                            <label class="form-label">Pilih Tahun</label>
+                            <select name="tahun" class="form-select select2">
+                                @for ($i = 2020; $i <= date('Y'); $i++)
+                                    <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>
+                                        {{ $i }}</option>
+                                @endfor
+                            </select>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="form-label">Jenis Laporan</label>
-                                <select class="form-control select2" name="state">
-                                    <option value="AL">Alabama</option>
-                                    ...
-                                    <option value="WY">Wyoming</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Kelas</label>
-                                <select class="form-control select2" name="state">
-                                    <option value="AL">Alabama</option>
-                                    ...
-                                    <option value="WY">Wyoming</option>
-                                </select>
-                            </div>
+
+                        {{-- Bulan --}}
+                        <div class="col-md-4">
+                            <label class="form-label"> Pilih Bulan</label>
+                            <select name="bulan" class="form-select select2">
+                                @foreach ([
+            '01' => 'JANUARI',
+            '02' => 'FEBRUARI',
+            '03' => 'MARET',
+            '04' => 'APRIL',
+            '05' => 'MEI',
+            '06' => 'JUNI',
+            '07' => 'JULI',
+            '08' => 'AGUSTUS',
+            '09' => 'SEPTEMBER',
+            '10' => 'OKTOBER',
+            '11' => 'NOVEMBER',
+            '12' => 'DESEMBER',
+        ] as $num => $name)
+                                    <option value="{{ $num }}" {{ $num == date('m') ? 'selected' : '' }}>
+                                        {{ $num }}.
+                                        {{ $name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+
+                        <div class="col-md-4 mb-3" style="padding-right: 10px;">
+                            <label class="form-label">Pilih Hari</label>
+                            <select name="hari" class="form-select select2">
+                                <option value="">---</option>
+                                @for ($i = 1; $i <= 31; $i++)
+                                    <option value="{{ $i }}">{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <div id="colLaporan" class="col-md-6 mb-3" style="padding-left: 10px;">
+                            <label class="form-label"> Pilih Nama Laporan</label>
+                            <select id="laporan" name="laporan" class="form-select select2">
+                                <option value="">---</option>
+                                @foreach ($laporan as $item)
+                                    <option value="{{ $item->file }}"
+                                        {{ request('laporan') == $item->file ? 'selected' : '' }}>
+                                        {{ $item->nama_laporan }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{-- Sub Laporan --}}
+                        <div id="subLaporan" class="col-md-6">
+                            <label class="form-label"> Pilih Nama Sub Laporan</label>
+                            <select name="sub_laporan" id="sub_laporan" class="form-select select2">
+                                <option value="">---</option>
+                            </select>
                         </div>
                     </div>
-                </div>
-            </div>
+
+                    <div class="col-12">
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                            <button type="submit" name="action" value="excel" class="btn btn-success">Excel</button>
+                            <button type="submit" name="action" value="preview" class="btn btn-primary">Preview</button>
+                        </div>
+                    </div>
+            </form>
         </div>
     </div>
 @endsection
