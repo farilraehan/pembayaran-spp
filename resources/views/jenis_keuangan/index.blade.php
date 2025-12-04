@@ -1,221 +1,44 @@
 @extends('layouts.base')
 @section('content')
     <div class="row">
+        <div class="ms-3 ">
+            <h3 class="mb-0 h4 font-weight-bolder">Jenis Biaya</h3>
+            <p class="mb-4">Management System Pembayaran SPP</p>
+        </div>
+
         <div class="col-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div
                         class="bg-gradient-dark shadow-secondary border-radius-lg pt-3 pb-1 d-flex justify-content-between align-items-center">
-                        <h6 class="text-white text-capitalize ps-3">Jenis Keuangan</h6>
-                        <div class="pe-3">
-                            <a href="#" class="btn btn-sm btn-light text-dark">
-                                + Tambah Data
-                            </a>
-                            <a href="#" class="btn btn-sm btn-info text-dark">
+                        <h6 class="text-white text-capitalize ps-3" id="headerTitle">
+                            Jenis dan Nominal Pembayaran <span id="titleYear" class="text-muted"></span>
+                        </h6>
+                        <div class="d-flex align-items-center gap-3 pe-3">
+                            <label class="text-white mb-0">Angkatan :</label>
+                            <div class="input-group input-group-static" style="width: 150px;">
+                                <label class="form-label active">Tahun</label>
+                                <input type="number" class="form-control tahun text-white">
+                            </div>
+                            <button id="Filter_angkatan" class="btn btn-info text-white px-4">
                                 Lihat
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="card-body px-0 pb-2">
-                    <div class="table-responsive p-0">
-                        <table class="table align-items-center mb-0">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="keuangan" class="table align-items-center table-striped">
                             <thead>
                                 <tr>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Author
-                                    </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Function</th>
-                                    <th
-                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Status</th>
-                                    <th
-                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Employed</th>
-                                    <th class="text-secondary opacity-7"></th>
+                                    <th>No</th>
+                                    <th>Angkatan</th>
+                                    <th>Jenis Pembayaran</th>
+                                    <th>Nominal</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="../assets/img/team-2.jpg"
-                                                    class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">John Michael</h6>
-                                                <p class="text-xs text-secondary mb-0">john@creative-tim.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Manager</p>
-                                        <p class="text-xs text-secondary mb-0">Organization</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-success">Online</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">23/04/18</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="../assets/img/team-3.jpg"
-                                                    class="avatar avatar-sm me-3 border-radius-lg" alt="user2">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Alexa Liras</h6>
-                                                <p class="text-xs text-secondary mb-0">alexa@creative-tim.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Programator</p>
-                                        <p class="text-xs text-secondary mb-0">Developer</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-secondary">Offline</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">11/01/19</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="../assets/img/team-4.jpg"
-                                                    class="avatar avatar-sm me-3 border-radius-lg" alt="user3">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Laurent Perrier</h6>
-                                                <p class="text-xs text-secondary mb-0">laurent@creative-tim.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Executive</p>
-                                        <p class="text-xs text-secondary mb-0">Projects</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-success">Online</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">19/09/17</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="../assets/img/team-3.jpg"
-                                                    class="avatar avatar-sm me-3 border-radius-lg" alt="user4">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Michael Levi</h6>
-                                                <p class="text-xs text-secondary mb-0">michael@creative-tim.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Programator</p>
-                                        <p class="text-xs text-secondary mb-0">Developer</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-success">Online</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">24/12/08</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="../assets/img/team-2.jpg"
-                                                    class="avatar avatar-sm me-3 border-radius-lg" alt="user5">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Richard Gran</h6>
-                                                <p class="text-xs text-secondary mb-0">richard@creative-tim.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Manager</p>
-                                        <p class="text-xs text-secondary mb-0">Executive</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-secondary">Offline</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">04/10/21</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div>
-                                                <img src="../assets/img/team-4.jpg"
-                                                    class="avatar avatar-sm me-3 border-radius-lg" alt="user6">
-                                            </div>
-                                            <div class="d-flex flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Miriam Eric</h6>
-                                                <p class="text-xs text-secondary mb-0">miriam@creative-tim.com</p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <p class="text-xs font-weight-bold mb-0">Programator</p>
-                                        <p class="text-xs text-secondary mb-0">Developer</p>
-                                    </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <span class="badge badge-sm bg-gradient-secondary">Offline</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">14/09/20</span>
-                                    </td>
-                                    <td class="align-middle">
-                                        <a href="javascript:;" class="text-secondary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit user">
-                                            Edit
-                                        </a>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -223,4 +46,165 @@
             </div>
         </div>
     </div>
+
+    <!-- Toast Notification -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+        <div class="toast fade hide p-2 mt-2 bg-white" role="alert" aria-live="assertive" id="warningToast"
+            aria-atomic="true">
+            <div class="toast-header border-0">
+                <i class="material-symbols-rounded text-warning me-2">travel_explore</i>
+                <span class="me-auto font-weight-bold">Sistem Akademik</span>
+                <small class="text-body">Now</small>
+                <i class="fas fa-times text-md ms-3 cursor-pointer" data-bs-dismiss="toast" aria-label="Close"></i>
+            </div>
+            <div class="toast-body text-dark">
+                "Maaf! Tidak ada data untuk ditampilkan".
+            </div>
+        </div>
+    </div>
+
+
+    <form action="" method="post" id="FormHapusBiaya">
+        @method('DELETE')
+        @csrf
+    </form>
+@endsection
+
+@section('script')
+    <script>
+        //index
+        $(document).ready(function() {
+            let currentYear = new Date().getFullYear();
+
+            $('.tahun').each(function() {
+                $(this).val(currentYear);
+                $(this).closest('.input-group-static').addClass('is-filled');
+            });
+            $('#titleYear').text(currentYear);
+
+            const table = $('#keuangan').DataTable({
+                dom: '<"row mb-3"<"col-md-6"l><"col-md-6">>rt<"row mt-3"<"col-md-5"i><"col-md-7"p>>',
+                processing: true,
+                serverSide: true,
+                language: {
+                    emptyTable: "Hello, Maaf! Data kosong"
+                },
+                ajax: {
+                    url: '/app/keuangan-nominal',
+                    data: function(d) {
+                        d.tahun = $('.tahun').val();
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        width: '5%'
+                    },
+                    {
+                        data: 'angkatan',
+                        name: 'angkatan',
+                        className: 'text-start ps-4'
+                    },
+                    {
+                        data: 'nama_jenis',
+                        name: 'nama_jenis',
+                        className: 'text-start'
+                    },
+                    {
+                        data: 'total_beban',
+                        name: 'total_beban',
+                        className: 'text-end pe-4'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        width: '15%',
+                        className: 'text-center'
+                    },
+                ]
+            });
+
+            $('#Filter_angkatan').on('click', function() {
+                const selectedYear = $('.tahun').val();
+                $('#titleYear').text(selectedYear);
+
+                table.ajax.reload();
+            });
+
+            $('#keuangan').on('xhr.dt', function(e, settings, json, xhr) {
+                if (!json.data || json.data.length === 0) {
+                    const toastEl = document.getElementById('warningToast');
+                    const toast = new bootstrap.Toast(toastEl);
+                    toast.show();
+                }
+            });
+
+        });
+        //hapus
+        $(document).on('click', '.btnDelete', function(e) {
+            e.preventDefault();
+
+            var hapus_id = $(this).attr('data-id');
+            var actionUrl = '/app/keuangan-nominal/' + hapus_id;
+
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Data akan dihapus secara permanen dari aplikasi dan tidak bisa dikembalikan!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Hapus",
+                cancelButtonText: "Batal",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var form = $('#FormHapusBiaya');
+                    $.ajax({
+                        type: form.attr('method'),
+                        url: actionUrl,
+                        data: form.serialize(),
+                        success: function(result) {
+                            if (result.success) {
+                                Swal.fire({
+                                    title: "Berhasil!",
+                                    text: result.msg,
+                                    icon: "success",
+                                    confirmButtonText: "OK"
+                                }).then((res) => {
+                                    if (res.isConfirmed) {
+                                        window.location.reload();
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: result.msg,
+                                    icon: "info",
+                                    confirmButtonText: "OK"
+                                });
+                            }
+                        },
+                        error: function(response) {
+                            Swal.fire({
+                                title: "Error",
+                                text: "Terjadi kesalahan pada server. Silakan coba lagi.",
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: "Dibatalkan",
+                        text: "Data tidak jadi dihapus.",
+                        icon: "info",
+                        confirmButtonText: "OK"
+                    });
+                }
+            });
+        });
+    </script>
 @endsection

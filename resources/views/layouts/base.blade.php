@@ -9,6 +9,7 @@
     <title>{{ env('APP_NAME') }} | {{ $title ?? 'Dashboard' }}</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900">
     <link rel="stylesheet" href="/assets/css/nucleo-icons.css">
     <link rel="stylesheet" href="/assets/css/nucleo-svg.css">
@@ -23,7 +24,70 @@
         .swal2-container {
             z-index: 99999 !important;
         }
+
+        .dataTables_wrapper .dataTables_paginate {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+            align-items: center;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            transition: background-color 0.3s, transform 0.2s;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.05);
+            color: inherit !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover:not(.disabled) {
+            background-color: rgba(186, 186, 186, 0.315);
+            transform: scale(1.1);
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: linear-gradient(to bottom, rgba(171, 168, 168, 0) 0%, rgba(203, 24, 24, 0.05) 100%);
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+            cursor: default;
+            color: #666 !important;
+            border: 1px solid transparent;
+            background: #eb1d1d00;
+            box-shadow: none;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .previous,
+        .dataTables_wrapper .dataTables_paginate .next {
+            border-radius: 4px;
+            width: auto;
+            height: auto;
+            padding: 4px 12px;
+            margin: 0 3px;
+            background: #f0f0f0;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            color: inherit !important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .previous:hover:not(.disabled),
+        .dataTables_wrapper .dataTables_paginate .next:hover:not(.disabled) {
+            background-color: rgba(186, 186, 186, 0.3);
+        }
     </style>
+
     @yield('style')
 </head>
 
@@ -42,7 +106,7 @@
         @include('layouts.sidebar')
     </aside>
 
-    <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg">
+    <main class="main-content position-relative ">
         <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur"
             data-scroll="true">
             @include('layouts.navbar')
@@ -64,6 +128,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>

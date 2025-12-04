@@ -5,7 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\KeuanganBayarController;
-use App\Http\Controllers\KeuanganJenisController;
+use App\Http\Controllers\KeuanganNominalController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\LaporanController;
 
@@ -20,7 +20,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::resource('/keuangan-bayar', KeuanganBayarController::class);
 
-    Route::resource('/keuangan-jenis', KeuanganJenisController::class);
+    Route::resource('/keuangan-nominal', KeuanganNominalController::class);
 
     Route::resource('/siswa', SiswaController::class);
 
