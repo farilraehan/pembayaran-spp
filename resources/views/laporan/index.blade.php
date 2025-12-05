@@ -2,7 +2,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
-            <form action="/pelaporan/preview" method="GET" target="_blank">
+            <form action="/app/pelaporan/preview" method="GET" target="_blank">
                 <div id="laporanRow" class="row g-3 align-items-end mt-2">
                     <div class="row g-3">
                         {{-- Tahun --}}

@@ -25,6 +25,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/siswa', SiswaController::class);
 
     Route::get('/laporan-keuangan', [LaporanController::class, 'index']);
+    Route::get('/pelaporan/preview', [LaporanController::class, 'preview']);
+    Route::get('/pelaporan/sub_laporan/{file}', [LaporanController::class, 'subLaporan']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 });
