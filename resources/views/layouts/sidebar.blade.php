@@ -17,7 +17,7 @@
                 <ul class="nav ms-4">
                     <li class="nav-item">
                         <a class="nav-link text-dark py-2" href="/app/siswa/create">
-                            <span class="sidenav-normal">Create Data Siswa</span>
+                            <span class="sidenav-normal">Tambah Data Siswa</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -39,7 +39,7 @@
                 <ul class="nav ms-4">
                     <li class="nav-item">
                         <a class="nav-link text-dark py-2" href="/app/keuangan-nominal/create">
-                            <span class="sidenav-normal">Create Jenis Bayar</span>
+                            <span class="sidenav-normal">Tambah Jenis Bayar</span>
                         </a>
                     </li>
                     <li class="nav-item">

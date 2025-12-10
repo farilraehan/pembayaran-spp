@@ -22,6 +22,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::resource('/keuangan-nominal', KeuanganNominalController::class);
 
+    Route::get('/siswa/listTahun', [SiswaController::class, 'listTahun']);
+    Route::get('/siswa/listKelas', [SiswaController::class, 'listKelas']);
+    Route::get('/siswa/printSiswa', [SiswaController::class, 'printSiswa']);
     Route::resource('/siswa', SiswaController::class);
 
     Route::get('/laporan-keuangan', [LaporanController::class, 'index']);

@@ -53,7 +53,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end mt-3">
+                        <div class="d-flex justify-content-end mt-3 gap-2">
+                            <a href="/app/keuangan-nominal" class="btn btn-secondary ">kembali</a>
                             <button type="submit" class="btn btn-info" id="simpan">Update Data</button>
                         </div>
                     </form>
