@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Keuangan_nominal;
 use App\Models\Keuangan_jenis;
+use App\Models\Rekening;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -53,9 +54,10 @@ class KeuanganNominalController extends Controller
     public function create()
     {
         $keuangan_jenis = Keuangan_jenis::get();
+        $rekening = keuangan_jenis::get();
 
         $title = 'Tambah Nominal Keuangan';
-        return view('jenis_keuangan.create', compact('title', 'keuangan_jenis'));
+        return view('jenis_keuangan.create', compact('title', 'keuangan_jenis','rekening'));
     }
 
     /**

@@ -23,6 +23,8 @@
                             <button id="Filter_angkatan" class="btn btn-info text-white px-4">
                                 Lihat
                             </button>
+                            {{-- <a href="/app/keuangan-nominal/create"class="btn btn-primary text-white px-4">Tambah Jenis
+                                Bayar</a> --}}
                         </div>
                     </div>
                 </div>
