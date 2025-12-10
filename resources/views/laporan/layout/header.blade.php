@@ -19,20 +19,26 @@
 </head>
 
 <body>
-    <table width="100%">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
         <tr>
-            <td width="70">
-
+            <td style="width:0.1%; padding:0; vertical-align:middle;">
                 @if (!empty($logo))
-                    <img src="data:image/{{ $logo_type }};base64,{{ $logo }}" height="70">
+                    <img src="data:image/{{ $logo_type }};base64,{{ $logo }}" height="100"
+                        style="display:block; margin:0;">
                 @endif
             </td>
-            <td align="left">
-                <div><b>PEMBAYARAN SPP</b></div>
-                <div style="font-size: 10px; color: grey;"><i>alamat,</i></div>
+            <td style="padding:0; margin:0; vertical-align:middle;">
+                <div style="font-weight:bold;font-size:18px;line-height:1;margin:0 0 0 -12px;">
+                    SABIT<br>PEMBAYARAN SPP
+                </div>
+                <div style="font-size:10px;color:grey; line-height:1;margin:0 0 0 -12px;">
+                    <i>alamat</i>
+                </div>
             </td>
         </tr>
     </table>
+
+
 
     <!-- Garis di bawah -->
     <div class="footer-line"></div>
