@@ -17,7 +17,7 @@
                 </div>
                 <br>
                 <div class="card-body">
-                    <form id="FormJenisBiaya" method="POST" action="/app/keuangan-nominal/{{ $keuangan_nominal->id }}"
+                    <form id="FormJenisBiaya" method="POST" action="/app/keuangan-nominal/{{ $jenis_biaya->id }}"
                         class="text-start">
                         @csrf
                         @method('PUT')
@@ -26,20 +26,20 @@
                                 <label class="form-label">Masukkan tahun angkatan</label>
                                 <div class="input-group input-group-outline mb-3">
                                     <input type="number" name="angkatan" class="form-control"
-                                        value="{{ $keuangan_nominal->angkatan }}" required>
+                                        value="{{ $jenis_biaya->angkatan }}" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Pilih Jenis</label>
                                 <div class="input-group input-group-outline mb-3">
                                     <select name="nama_jenis_select" id="namaJenisSelect" class="form-control select2">
-                                        <option value="{{ $keuangan_nominal->getkeuanganJenis->id ?? '' }}">
-                                            {{ $keuangan_nominal->getkeuanganJenis->nama_jenis ?? 'Pilih Jenis' }}
+                                        <option value="{{ $jenis_biaya->getkeuanganJenis->id ?? '' }}">
+                                            {{ $jenis_biaya->getkeuanganJenis->nama_jenis ?? 'Pilih Jenis' }}
                                         </option>
-                                        @foreach ($keuangan_jenis as $KJ)
-                                            <option value="{{ $KJ->id }}"
-                                                {{ $KJ->id == $keuangan_nominal->keuangan_jenis_id ? 'selected' : '' }}>
-                                                {{ $KJ->nama_jenis }}
+                                        @foreach ($Rekening as $RK)
+                                            <option value="{{ $RK->id }}"
+                                                {{ $RK->id == $jenis_biaya->kode_akun ? 'selected' : '' }}>
+                                                {{ $RK->nama_akun }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -49,12 +49,12 @@
                                 <label class="form-label">Total Beban</label>
                                 <div class="input-group input-group-outline mb-3">
                                     <input type="text" name="total_beban" class="form-control nominal"
-                                        value="{{ $keuangan_nominal->total_beban }}" required>
+                                        value="{{ $jenis_biaya->total_beban }}" required>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end mt-3 gap-2">
-                            <a href="/app/keuangan-nominal" class="btn btn-secondary ">kembali</a>
+                            <a href="/app/Jenis-biaya" class="btn btn-secondary ">kembali</a>
                             <button type="submit" class="btn btn-info" id="simpan">Update Data</button>
                         </div>
                     </form>

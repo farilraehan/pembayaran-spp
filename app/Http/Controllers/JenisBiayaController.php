@@ -3,7 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Jenis_Biaya;
+use App\Models\Rekening;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class JenisBiayaController extends Controller
 {
@@ -114,12 +121,12 @@ class JenisBiayaController extends Controller
      */
     public function edit(Jenis_Biaya $jenis_biaya)
     {
-        $keuangan_jenis = Keuangan_jenis::get();
-        $jenis_biaya->load('getkeuanganJenis');
+        $Rekening = Rekening::get();
+        $jenis_biaya->load('get_rekening');
 
         $title = 'Edit Nominal Keuangan';
 
-        return view('jenis_keuangan.edit', compact('title', 'keuangan_jenis','jenis_biaya'));
+        return view('jenis_biaya.edit', compact('title', 'Rekening','jenis_biaya'));
     }
 
     /**

@@ -14,6 +14,6 @@ class Jenis_Biaya extends Model
 
     public function get_rekening()
     {
-        return $this->belongsTo(Rekening::class, '');
+        return $this->belongsTo(Rekening::class, 'kode_akun', 'kode_akun');
     }
 }
