@@ -6,33 +6,6 @@
                 <span class="nav-link-text ms-1">Dashboard</span>
             </a>
         </li>
-
-        {{-- <li class="nav-item">
-            <a data-bs-toggle="collapse" href="#submenuPEngaturan" class="nav-link text-dark py-2 my-1"
-                aria-controls="submenuPEngaturan" role="button" aria-expanded="false"><i
-                    class="material-symbols-rounded opacity-5">settings</i>
-                <span class="sidenav-normal ms-1">Pengaturan</span>
-            </a>
-            <div class="collapse" id="submenuPEngaturan">
-                <ul class="nav ms-4">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app/siswa/create">
-                            <span class="sidenav-normal"> Chart of Accounts (COA)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app/keuangan-nominal">
-                            <span class="sidenav-normal">Jenis Biaya</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app/siswa">
-                            <span class="sidenav-normal">TTD Laporan</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li> --}}
         <li class="nav-item">
             <a data-bs-toggle="collapse" href="#submenuSiswa" class="nav-link text-dark py-2 my-1"
                 aria-controls="submenuSiswa" role="button" aria-expanded="false">
@@ -65,12 +38,12 @@
             <div class="collapse" id="submenuJenisBiaya">
                 <ul class="nav ms-4">
                     <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app/keuangan-nominal/create">
+                        <a class="nav-link text-dark py-2" href="/app/Jenis-biaya/create">
                             <span class="sidenav-normal">Tambah Jenis Bayar</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app/keuangan-nominal">
+                        <a class="nav-link text-dark py-2" href="/app/Jenis-biaya">
                             <span class="sidenav-normal">Daftar Biaya</span>
                         </a>
                     </li>

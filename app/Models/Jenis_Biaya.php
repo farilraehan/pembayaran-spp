@@ -5,9 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Keuangan_jenis extends Model
+class Jenis_Biaya extends Model
 {
     use HasFactory;
-    protected $table = 'keuangan_jenis';
+    protected $table = 'jenis_biaya';
     protected $guarded = ['id'];
+
+
+    public function get_rekening()
+    {
+        return $this->belongsTo(Rekening::class, '');
+    }
 }

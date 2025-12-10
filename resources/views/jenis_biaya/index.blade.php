@@ -35,6 +35,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Angkatan</th>
+                                    <th>Kode Rekening</th>
                                     <th>Jenis Pembayaran</th>
                                     <th>Nominal</th>
                                     <th>Action</th>
@@ -92,7 +93,7 @@
                     emptyTable: "Hello, Maaf! Data kosong"
                 },
                 ajax: {
-                    url: '/app/keuangan-nominal',
+                    url: '/app/Jenis-biaya',
                     data: function(d) {
                         d.tahun = $('.tahun').val();
                     }
@@ -110,8 +111,13 @@
                         className: 'text-start ps-4'
                     },
                     {
-                        data: 'nama_jenis',
-                        name: 'nama_jenis',
+                        data: 'kode_akun',
+                        name: 'kode_akun',
+                        className: 'text-start'
+                    },
+                    {
+                        data: 'nama_akun',
+                        name: 'nama_akun',
                         className: 'text-start'
                     },
                     {

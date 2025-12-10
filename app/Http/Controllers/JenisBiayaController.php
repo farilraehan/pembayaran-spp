@@ -2,17 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Keuangan_nominal;
-use App\Models\Keuangan_jenis;
-use App\Models\Rekening;
+use App\Models\Jenis_Biaya;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\Facades\DataTables;
 
-
-class KeuanganNominalController extends Controller
+class JenisBiayaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,7 +13,7 @@ class KeuanganNominalController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Keuangan_nominal::with('getkeuanganJenis');
+            $data = Jenis_Biaya::with('get_rekening');
             if ($request->has('tahun') && $request->tahun != '') {
                 $data->where('angkatan', $request->tahun);
             } else {
@@ -28,13 +21,16 @@ class KeuanganNominalController extends Controller
             }
             return DataTables::eloquent($data)
                 ->addIndexColumn()
-                ->addColumn('nama_jenis', function ($row) {
-                    return $row->getkeuanganJenis->nama_jenis ?? '-';
+                ->addColumn('nama_akun', function ($row) {
+                    return $row->get_rekening->nama_akun ?? '-';
+                })
+                ->addColumn('kode_akun', function ($row) {
+                    return $row->get_rekening->kode_akun ?? '-';
                 })
                 ->addColumn('action', function ($row) {
                     return '
                         <div class="d-inline-flex gap-1">
-                            <a href="/app/keuangan-nominal/'.$row->id.'/edit" class="btn btn-warning">
+                            <a href="/app/Jenis-biaya/'.$row->id.'/edit" class="btn btn-warning">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                             <button class="btn btn-danger btnDelete" data-id="'.$row->id.'">
@@ -45,7 +41,7 @@ class KeuanganNominalController extends Controller
                 })
                 ->toJson();
         }
-        return view('jenis_keuangan.index', ['title' => 'Jenis Keuangan']);
+        return view('jenis_biaya.index', ['title' => 'Jenis Keuangan']);
     }
 
     /**
@@ -92,7 +88,7 @@ class KeuanganNominalController extends Controller
         $keuanganJenisId = $request->nama_jenis_select;
     }
 
-    $createKN = Keuangan_nominal::create([
+    $createKN = jenis_biaya::create([
         'angkatan'          => $request->angkatan,
         'id_keuangan_jenis' => $keuanganJenisId,
         'total_beban'       => str_replace(',', '', str_replace('.00', '', $request->total_beban)),
@@ -108,7 +104,7 @@ class KeuanganNominalController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Keuangan_nominal $keuangan_nominal)
+    public function show(Jenis_Biaya $jenis_biaya)
     {
         //
     }
@@ -116,20 +112,20 @@ class KeuanganNominalController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Keuangan_nominal $keuangan_nominal)
+    public function edit(Jenis_Biaya $jenis_biaya)
     {
         $keuangan_jenis = Keuangan_jenis::get();
-        $keuangan_nominal->load('getkeuanganJenis');
+        $jenis_biaya->load('getkeuanganJenis');
 
         $title = 'Edit Nominal Keuangan';
 
-        return view('jenis_keuangan.edit', compact('title', 'keuangan_jenis','keuangan_nominal'));
+        return view('jenis_keuangan.edit', compact('title', 'keuangan_jenis','jenis_biaya'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Keuangan_nominal $keuangan_nominal)
+    public function update(Request $request, Jenis_Biaya $jenis_biaya)
     {
         $data = $request->only([
             'nama_jenis_select',
@@ -147,7 +143,7 @@ class KeuanganNominalController extends Controller
             return response()->json($validate->errors(), Response::HTTP_MOVED_PERMANENTLY);
         }
 
-        $keuangan_nominal->update([
+        $jenis_biaya->update([
             'angkatan'          => $request->angkatan,
             'keuangan_jenis_id' => $request->nama_jenis_select,
             'total_beban'       => str_replace(',', '', str_replace('.00', '', $request->total_beban)),
@@ -162,13 +158,13 @@ class KeuanganNominalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Keuangan_nominal $keuangan_nominal)
+    public function destroy(Jenis_Biaya $jenis_biaya)
     {
-        $keuangan_nominal->delete();
+        $jenis_biaya->delete();
         return response()->json([
             'success'       => true,
             'msg'           => 'Data Biaya berhasil dihapus',
-            'biaya'         => $keuangan_nominal
+            'biaya'         => $jenis_biaya
         ]);
     }
 }
