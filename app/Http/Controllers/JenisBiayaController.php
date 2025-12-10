@@ -56,12 +56,12 @@ class JenisBiayaController extends Controller
      */
     public function create()
     {
-        $keuangan_jenis = Keuangan_jenis::get();
-        $rekening = keuangan_jenis::get();
-
+        $Rekening = Rekening::where('kode_akun', 'like', '1.1.03.%')->get();
         $title = 'Tambah Nominal Keuangan';
-        return view('jenis_keuangan.create', compact('title', 'keuangan_jenis','rekening'));
+
+        return view('jenis_biaya.create', compact('title', 'Rekening'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -69,16 +69,15 @@ class JenisBiayaController extends Controller
     public function store(Request $request)
     {
         $data = $request->only([
-            'nama_jenis_input',
-            'nama_jenis_select',
+            'kode_akun',
             'total_beban',
             'angkatan'
         ]);
+
         $rules = [
             'total_beban'       => 'required',
             'angkatan'          => 'required',
-            'nama_jenis_input'  => 'nullable',
-            'nama_jenis_select' => 'nullable'
+            'kode_akun'         => 'required'
         ];
 
         $validate = Validator::make($data, $rules);
@@ -86,32 +85,22 @@ class JenisBiayaController extends Controller
             return response()->json($validate->errors(), Response::HTTP_MOVED_PERMANENTLY);
         }
 
-    if ($request->filled('nama_jenis_input')) {
-        $createKJ = Keuangan_jenis::create([
-            'nama_jenis' => $request->nama_jenis_input
+        $Jenis_biaya = Jenis_Biaya::create([
+            'angkatan'          => $request->angkatan,
+            'kode_akun'         => $request->kode_akun,
+            'total_beban'       => str_replace(',', '', str_replace('.00', '', $request->total_beban)),
         ]);
-        $keuanganJenisId = $createKJ->id;
-    } elseif ($request->filled('nama_jenis_select')) {
-        $keuanganJenisId = $request->nama_jenis_select;
-    }
 
-    $createKN = jenis_biaya::create([
-        'angkatan'          => $request->angkatan,
-        'id_keuangan_jenis' => $keuanganJenisId,
-        'total_beban'       => str_replace(',', '', str_replace('.00', '', $request->total_beban)),
-    ]);
-
-    return response()->json([
-        'success' => true,
-        'msg' => 'Jenis Biaya berhasil disimpan',
-        'biaya' => $createKN
-    ]);
+        return response()->json([
+            'success' => true,
+            'msg' => 'Jenis Biaya berhasil ditambahkan',
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Jenis_Biaya $jenis_biaya)
+    public function show(Jenis_biaya $Jenis_biaya)
     {
         //
     }
@@ -119,30 +108,30 @@ class JenisBiayaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Jenis_Biaya $jenis_biaya)
+    public function edit(Jenis_biaya $Jenis_biaya)
     {
-        $Rekening = Rekening::get();
-        $jenis_biaya->load('get_rekening');
-
+        $Rekening = Rekening::where('kode_akun', 'like', '1.1.03.%')->get();
+        $Jenis_biaya->load('get_rekening');
         $title = 'Edit Nominal Keuangan';
 
-        return view('jenis_biaya.edit', compact('title', 'Rekening','jenis_biaya'));
+        return view('jenis_biaya.edit', compact('title', 'Rekening','Jenis_biaya'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Jenis_Biaya $jenis_biaya)
+    public function update(Request $request, Jenis_Biaya $Jenis_biaya)
     {
         $data = $request->only([
-            'nama_jenis_select',
+            'kode_akun',
             'total_beban',
             'angkatan'
         ]);
+
         $rules = [
             'total_beban'       => 'required',
             'angkatan'          => 'required',
-            'nama_jenis_select' => 'required'
+            'kode_akun'         => 'required'
         ];
 
         $validate = Validator::make($data, $rules);
@@ -150,9 +139,9 @@ class JenisBiayaController extends Controller
             return response()->json($validate->errors(), Response::HTTP_MOVED_PERMANENTLY);
         }
 
-        $jenis_biaya->update([
+        $Jenis_biaya->update([
             'angkatan'          => $request->angkatan,
-            'keuangan_jenis_id' => $request->nama_jenis_select,
+            'kode_akun'         => $request->kode_akun,
             'total_beban'       => str_replace(',', '', str_replace('.00', '', $request->total_beban)),
         ]);
 
@@ -165,13 +154,13 @@ class JenisBiayaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Jenis_Biaya $jenis_biaya)
+    public function destroy(Jenis_biaya $Jenis_biaya)
     {
-        $jenis_biaya->delete();
+        $Jenis_biaya->delete();
         return response()->json([
             'success'       => true,
             'msg'           => 'Data Biaya berhasil dihapus',
-            'biaya'         => $jenis_biaya
+            'biaya'         => $Jenis_biaya
         ]);
     }
 }

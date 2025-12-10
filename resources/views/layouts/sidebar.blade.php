@@ -29,26 +29,10 @@
             </div>
         </li>
         <li class="nav-item">
-            <a data-bs-toggle="collapse" href="#submenuJenisBiaya" class="nav-link text-dark py-2 my-1"
-                aria-controls="submenuJenisBiaya" role="button" aria-expanded="false">
+            <a class="nav-link text-dark my-1" href="/app/Jenis-biaya">
                 <i class="material-symbols-rounded opacity-5">view_list</i>
-                <span class="sidenav-normal ms-1">Jenis Biaya</span>
+                <span class="nav-link-text ms-1">Daftar Biaya</span>
             </a>
-
-            <div class="collapse" id="submenuJenisBiaya">
-                <ul class="nav ms-4">
-                    <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app/Jenis-biaya/create">
-                            <span class="sidenav-normal">Tambah Jenis Bayar</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app/Jenis-biaya">
-                            <span class="sidenav-normal">Daftar Biaya</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark my-1" href="/app/keuangan-bayar">

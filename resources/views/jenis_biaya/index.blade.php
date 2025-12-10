@@ -23,8 +23,8 @@
                             <button id="Filter_angkatan" class="btn btn-info text-white px-4">
                                 Lihat
                             </button>
-                            {{-- <a href="/app/keuangan-nominal/create"class="btn btn-primary text-white px-4">Tambah Jenis
-                                Bayar</a> --}}
+                            <a href="/app/Jenis-biaya/create"class="btn btn-primary text-white px-4">Tambah Jenis
+                                Bayar</a>
                         </div>
                     </div>
                 </div>
@@ -157,7 +157,7 @@
             e.preventDefault();
 
             var hapus_id = $(this).attr('data-id');
-            var actionUrl = '/app/keuangan-nominal/' + hapus_id;
+            var actionUrl = '/app/Jenis-biaya/' + hapus_id;
 
             Swal.fire({
                 title: "Apakah Anda yakin?",

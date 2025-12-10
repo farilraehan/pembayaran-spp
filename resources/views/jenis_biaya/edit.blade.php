@@ -17,7 +17,7 @@
                 </div>
                 <br>
                 <div class="card-body">
-                    <form id="FormJenisBiaya" method="POST" action="/app/keuangan-nominal/{{ $jenis_biaya->id }}"
+                    <form id="FormJenisBiaya" method="POST" action="/app/Jenis-biaya/{{ $Jenis_biaya->id }}"
                         class="text-start">
                         @csrf
                         @method('PUT')
@@ -26,20 +26,20 @@
                                 <label class="form-label">Masukkan tahun angkatan</label>
                                 <div class="input-group input-group-outline mb-3">
                                     <input type="number" name="angkatan" class="form-control"
-                                        value="{{ $jenis_biaya->angkatan }}" required>
+                                        value="{{ $Jenis_biaya->angkatan }}" required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Pilih Jenis</label>
                                 <div class="input-group input-group-outline mb-3">
-                                    <select name="nama_jenis_select" id="namaJenisSelect" class="form-control select2">
-                                        <option value="{{ $jenis_biaya->getkeuanganJenis->id ?? '' }}">
-                                            {{ $jenis_biaya->getkeuanganJenis->nama_jenis ?? 'Pilih Jenis' }}
+                                    <select name="kode_akun" id="kode_akun" class="form-control select2">
+                                        <option value="{{ $Jenis_biaya->getkeuanganJenis->id ?? '' }}">
+                                            {{ $Jenis_biaya->getkeuanganJenis->nama_jenis ?? 'Pilih Jenis' }}
                                         </option>
                                         @foreach ($Rekening as $RK)
-                                            <option value="{{ $RK->id }}"
-                                                {{ $RK->id == $jenis_biaya->kode_akun ? 'selected' : '' }}>
-                                                {{ $RK->nama_akun }}
+                                            <option value="{{ $RK->kode_akun }}"
+                                                {{ $RK->kode_akun == $Jenis_biaya->kode_akun ? 'selected' : '' }}>
+                                                {{ $RK->kode_akun }} - {{ $RK->nama_akun }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -49,12 +49,12 @@
                                 <label class="form-label">Total Beban</label>
                                 <div class="input-group input-group-outline mb-3">
                                     <input type="text" name="total_beban" class="form-control nominal"
-                                        value="{{ $jenis_biaya->total_beban }}" required>
+                                        value="{{ number_format($Jenis_biaya->total_beban, 2) }}" required>
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end mt-3 gap-2">
-                            <a href="/app/Jenis-biaya" class="btn btn-secondary ">kembali</a>
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="/app/Jenis-biaya" class="btn btn-secondary">Kembali</a>
                             <button type="submit" class="btn btn-info" id="simpan">Update Data</button>
                         </div>
                     </form>
@@ -88,12 +88,16 @@
                 success: function(result) {
                     if (result.success) {
                         Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
                             title: result.msg,
-                            text: "Data berhasil diupdate",
-                            icon: "success",
-                            confirmButtonText: "OK"
-                        }).then(() => {
-                            window.location.href = '/app/keuangan-nominal';
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didClose: () => {
+                                window.location.href = '/app/Jenis-biaya';
+                            }
                         });
                     }
                 },

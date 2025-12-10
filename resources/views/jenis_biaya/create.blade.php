@@ -16,37 +16,29 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <form id="FormJenisBiaya" method="POST" action="/app/keuangan-nominal" class="text-start">
+                    <form id="FormJenisBiaya" method="POST" action="/app/Jenis-biaya" class="text-start">
                         @csrf
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-4">
                                 <label for="angkatan">Tahun Angkatan</label>
                                 <div class="input-group input-group-outline mb-3">
                                     <label class="form-label">Masukkan tahun angkatan</label>
                                     <input type="number" name="angkatan" class="form-control" required>
                                 </div>
                             </div>
-
-                            <div class="col-md-12">
+                            <div class="col-md-4">
                                 <label for="">Pilih Jenis Pembayaran/Nama jenis lain</label>
-                                <div class="d-flex gap-2 mb-3">
-                                    <div class="input-group input-group-outline flex-fill">
-                                        <select name="nama_jenis_select" id="namaJenisSelect" class="form-control select2">
-                                            <option value="">-- Pilih Jenis Pembayaran --</option>
-                                            @foreach ($keuangan_jenis as $KJ)
-                                                <option value="{{ $KJ->id }}">{{ $KJ->nama_jenis }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="input-group input-group-outline flex-fill">
-                                        <label class="form-label">Nama Jenis Lain</label>
-                                        <input type="text" name="nama_jenis_input" id="namaJenisInput"
-                                            class="form-control">
-                                    </div>
+                                <div class="input-group input-group-outline flex-fill">
+                                    <select name="kode_akun" id="kode_akun" class="form-control select2">
+                                        <option value="">-- Pilih Jenis Pembayaran --</option>
+                                        @foreach ($Rekening as $RK)
+                                            <option value="{{ $RK->kode_akun }}">{{ $RK->kode_akun }} - {{ $RK->nama_akun }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-
-                            <div class="col-md-12">
+                            <div class="col-md-4">
                                 <label for="total_beban">Total Beban</label>
                                 <div class="input-group input-group-outline mb-3">
                                     <label class="form-label"> Masukkan Total Beban</label>
@@ -54,9 +46,9 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="d-flex justify-content-end mt-3">
-                            <button type="submit" class="btn btn-info" id="simpan">Simpan data</button>
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="/app/Jenis-biaya" class="btn btn-secondary">Kembali</a>
+                            <button type="submit" class="btn btn-info" id="simpan">Update Data</button>
                         </div>
                     </form>
                 </div>
@@ -119,7 +111,7 @@
                             if (res.isConfirmed) {
                                 window.location.reload();
                             } else if (res.isDenied) {
-                                window.location.href = '/app/keuangan-nominal';
+                                window.location.href = '/app/Jenis-biaya';
                             }
                         });
                     }
