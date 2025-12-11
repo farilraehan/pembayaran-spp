@@ -235,4 +235,48 @@ class LaporanController extends Controller
 
         return $pdf->stream();
     }
+
+    private function jurnal_transaksi(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+
+        $tgl = $thn . '-' . $bln . '-' . $hari;
+
+        $data['judul']     = 'Jurnal Transaksi';
+        $data['sub_judul'] = 'Tahun ' . Tanggal::tahun($tgl);
+        $data['tgl']       = Tanggal::tahun($tgl);
+        $data['title']     = 'Jurnal Transaksi';
+        if (!empty($data['bulan'])) {
+            $data['sub_judul'] = 'Bulan ' . Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+            $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+        }
+
+
+        $data['transaksis'] = Transaksi::with(['rekeningDebit', 'rekeningKredit', 'user'])
+            ->when(!empty($data['bulan']), function ($q) use ($thn, $bln) {
+                $q->whereBetween('tanggal_transaksi', [
+                    "$thn-$bln-01",
+                    date('Y-m-t', strtotime("$thn-$bln-01"))
+                ]);
+            })
+            ->when(!empty($data['hari']), function ($q) use ($thn, $bln, $hari) {
+                $q->whereDate('tanggal_transaksi', "$thn-$bln-$hari");
+            })
+            ->orderBy('tanggal_transaksi', 'asc')
+            ->get();
+        
+        $view = view('laporan.views.jurnal_transaksi', $data)->render();
+
+        $pdf = Pdf::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'enable-local-file-access' => true,
+        ]);
+
+        return $pdf->stream();
+    }
 }
