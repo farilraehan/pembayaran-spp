@@ -11,15 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('anggota_kelas', function (Blueprint $table) {
+        Schema::create('spp', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_siswa');
-            $table->integer('id_tahun_akademik');
-            $table->string('tingkat');
-            $table->string('kode_kelas');
-            $table->string('tgl_masuk');
-            $table->string('tgl_keluar');
-            $table->string('status');
+            $table->date('tanggal');
+            $table->string('anggota_kelas');
+            $table->string('nominal');
             $table->timestamps();
         });
     }
@@ -29,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('anggota_kelas');
+        Schema::dropIfExists('spp');
     }
 };

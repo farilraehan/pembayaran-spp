@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Keuangan_Bayar;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 
-class KeuanganBayarController extends Controller
+class TransaksiController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $title = 'Pembayaran SPP - Keuangan Bayar';
-        return view('pembayaran.index', compact('title'));
+        $title = 'Pembayaran SPP ';
+        return view('transaksi.index', compact('title'));
+    }
+
+    public function pembayaranSPP()
+    {
+        $title = 'Pembayaran SPP ';
+
+        return view('transaksi.pembayaran-spp', compact('title'));
     }
 
     /**
@@ -35,7 +42,7 @@ class KeuanganBayarController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Keuangan_Bayar $keuangan_Bayar)
+    public function show(Transaksi $Transaksi)
     {
         //
     }
@@ -43,7 +50,7 @@ class KeuanganBayarController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Keuangan_Bayar $keuangan_Bayar)
+    public function edit(Transaksi $Transaksi)
     {
         //
     }
@@ -51,7 +58,7 @@ class KeuanganBayarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Keuangan_Bayar $keuangan_Bayar)
+    public function update(Request $request, Transaksi $Transaksi)
     {
         //
     }
@@ -59,7 +66,7 @@ class KeuanganBayarController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Keuangan_Bayar $keuangan_Bayar)
+    public function destroy(Transaksi $Transaksi)
     {
         //
     }

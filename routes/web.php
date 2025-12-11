@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilController;
-use App\Http\Controllers\KeuanganBayarController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\JenisBiayaController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\LaporanController;
@@ -18,7 +18,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::get('/profile', [ProfilController::class, 'index']);
 
-    Route::resource('/keuangan-bayar', KeuanganBayarController::class);
+    Route::get('/Transaksi/pembayaran-spp', [TransaksiController::class, 'pembayaranSPP']);
+    Route::resource('/Transaksi', TransaksiController::class);
 
     Route::resource('/Jenis-biaya', JenisBiayaController::class);
 

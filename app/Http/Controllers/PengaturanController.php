@@ -10,7 +10,7 @@ class PengaturanController extends Controller
     {
         return view('pengaturan.index');
     }
-        public function coa()
+    public function coa()
     {
         $title = "Chart Of Account (CoA)";
         $akun1 = AkunLevel1::with([

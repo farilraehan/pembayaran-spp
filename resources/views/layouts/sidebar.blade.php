@@ -7,12 +7,42 @@
             </a>
         </li>
         <li class="nav-item">
+            <a data-bs-toggle="collapse" href="#submenusettigs" class="nav-link text-dark py-2 my-1"
+                aria-controls="submenusettigs" role="button" aria-expanded="false"><i
+                    class="material-symbols-rounded opacity-5">settings</i>
+                <span class="sidenav-normal ms-1">Pengaturan</span>
+            </a>
+            <div class="collapse" id="submenusettigs">
+                <ul class="nav ms-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark py-2" href="/app">
+                            <span class="sidenav-normal">Personalisasi SOP</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark py-2" href="/app">
+                            <span class="sidenav-normal">Chart of Accounts</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark py-2" href="/app/Jenis-biaya">
+                            <span class="sidenav-normal">Daftar Biaya</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark py-2" href="/app">
+                            <span class="sidenav-normal">TTD Pelaporan</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item">
             <a data-bs-toggle="collapse" href="#submenuSiswa" class="nav-link text-dark py-2 my-1"
                 aria-controls="submenuSiswa" role="button" aria-expanded="false">
-                <i class="material-symbols-rounded opacity-5">view_in_ar</i>
+                <i class="material-symbols-rounded opacity-5">school</i>
                 <span class="sidenav-normal ms-1">Siswa</span>
             </a>
-
             <div class="collapse" id="submenuSiswa">
                 <ul class="nav ms-4">
                     <li class="nav-item">
@@ -29,20 +59,29 @@
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark my-1" href="/app/Jenis-biaya">
-                <i class="material-symbols-rounded opacity-5">view_list</i>
-                <span class="nav-link-text ms-1">Daftar Biaya</span>
+            <a data-bs-toggle="collapse" href="#submenuTransaksi" class="nav-link text-dark py-2 my-1"
+                aria-controls="submenuTransaksi" role="button" aria-expanded="false">
+                <i class="material-symbols-rounded opacity-5">paid</i>
+                <span class="sidenav-normal ms-1">Transaksi</span>
             </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-dark my-1" href="/app/keuangan-bayar">
-                <i class="material-symbols-rounded opacity-5">receipt_long</i>
-                <span class="nav-link-text ms-1">Pembayaran Siswa</span>
-            </a>
+            <div class="collapse" id="submenuTransaksi">
+                <ul class="nav ms-4">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark py-2" href="/app/Transaksi">
+                            <span class="sidenav-normal">Jurnal Umum</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark py-2" href="/app/Transaksi/pembayaran-spp">
+                            <span class="sidenav-normal">Pembayaran SPP</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
         <li class="nav-item">
             <a class="nav-link text-dark my-1" href="/app/laporan-keuangan">
-                <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
+                <i class="material-symbols-rounded opacity-5">receipt_long</i>
                 <span class="nav-link-text ms-1">Laporan Keuangan</span>
             </a>
         </li>
