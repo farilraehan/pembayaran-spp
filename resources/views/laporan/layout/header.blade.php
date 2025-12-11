@@ -29,12 +29,16 @@
             </td>
             <td style="padding:0; margin:0; vertical-align:middle;">
                 <div style="font-weight:bold;font-size:18px;line-height:1;margin:0 0 0 -12px;">
-                    SABIT<br>PEMBAYARAN SPP
+                    SISTEM AKADEMIK
+                </div>
+                <div style="font-size:14px;line-height:1;margin:0 0 0 -12px;">
+                    PEMBAYARAN SPP
                 </div>
                 <div style="font-size:10px;color:grey; line-height:1;margin:0 0 0 -12px;">
                     <i>alamat</i>
                 </div>
             </td>
+
         </tr>
     </table>
 
