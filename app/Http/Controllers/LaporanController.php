@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\JenisLaporan;
 use App\Models\Rekening;
-use App\Utils\Tanggal;
 use App\Models\Transaksi;
+use App\Models\Profil;
+use App\Utils\Tanggal;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 class LaporanController extends Controller
@@ -85,6 +86,23 @@ class LaporanController extends Controller
 
     private function cover(array $data)
     {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+
+        $tgl = $thn . '-' . $bln . '-' . $hari;
+
+        $data['tahun']     = $thn;
+        $data['judul']     = 'LAPORAN KEUANGAN';
+        $data['sub_judul'] = 'Tahun ' . Tanggal::tahun($tgl);
+        $data['tgl']       = Tanggal::tahun($tgl);
+        $data['title']     = 'LAPORAN KEUANGAN';
+        if (!empty($data['bulan'])) {
+            $data['sub_judul'] = 'Bulan ' . Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+            $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+        }
+
+        $data['profil'] = Profil::first();
         $view = view('laporan.views.cover', $data)->render();
 
         $pdf = Pdf::loadHTML($view)->setOptions([
