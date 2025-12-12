@@ -12,10 +12,11 @@
 
         .footer-line {
             border-top: 1px solid #7e7c7c;
-            margin-top: 15px;
+            margin-top: 2px;
             width: 100%;
         }
     </style>
+
 </head>
 
 <body>
