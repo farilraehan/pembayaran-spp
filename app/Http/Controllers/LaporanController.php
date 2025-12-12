@@ -374,7 +374,11 @@ class LaporanController extends Controller
         $data['ph']         = $lr['ph'];
 
         $data['title'] = 'Laba Rugi';
-
+        $data['title_bulan'] = 'Tahun ' . Tanggal::tahun($tgl);
+         if (!empty($data['bulan'])) {
+            $data['title_bulan'] = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+            $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
+        }
         $view = view('laporan.views.laba_rugi', $data)->render();
 
         $pdf = Pdf::loadHTML($view)->setOptions([

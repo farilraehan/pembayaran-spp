@@ -7,6 +7,7 @@
         return number_format($value, 2);
     }
 @endphp
+<title>{{ $title }} ({{ $title_bulan }})</title>
 
 @extends('laporan.layout.base')
 
