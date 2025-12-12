@@ -6,6 +6,8 @@ use App\Models\JenisLaporan;
 use App\Models\Rekening;
 use App\Models\Transaksi;
 use App\Models\Profil;
+use App\Models\MasterArusKas;
+use App\Utils\Keuangan;
 use App\Utils\Tanggal;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -80,9 +82,6 @@ class LaporanController extends Controller
 
         abort(404, 'Laporan tidak ditemukan');
     }
-
-
-    
 
     private function cover(array $data)
     {
@@ -279,4 +278,64 @@ class LaporanController extends Controller
 
         return $pdf->stream();
     }
+
+    private function arus_kas(array $data)
+    {
+         $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+
+        $tgl_awal_tahun  = "{$thn}-01-01";
+        $tgl_awal_bulan  = "{$thn}-{$bln}-01";
+        $tgl_akhir_bulan = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int)$bln, (int)$thn);
+
+        $data['judul'] = 'Laporan Arus Kas';
+        
+        $data['tgl_awal_bulan'] = $tgl_awal_bulan;
+        $data['tgl_akhir_bulan'] = $tgl_akhir_bulan;
+
+        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
+
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? 'bulan '  . ' ' . $namaBulan . ' ' . $thn
+            : 'Tahun ' . $thn;
+
+        $data['tgl'] = $data['sub_judul'];
+        $data['title'] = !empty($data['bulan'])
+            ? 'Arus Kas (' . $namaBulan . ' ' . $thn . ')'
+            : 'Arus Kas (Tahun ' . $thn . ')';
+
+        // ambil arus kas dengan transaksi bulan berjalan
+        $data['arus_kas'] = MasterArusKas::with([
+            'child',
+            'child.rek_debit.rek.transaksiDebit' => function ($q) use ($tgl_awal_bulan, $tgl_akhir_bulan) {
+                $q->whereBetween('tanggal_transaksi', [$tgl_awal_bulan, $tgl_akhir_bulan])
+                ->where('rekening_kredit', 'like', '1.1.01%');
+            },
+            'child.rek_kredit.rek.transaksiKredit' => function ($q) use ($tgl_awal_bulan, $tgl_akhir_bulan) {
+                $q->whereBetween('tanggal_transaksi', [$tgl_awal_bulan, $tgl_akhir_bulan])
+                ->where('rekening_debit', 'like', '1.1.01%');
+            }
+        ])->where('parent_id', 0)->get();
+
+        // hitung saldo kas sampai akhir bulan sebelumnya
+        $keuangan = new Keuangan;
+        $tgl_saldo_lalu = date('Y-m-d', strtotime("-1 day", strtotime($tgl_awal_bulan)));
+        $saldo_bulan_lalu = $keuangan->saldoKas($tgl_saldo_lalu);
+        $data['saldo_bulan_lalu'] = $saldo_bulan_lalu;
+
+        $view = view('laporan.views.arus_kas', $data)->render();
+
+        $pdf = Pdf::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'enable-local-file-access' => true,
+        ]);
+
+        return $pdf->stream();
+    }
+    
 }
