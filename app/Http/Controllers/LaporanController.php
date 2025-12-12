@@ -337,5 +337,55 @@ class LaporanController extends Controller
 
         return $pdf->stream();
     }
+
+    private function laba_rugi(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = $data['bulan'] ?? null;
+        $hari = $data['hari'] ?? null;
+
+        $tgl = $thn
+            . ($bln ? '-' . $bln : '-12')
+            . ($hari ? '-' . $hari : '-' . date('t', strtotime("$thn-" . ($bln ?? '12') . "-01")));
+
+        $keuangan = new Keuangan();
+        $lr = $keuangan->listLabaRugi($tgl);
+
+        $data['judul'] = 'Laporan Laba Rugi';
+        $namaBulanAkhir = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $lastDay        = date('t', strtotime("{$thn}-{$bln}-01"));
+
+        // Awal selalu 01 Januari
+        $awal = '01 Januari ' . $thn;
+        $akhir = $lastDay . ' ' . $namaBulanAkhir . ' ' . $thn;
+
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? 'PERIODE ' . $awal . ' S.D. ' . $akhir
+            : 'TAHUN ' . $thn;
+
+
+
+        $data['pendapatan'] = $lr['pendapatan'];
+        $data['beban']      = $lr['beban'];
+        $data['bp']         = $lr['bp'];
+        $data['pen']        = $lr['pen'];
+        $data['pendl']      = $lr['pendl'];
+        $data['beb']        = $lr['beb'];
+        $data['ph']         = $lr['ph'];
+
+        $data['title'] = 'Laba Rugi';
+
+        $view = view('laporan.views.laba_rugi', $data)->render();
+
+        $pdf = Pdf::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'enable-local-file-access' => true,
+        ]);
+
+        return $pdf->stream();
+    }
     
 }
