@@ -6,6 +6,7 @@ use App\Models\JenisLaporan;
 use App\Models\Rekening;
 use App\Models\Transaksi;
 use App\Models\Profil;
+use App\Models\AkunLevel1;
 use App\Models\MasterArusKas;
 use App\Utils\Keuangan;
 use App\Utils\Tanggal;
@@ -380,6 +381,49 @@ class LaporanController extends Controller
             $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
         }
         $view = view('laporan.views.laba_rugi', $data)->render();
+
+        $pdf = Pdf::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'enable-local-file-access' => true,
+        ]);
+
+        return $pdf->stream();
+    }
+
+    public function neraca(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+
+        $tgl_awal  = "{$thn}-01-01";
+        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
+
+        $data['judul'] = 'Neraca';
+        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
+
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? 'per ' . $lastDay . ' ' . $namaBulan . ' ' . $thn
+            : 'Tahun ' . $thn;
+
+        $data['title'] = !empty($data['bulan']) ? $data['judul'] . ' (' . $namaBulan . ' ' . $thn . ')' : $data['judul'] . ' Tahun ' . $thn;
+
+        $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
+        ->with(['akun2.akun3.rek' => function($q) use ($tgl_awal, $tgl_akhir) {
+            $q->whereHas('transaksiDebit', fn($q2) => $q2->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]))
+            ->orWhereHas('transaksiKredit', fn($q2) => $q2->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]));
+        }])
+        ->orderBy('kode_akun', 'ASC')
+        ->get();
+
+
+        $data['tgl_awal']  = $tgl_awal;
+        $data['tgl_akhir'] = $tgl_akhir;
+
+        $view = view('laporan.views.neraca', $data)->render();
 
         $pdf = Pdf::loadHTML($view)->setOptions([
             'margin-top'    => 30,
