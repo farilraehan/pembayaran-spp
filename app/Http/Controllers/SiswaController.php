@@ -158,11 +158,35 @@ class SiswaController extends Controller
             if (!$siswa) continue;
 
             $nominal_spp = $siswa->spp_nominal;
+
             $anggota = Anggota_Kelas::where('id_siswa', $id_siswa)
                 ->orderBy('id', 'DESC')
                 ->first();
 
-            //UPDATE kelas saja
+            /*
+        |--------------------------------------------------------------------------
+        | UPDATE DATA SISWA
+        |--------------------------------------------------------------------------
+        */
+            if ($siswa->tingkat == $tingkat_baru) {
+                // tingkat sama → update kelas saja
+                $siswa->update([
+                    'kode_kelas' => $kode_kelas_baru,
+                ]);
+            } else {
+                // tingkat beda → update tingkat + kelas
+                $siswa->update([
+                    'tingkat'    => $tingkat_baru,
+                    'kode_kelas' => $kode_kelas_baru,
+                ]);
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | UPDATE ANGGOTA_KELAS
+        |--------------------------------------------------------------------------
+        */
+            // Jika tingkat sama → update kelas saja
             if ($anggota && $anggota->tingkat == $tingkat_baru) {
                 $anggota->update([
                     'kode_kelas' => $kode_kelas_baru,
@@ -170,25 +194,29 @@ class SiswaController extends Controller
                 continue;
             }
 
-            //NONAKTIFKAN anggota_kelas lama
+            // Nonaktifkan anggota_kelas lama
             if ($anggota) {
                 $anggota->update([
                     'status' => 'nonaktif'
                 ]);
             }
 
-            //BUAT anggota_kelas baru
+            // Buat anggota_kelas baru
             $anggotaBaru = Anggota_Kelas::create([
-                'id_siswa'          => $id_siswa,
-                'tahun_akademik'    => $tahun_akademik,
-                'tingkat'           => $tingkat_baru,
-                'kode_kelas'        => $kode_kelas_baru,
-                'tgl_masuk'         => $tgl_masuk->format('Y-m-d'),
-                'tgl_keluar'        => $tgl_keluar->format('Y-m-d'),
-                'status'            => 'aktif',
+                'id_siswa'       => $id_siswa,
+                'tahun_akademik' => $tahun_akademik,
+                'tingkat'        => $tingkat_baru,
+                'kode_kelas'     => $kode_kelas_baru,
+                'tgl_masuk'      => $tgl_masuk->format('Y-m-d'),
+                'tgl_keluar'     => $tgl_keluar->format('Y-m-d'),
+                'status'         => 'aktif',
             ]);
 
-            //BUAT SPP baru
+            /*
+        |--------------------------------------------------------------------------
+        | BUAT SPP BARU
+        |--------------------------------------------------------------------------
+        */
             $anggota_kelas_id = $anggotaBaru->id;
             $awal  = $tgl_masuk->copy()->startOfMonth();
             $akhir = $awal->copy()->addYear()->subMonth();
@@ -208,8 +236,6 @@ class SiswaController extends Controller
             'msg' => "Mutasi berhasil diproses!"
         ]);
     }
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -687,11 +713,32 @@ class SiswaController extends Controller
      */
     public function destroy(Siswa $siswa)
     {
+        $anggotaKelas = Anggota_Kelas::where('id_siswa', $siswa->id)->get();
+        $hasSpp = false;
+
+        foreach ($anggotaKelas as $anggota) {
+            if (Spp::where('anggota_kelas', $anggota->id)->exists()) {
+                $hasSpp = true;
+                break;
+            }
+        }
+
+        if ($hasSpp) {
+            return response()->json([
+                'success' => false,
+                'msg'     => 'Siswa tidak bisa dihapus karena sudah memiliki riwayat SPP',
+            ], 400);
+        }
+
+        foreach ($anggotaKelas as $anggota) {
+            $anggota->delete();
+        }
+
         $siswa->delete();
+
         return response()->json([
-            'success'       => true,
-            'msg'           => 'Data Siswa berhasil dihapus',
-            'siswa'         => $siswa
+            'success' => true,
+            'msg'     => 'Data Siswa berhasil dihapus',
         ]);
     }
 }

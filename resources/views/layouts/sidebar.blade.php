@@ -20,7 +20,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app">
+                        <a class="nav-link text-dark py-2" href="/app/pengaturan/coa">
                             <span class="sidenav-normal">Chart of Accounts</span>
                         </a>
                     </li>
@@ -30,7 +30,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app">
+                        <a class="nav-link text-dark py-2" href="/app/pengaturan/ttd-pelaporan">
                             <span class="sidenav-normal">TTD Pelaporan</span>
                         </a>
                     </li>

@@ -479,9 +479,14 @@
                             }
                         },
                         error: function(response) {
+                            // Tangkap pesan error khusus dari controller
+                            let msg = "Terjadi kesalahan pada server. Silakan coba lagi.";
+                            if (response.responseJSON && response.responseJSON.msg) {
+                                msg = response.responseJSON.msg;
+                            }
                             Swal.fire({
-                                title: "Error",
-                                text: "Terjadi kesalahan pada server. Silakan coba lagi.",
+                                title: "Gagal",
+                                text: msg,
                                 icon: "error",
                                 confirmButtonText: "OK"
                             });
@@ -497,5 +502,6 @@
                 }
             });
         });
+
     </script>
 @endsection

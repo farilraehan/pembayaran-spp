@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\JenisBiayaController;
 use App\Http\Controllers\SiswaController;
@@ -22,6 +23,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/Transaksi', TransaksiController::class);
 
     Route::resource('/Jenis-biaya', JenisBiayaController::class);
+
+    Route::get('/pengaturan/coa', [PengaturanController::class, 'coa']);
+    Route::get('/pengaturan/ttd-pelaporan', [PengaturanController::class, 'ttdPelaporan']);
+    Route::resource('/pengaturan', PengaturanController::class);
 
     Route::get('/siswa/listTahun', [SiswaController::class, 'listTahun']);
     Route::get('/siswa/listKelas', [SiswaController::class, 'listKelas']);
