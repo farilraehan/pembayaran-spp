@@ -230,24 +230,9 @@
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="input-group input-group-outline mb-3">
-                                            <select name="kelas" id="kelas" class="form-select select2">
-                                                <option value="" disabled selected>Pilih Kelas</option>
-                                                @foreach ($kelas as $kls)
-                                                    <option value="{{ $kls->kode_kelas }}">{{ $kls->kode_kelas }} -
-                                                        {{ $kls->nama_kelas }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="input-group input-group-outline mb-3">
-                                            <select name="jurusan" id="jurusan" class="form-select select2">
-                                                <option value="" disabled selected>Pilih Jurusan</option>
-                                                @foreach ($jurusan as $J)
-                                                    <option value="{{ $J->kode_jurusan }}">{{ $J->kode_jurusan }} -
-                                                        {{ $J->nama }}</option>
-                                                @endforeach
-                                            </select>
+                                            <label class="form-label">Tanggal Masuk</label>
+                                            <input type="text" name="tanggal_masuk" id="tanggal_masuk"
+                                                class="form-control datepicker">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -258,12 +243,68 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div class="input-group input-group-outline mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" id="email" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group input-group-outline mb-3">
                                             <label class="form-label">SKHUN</label>
                                             <input type="text" name="skhun" id="skhun" class="form-control">
                                         </div>
                                     </div>
                                 </div>
-
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="input-group input-group-outline mb-3">
+                                            <select name="tahun_akademik" id="tahun_akademik"
+                                                class="form-select select2">
+                                                <option value="" disabled selected>Tahun Ajaran</option>
+                                                @foreach ($tahunAkademmik as $tA)
+                                                    <option value="{{ $tA->nama_tahun }}">
+                                                        {{ $tA->nama_tahun }} -
+                                                        {{ $tA->keterangan }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group input-group-outline mb-3">
+                                            <select name="kelas" id="kelas" class="form-select select2">
+                                                <option value="" disabled selected>Pilih Kelas</option>
+                                                @foreach ($kelas as $kls)
+                                                    <option value="{{ $kls->kode_kelas }}-{{ $kls->tingkat }}">
+                                                        {{ $kls->kode_kelas }} -
+                                                        {{ $kls->nama_kelas }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group input-group-outline mb-3">
+                                            <select name="jurusan" id="jurusan" class="form-select select2">
+                                                <option value="" disabled selected>Pilih Jurusan</option>
+                                                @foreach ($jurusan as $J)
+                                                    <option value="{{ $J->kode_jurusan }}">
+                                                        {{ $J->kode_jurusan }} -
+                                                        {{ $J->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="input-group input-group-outline mb-3">
+                                            <select name="ruangan" id="ruangan" class="form-select select2">
+                                                <option value="" disabled selected>Pilih Ruangan</option>
+                                                @foreach ($ruang as $R)
+                                                    <option value="{{ $R->kode_ruangan }}">
+                                                        {{ $R->kode_ruangan }} -
+                                                        {{ $R->nama_ruangan }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <div class="input-group input-group-outline mb-3">
@@ -285,9 +326,11 @@
                                         </div>
                                     </div>
                                     <div class="col-md-3">
-                                        <div class="input-group input-group-outline mb-3">
-                                            <label class="form-label">Alokasi SPP</label>
-                                            <input type="text" name="alokasi_spp" id="alokasi_spp"
+                                        <div
+                                            class="input-group input-group-outline mb-3 {{ old('alokasi_spp', $jenisBiaya->total_beban) ? 'is-filled' : '' }}">
+                                            <label class="form-label">Alokasi SPP per Bulan</label>
+                                            <input type="text" name="alokasi_spp"
+                                                value="{{ number_format($jenisBiaya->total_beban, 2) }}" id="alokasi_spp"
                                                 class="form-control nominal">
                                         </div>
                                     </div>

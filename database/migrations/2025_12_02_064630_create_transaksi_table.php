@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('transaksi', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->date('tanggal');
+            $table->date('tanggal_transaksi');
             $table->integer('invoice_id');
             $table->string('rekening_debit');
             $table->string('rekening_kredit');

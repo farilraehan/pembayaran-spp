@@ -15,9 +15,14 @@ class Siswa extends Model
     {
         return $this->belongsTo(Tahun_akademik::class, '');
     }
-
+    
     public function getKelas()
     {
         return $this->belongsTo(Kelas::class, '');
+    }
+
+    public function getAnggotaKelas()
+    {
+        return $this->belongsTo(Anggota_Kelas::class, '');
     }
 }

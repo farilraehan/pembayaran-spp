@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('anggota_kelas', function (Blueprint $table) {
+        Schema::create('ruangan', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('id_siswa');
-            $table->string('tahun_akademik');
-            $table->string('tingkat');
-            $table->string('kode_kelas');
-            $table->string('tgl_masuk');
-            $table->string('tgl_keluar');
-            $table->string('status');
+            $table->string('kode_gedung');
+            $table->string('kode_ruangan');
+            $table->string('nama_ruangan');
+            $table->string('kapasitas_belajar');
+            $table->string('kapasitas_ujian');
+            $table->string('keterangan');
+            $table->enum('status', ['aktif', 'non_aktif']);
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('anggota_kelas');
+        Schema::dropIfExists('ruangan');
     }
 };

@@ -272,30 +272,12 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <div class="input-group input-group-outline mb-3">
-                                            <select name="kelas" id="kelas" class="form-select select2">
-                                                <option value="" disabled>Pilih Kelas</option>
-                                                @foreach ($kelas as $kls)
-                                                    <option value="{{ $kls->kode_kelas }}"
-                                                        {{ old('kelas', $siswa->kelas) == $kls->kode_kelas ? 'selected' : '' }}>
-                                                        {{ $kls->kode_kelas }} - {{ $kls->nama_kelas }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <div class="input-group input-group-outline mb-3">
-                                            <select name="jurusan" id="jurusan" class="form-select select2">
-                                                <option value="" disabled>Pilih Jurusan</option>
-                                                @foreach ($jurusan as $J)
-                                                    <option value="{{ $J->kode_jurusan }}"
-                                                        {{ old('jurusan', $siswa->jurusan) == $J->kode_jurusan ? 'selected' : '' }}>
-                                                        {{ $J->kode_jurusan }} - {{ $J->nama }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                        <div
+                                            class="input-group input-group-outline mb-3 {{ old('tanggal_masuk', $siswa->tanggal_masuk) ? 'is-filled' : '' }}">
+                                            <label class="form-label">Tanggal Masuk</label>
+                                            <input type="text" name="tanggal_masuk"
+                                                value="{{ old('tanggal_masuk', $siswa->tanggal_masuk) }}"
+                                                id="tanggal_masuk" class="form-control datepicker">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -308,10 +290,60 @@
                                     </div>
                                     <div class="col-md-3">
                                         <div
+                                            class="input-group input-group-outline mb-3 {{ old('email', $siswa->email) ? 'is-filled' : '' }}">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" name="email" id="email"
+                                                value="{{ old('email', $siswa->email) }}" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div
                                             class="input-group input-group-outline mb-3 {{ old('skhun', $siswa->skhun) ? 'is-filled' : '' }}">
                                             <label class="form-label">SKHUN</label>
                                             <input type="text" name="skhun" id="skhun"
                                                 value="{{ old('skhun', $siswa->skhun) }}" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="input-group input-group-outline mb-3">
+                                            <select name="kelas" id="kelas" class="form-select select2">
+                                                <option value="" disabled>Pilih Kelas</option>
+                                                @foreach ($kelas as $kls)
+                                                    <option value="{{ $kls->kode_kelas }}-{{ $kls->tingkat }}"
+                                                        {{ old('kelas', $siswa->kelas) == $kls->kode_kelas ? 'selected' : '' }}>
+                                                        {{ $kls->kode_kelas }} - {{ $kls->nama_kelas }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="input-group input-group-outline mb-3">
+                                            <select name="jurusan" id="jurusan" class="form-select select2">
+                                                <option value="" disabled>Pilih Jurusan</option>
+                                                @foreach ($jurusan as $J)
+                                                    <option value="{{ $J->kode_jurusan }}"
+                                                        {{ old('jurusan', $siswa->jurusan) == $J->kode_jurusan ? 'selected' : '' }}>
+                                                        {{ $J->kode_jurusan }} - {{ $J->nama }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group input-group-outline mb-3">
+                                            <select name="ruangan" id="ruangan" class="form-select select2">
+                                                <option value="" disabled>Pilih Ruangan</option>
+                                                @foreach ($ruang as $R)
+                                                    <option value="{{ $R->kode_ruangan }}"
+                                                        {{ old('ruangan', $siswa->ruang) == $R->kode_ruangan ? 'selected' : '' }}>
+                                                        {{ $R->kode_ruangan }} - {{ $R->nama_ruangan }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -633,27 +665,34 @@
                 success: function(result) {
                     if (result.success) {
                         Swal.fire({
-                            title: result.msg ?? "Berhasil",
-                            text: "Update Data Siswa?",
-                            icon: "success",
-                            showCancelButton: true,
-                            confirmButtonText: "Ya, simpan",
-                            cancelButtonText: "Tetap disini"
-                        }).then((res) => {
-                            if (res.isConfirmed) {
-                                window.location.href = '/app/siswa';
-                            }
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'success',
+                            title: result.msg ?? "Berhasil update data",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
                         });
-
+                        setTimeout(() => {
+                            let params = new URLSearchParams(window.location.search);
+                            let tahun = params.get('tahun_akademik');
+                            let kelas = params.get('kelas');
+                            window.location.href = `/app/siswa?tahun_akademik=${tahun}&kelas=${kelas}`;
+                        }, 1500);
                     } else {
-                        Swal.fire('Gagal', result.message ?? 'Gagal update data', 'error');
+                        Swal.fire({
+                            toast: true,
+                            position: 'top-end',
+                            icon: 'error',
+                            title: result.message ?? "Gagal update data",
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true
+                        });
                     }
                 },
-
                 error: function(xhr) {
                     Swal.fire('Error', 'Cek kembali input yang anda masukkan', 'error');
-
-                    // tampilkan validasi error Laravel jika mau
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
                         $.each(errors, function(key, value) {
@@ -662,7 +701,6 @@
                     }
                 }
             });
-
         });
     </script>
 @endsection

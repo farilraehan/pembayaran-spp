@@ -48,7 +48,7 @@
                         </div>
                         <div class="d-flex justify-content-between mt-3">
                             <a href="/app/Jenis-biaya" class="btn btn-secondary">Kembali</a>
-                            <button type="submit" class="btn btn-info" id="simpan">Update Data</button>
+                            <button type="submit" class="btn btn-info" id="simpan">Simpan Data</button>
                         </div>
                     </form>
                 </div>

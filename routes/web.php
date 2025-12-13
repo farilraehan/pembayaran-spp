@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/siswa/listTahun', [SiswaController::class, 'listTahun']);
     Route::get('/siswa/listKelas', [SiswaController::class, 'listKelas']);
     Route::get('/siswa/printSiswa', [SiswaController::class, 'printSiswa']);
+    Route::post('/siswa/mutasi', [SiswaController::class, 'mutasi']);
     Route::resource('/siswa', SiswaController::class);
 
     Route::get('/laporan-keuangan', [LaporanController::class, 'index']);

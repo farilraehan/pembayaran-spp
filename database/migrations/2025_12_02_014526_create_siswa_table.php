@@ -15,6 +15,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('nipd');
             $table->string('password');
+            $table->date('tanggal_masuk');
+            $table->integer('tahun_akademik');
             $table->string('nisn');
             $table->string('nama');
             $table->string('jenis_kelamin');
