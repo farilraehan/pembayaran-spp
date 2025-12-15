@@ -6,6 +6,7 @@ use App\Models\JenisLaporan;
 use App\Models\Rekening;
 use App\Models\Transaksi;
 use App\Models\Profil;
+use App\Models\Calk;
 use App\Models\AkunLevel1;
 use App\Models\MasterArusKas;
 use App\Utils\Keuangan;
@@ -24,7 +25,7 @@ class LaporanController extends Controller
     }
     public function subLaporan($file)
     {
-         if ($file == 'buku_besar') {
+        if ($file == 'buku_besar') {
             $rekening = Rekening::orderBy('kode_akun', 'ASC')->get();
             $sub_laporan = [];
 
@@ -39,8 +40,18 @@ class LaporanController extends Controller
                 'type' => 'select',
                 'sub_laporan' => $sub_laporan
             ]);
-        }
-         else {
+        } elseif ($file == 'calk') {
+            $tahun = request()->get('tahun');
+            $bulan = str_pad(request()->get('bulan'), 2, '0', STR_PAD_LEFT);
+
+            $calk = Calk::where('tanggal', 'LIKE', "$tahun-$bulan%")->first();
+            $keterangan = $calk ? $calk->catatan : '';
+
+            return view('laporan.partials.sub_laporan', [
+                'type' => 'textarea',
+                'keterangan' => $keterangan
+            ]);
+        } else {
             $sub_laporan = [
                 [
                     'value' => '',
@@ -53,6 +64,7 @@ class LaporanController extends Controller
                 'sub_laporan' => $sub_laporan
             ]);
         }
+        
         
     }
     public function preview(Request $request)
@@ -393,7 +405,7 @@ class LaporanController extends Controller
         return $pdf->stream();
     }
 
-    public function neraca(array $data)
+    private function neraca(array $data)
     {
         $thn  = $data['tahun'];
         $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
@@ -424,6 +436,60 @@ class LaporanController extends Controller
         $data['tgl_akhir'] = $tgl_akhir;
 
         $view = view('laporan.views.neraca', $data)->render();
+
+        $pdf = Pdf::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'enable-local-file-access' => true,
+        ]);
+
+        return $pdf->stream();
+    }
+
+    private function neraca_saldo(array $data)
+    {
+                $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+        $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
+
+        $tgl_awal  = "{$thn}-01-01";
+        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int) $bln, (int) $thn);
+
+        $data['judul'] = 'Neraca ';
+
+        $namaBulan = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $lastDay   = date('t', strtotime("{$thn}-{$bln}-01"));
+
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? $namaBulan . ' ' . $thn
+            : 'Tahun ' . $thn;
+
+        $data['tgl'] = $data['sub_judul'];
+
+
+        $data['title'] = !empty($data['bulan'])
+            ? 'Neraca Saldo (' . $namaBulan . ' ' . $thn . ')'
+            : 'Neraca Saldo (Tahun ' . $thn . ')';
+
+        $data['rekening'] = Rekening::with([
+            'transaksiDebit' => function ($q) use ($tgl_awal, $tgl_akhir) {
+                $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
+            },
+            'transaksiKredit' => function ($q) use ($tgl_awal, $tgl_akhir) {
+                $q->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]);
+            }
+        ])
+            ->orderBy('kode_akun')
+            ->get()
+            ->transform(function ($rek) {
+                $rek->total_debit  = $rek->transaksiDebit->sum('jumlah');
+                $rek->total_kredit = $rek->transaksiKredit->sum('jumlah');
+                return $rek;
+            });
+
+        $view = view('laporan.views.neraca_saldo', $data)->render();
 
         $pdf = Pdf::loadHTML($view)->setOptions([
             'margin-top'    => 30,
