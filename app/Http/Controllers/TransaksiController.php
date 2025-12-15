@@ -16,7 +16,7 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        $title = 'Transaksi Jurnal Umum';
+        $title = 'Jurnal Umum';
         $jenisTransaksi = Jenis_transaksi::all();
         $rekening = Rekening::orderBy('kode_akun', 'asc')->get();
 
@@ -252,7 +252,18 @@ class TransaksiController extends Controller
             }
         }
 
-        return response()->json(['success' => true, 'message' => $message]);
+        return response()->json([
+            'success' => true,
+            'message' => $message,
+            'data' => [
+                'keterangan' => $message,
+                'tanggal' => now()->format('d M Y, H:i'),
+                'jumlah' => $data['transaksi'] == 'jurnal_umum'
+                    ? floatval(str_replace(',', '', $form['nominal'] ?? 0))
+                    : ($harga_perolehan ?? $nilai_buku ?? 0),
+                'tipe' => in_array($data['transaksi'], ['beli_inventaris']) ? 'keluar' : 'masuk'
+            ]
+        ]);
     }
 
     /**
