@@ -23,9 +23,11 @@ class LaporanController extends Controller
             ->get();
         return view('laporan.index', compact('title','laporan'));
     }
+
     public function subLaporan($file)
     {
         if ($file == 'buku_besar') {
+
             $rekening = Rekening::orderBy('kode_akun', 'ASC')->get();
             $sub_laporan = [];
 
@@ -40,45 +42,58 @@ class LaporanController extends Controller
                 'type' => 'select',
                 'sub_laporan' => $sub_laporan
             ]);
-        } elseif ($file == 'calk') {
-            $tahun = request()->get('tahun');
-            $bulan = str_pad(request()->get('bulan'), 2, '0', STR_PAD_LEFT);
 
-            $calk = Calk::where('tanggal', 'LIKE', "$tahun-$bulan%")->first();
-            $keterangan = $calk ? $calk->catatan : '';
+        } elseif ($file == 'calk') {
+
+            $tahun = request('tahun');
+            $bulan = str_pad(request('bulan'), 2, '0', STR_PAD_LEFT);
+
+            $tanggal = "{$tahun}-{$bulan}-01";
+
+            $calk = Calk::where('tanggal', $tanggal)->first();
 
             return view('laporan.partials.sub_laporan', [
-                'type' => 'textarea',
-                'keterangan' => $keterangan
+                'type'       => 'textarea',
+                'keterangan' => $calk->catatan ?? ''
             ]);
+
         } else {
-            $sub_laporan = [
-                [
-                    'value' => '',
-                    'title' => '---'
-                ]
-            ];
 
             return view('laporan.partials.sub_laporan', [
                 'type' => 'select',
-                'sub_laporan' => $sub_laporan
+                'sub_laporan' => [
+                    ['value' => '', 'title' => '---']
+                ]
             ]);
         }
-        
-        
     }
+
     public function preview(Request $request)
     {
         $laporan = $request->laporan;
         $data    = $request->all();
 
-        //logo
+        // ================= LOGO =================
         $logoPath = public_path('assets/img/apple-icon.png');
         if (file_exists($logoPath)) {
             $data['logo'] = base64_encode(file_get_contents($logoPath));
             $data['logo_type'] = pathinfo($logoPath, PATHINFO_EXTENSION);
         }
 
+        // ================= SIMPAN CALK =================
+        if ($laporan === 'calk') {
+
+            $tahun = $request->tahun;
+            $bulan = str_pad($request->bulan, 2, '0', STR_PAD_LEFT);
+            $tanggal = "{$tahun}-{$bulan}-01";
+
+            Calk::updateOrCreate(
+                ['tanggal' => $tanggal],
+                ['catatan' => $request->sub_laporan]
+            );
+        }
+
+        // ================= BUKU BESAR =================
         if ($laporan === 'buku_besar') {
             $data['kode_akun'] = $request->sub_laporan;
             $data['laporan']   = 'buku_besar';
@@ -95,6 +110,7 @@ class LaporanController extends Controller
 
         abort(404, 'Laporan tidak ditemukan');
     }
+
 
     private function cover(array $data)
     {
@@ -501,5 +517,56 @@ class LaporanController extends Controller
 
         return $pdf->stream();
     }
+
+    private function calk(array $data)
+    {
+        $thn  = $data['tahun'];
+        $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
+
+        $tgl_awal  = "{$thn}-01-01";
+        $tgl_akhir = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int)$bln, (int)$thn);
+
+        $data['judul'] = 'Calk';
+
+        $namaBulanNormal = Tanggal::namaBulan("{$thn}-{$bln}-01");
+        $namaBulanCaps   = strtoupper($namaBulanNormal);
+
+        $data['sub_judul'] = !empty($data['bulan'])
+            ? 'BULAN ' . $namaBulanCaps . ' TAHUN ' . $thn
+            : 'TAHUN ' . $thn;
+
+        $data['title'] = !empty($data['bulan'])
+            ? $data['judul'] . ' (' . $namaBulanNormal . ' ' . $thn . ')'
+            : $data['judul'] . ' Tahun ' . $thn;
+
+        $data['profil'] = Profil::first();
+
+        $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
+            ->with(['akun2.akun3.rek'])
+            ->orderBy('kode_akun', 'ASC')
+            ->get();
+
+        $data['tgl_awal']  = $tgl_awal;
+        $data['tgl_akhir'] = $tgl_akhir;
+
+        $tanggal = "{$thn}-{$bln}-01";
+
+        $calk = Calk::where('tanggal', $tanggal)->first();
+
+        $data['catatan'] = $calk ? $calk->catatan : '';
+
+        $view = view('laporan.views.calk', $data)->render();
+
+        $pdf = Pdf::loadHTML($view)->setOptions([
+            'margin-top'    => 30,
+            'margin-bottom' => 15,
+            'margin-left'   => 25,
+            'margin-right'  => 20,
+            'enable-local-file-access' => true,
+        ]);
+
+        return $pdf->stream();
+    }
+
     
 }
