@@ -37,6 +37,9 @@
                 </ul>
             </div>
         </li>
+        <p class="text-uppercase text-muted ms-3 mb-1 mt-3" style="font-size: 12px;">
+            Master Data
+        </p>
         <li class="nav-item">
             <a data-bs-toggle="collapse" href="#submenuSiswa" class="nav-link text-dark py-2 my-1"
                 aria-controls="submenuSiswa" role="button" aria-expanded="false">
@@ -79,6 +82,17 @@
                 </ul>
             </div>
         </li>
+        <p class="text-uppercase text-muted ms-3 mb-1 mt-3" style="font-size: 12px;">
+            Pelaporan
+        </p>
+
+        <li class="nav-item">
+            <a class="nav-link text-dark my-1" href="/app/laporan">
+                <i class="material-symbols-rounded opacity-5">receipt_long</i>
+                <span class="nav-link-text ms-1">Laporan</span>
+            </a>
+        </li>
+
         <li class="nav-item">
             <a class="nav-link text-dark my-1" href="/app/laporan-keuangan">
                 <i class="material-symbols-rounded opacity-5">receipt_long</i>
