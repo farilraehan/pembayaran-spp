@@ -45,6 +45,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/laporan', [LaporanSppController::class, 'index']);
 
     Route::get('/pelaporan/preview', [LaporanController::class, 'preview']);
+    Route::get('/laporan/preview', [LaporanSppController::class, 'preview']);
+
     Route::get('/pelaporan/sub_laporan/{file}', [LaporanController::class, 'subLaporan']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
