@@ -25,7 +25,7 @@ class TransaksiController extends Controller
 
     public function pembayaranSPP()
     {
-        $title = 'Pembayaran SPP ';
+        $title = 'Pembayaran SPP';
 
         return view('transaksi.pembayaran-spp', compact('title'));
     }

@@ -10,6 +10,7 @@ use App\Http\Controllers\JenisBiayaController;
 use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LaporanSppController;
+use App\Http\Controllers\SppController;
 
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -26,6 +27,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::resource('/Transaksi', TransaksiController::class);
 
     Route::resource('/Jenis-biaya', JenisBiayaController::class);
+    Route::get('/spp/CariSiswa', [SppController::class, 'CariSiswaAktif']);
+    Route::get('/spp/Pembayaran-spp/{id}', [SppController::class, 'spp']);
+    Route::resource('/spp', SppController::class);
 
     Route::get('/pengaturan/coa', [PengaturanController::class, 'coa']);
     Route::get('/pengaturan/ttd-pelaporan', [PengaturanController::class, 'ttdPelaporan']);

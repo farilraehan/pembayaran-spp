@@ -3,63 +3,61 @@
 namespace App\Http\Controllers;
 
 use App\Models\Spp;
+use App\Models\Siswa;
+use App\Models\Rekening;
+use App\Models\Anggota_Kelas;
 use Illuminate\Http\Request;
 
 class SppController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function CariSiswaAktif(Request $request)
     {
-        //
+        $params = $request->input('query');
+
+        $anggota_kelas = Anggota_Kelas::select(
+            'anggota_kelas.*',
+            'anggota_kelas.id_siswa',
+            'siswa.nama',
+            'siswa.nisn',
+            'siswa.alamat',
+            'siswa.hp'
+        )
+            ->join('siswa', 'siswa.id', '=', 'anggota_kelas.id_siswa')
+            ->where(function ($query) use ($params) {
+                $query->where('siswa.nama', 'LIKE', "%{$params}%")
+                    ->orWhere('siswa.nisn', 'LIKE', "%{$params}%");
+            })
+            ->where('anggota_kelas.status', 'aktif')
+            ->get();
+
+        return response()->json($anggota_kelas);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function spp($id)
     {
-        //
-    }
+        $anggota_kelas = Anggota_Kelas::where('id_siswa', $id)
+            ->with([
+                'getSiswa',
+                'getSpp',
+            ])
+            ->first();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        if (!$anggota_kelas) {
+            return response()->json([
+                'success' => false,
+                'view' => '<div class="text-center text-muted py-3">Data siswa tidak ditemukan</div>'
+            ]);
+        }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Spp $spp)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Spp $spp)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Spp $spp)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Spp $spp)
-    {
-        //
+        return response()->json([
+            'success' => true,
+            'view' => view('transaksi.map_arsip.form_spp')
+                ->with([
+                    'siswa' => $anggota_kelas->getSiswa,
+                    'spp' => $anggota_kelas->getSpp,
+                ])
+                ->render(),
+        ]);
     }
 }
