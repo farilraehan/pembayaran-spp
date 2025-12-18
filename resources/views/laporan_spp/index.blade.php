@@ -39,12 +39,13 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label class="form-label">Jenis Laporan</label>
-                                    <select class="form-control select2" name="state">
-                                        <option value="AL">Alabama</option>
-                                        ...
-                                        <option value="WY">Wyoming</option>
+                                    <select class="form-control select2" name="jenis_laporan" required>
+                                        <option value="">-- Pilih Jenis Laporan --</option>
+                                        <option value="spp">Laporan Pembayaran SPP</option>
+                                        <option value="daftar_ulang">Laporan Pembayaran Daftar Ulang</option>
                                     </select>
                                 </div>
+
                                 <div class="col-md-6">
                                     <label class="form-label">Kelas</label>
                                     <select class="form-control select2" name="kelas_id">
@@ -60,6 +61,12 @@
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-end gap-2 mt-3 me-3">
+                        <button type="submit" name="action" value="preview" class="btn btn-primary">
+                            Preview
+                        </button>
+                    </div>
+
                 </div>
             </form>
         </div>
