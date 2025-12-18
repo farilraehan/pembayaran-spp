@@ -155,60 +155,88 @@
         .tt-highlight {
             font-weight: 600;
         }
-.select2-container--bootstrap-5 * {
-    --bs-primary: #dc3545;
-}
-.select2-container--bootstrap-5 .select2-selection {
-    border: 1px solid #dc3545 !important;
-    box-shadow: none !important;
-}
 
-.select2-container--bootstrap-5.select2-container--focus
-.select2-selection {
-    border-color: #dc3545 !important;
-    box-shadow: 0 0 0 .25rem rgba(220,53,69,.25) !important;
-}
-.select2-container--bootstrap-5
-.select2-selection__rendered {
-    color: #000 !important;
-}
-.select2-container--bootstrap-5
-.select2-selection__arrow {
-    color: #000 !important;
-}
-.select2-container--bootstrap-5
-.select2-search--dropdown .select2-search__field {
-    border: 1px solid #dc3545 !important;
-    outline: none !important;
-    box-shadow: none !important;
-    color: #000 !important;
-}
-.select2-container--bootstrap-5
-.select2-search--dropdown .select2-search__field:focus {
-    border-color: #dc3545 !important;
-    outline: none !important;
-    box-shadow: 0 0 0 .2rem rgba(220,53,69,.25) !important;
-}
-.select2-container--bootstrap-5 .select2-dropdown {
-    border: 1px solid #dc3545 !important;
-}
-.select2-container--bootstrap-5
-.select2-results__option {
-    color: #000 !important;
-}
-.select2-container--bootstrap-5
-.select2-results__option--highlighted {
-    background-color: #dc3545 !important;
-    color: #fff !important;
-}.select2-container--bootstrap-5
-.select2-results__option--selected {
-    background-color: rgba(220,53,69,.2) !important;
-    color: #000 !important;
-}
-.select2-container--bootstrap-5 *:focus {
-    outline: none !important;
-}
-</style>
+        .select2-container--bootstrap-5 * {
+            --bs-primary: #dc3545;
+        }
+
+        .select2-container--bootstrap-5 .select2-selection {
+            border: 1px solid #dc3545 !important;
+            box-shadow: none !important;
+        }
+
+        .select2-container--bootstrap-5.select2-container--focus .select2-selection {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 .25rem rgba(220, 53, 69, .25) !important;
+        }
+
+        .select2-container--bootstrap-5 .select2-selection__rendered {
+            color: #000 !important;
+        }
+
+        .select2-container--bootstrap-5 .select2-selection__arrow {
+            color: #000 !important;
+        }
+
+        .select2-container--bootstrap-5 .select2-search--dropdown .select2-search__field {
+            border: 1px solid #dc3545 !important;
+            outline: none !important;
+            box-shadow: none !important;
+            color: #000 !important;
+        }
+
+        .select2-container--bootstrap-5 .select2-search--dropdown .select2-search__field:focus {
+            border-color: #dc3545 !important;
+            outline: none !important;
+            box-shadow: 0 0 0 .2rem rgba(220, 53, 69, .25) !important;
+        }
+
+        .select2-container--bootstrap-5 .select2-dropdown {
+            border: 1px solid #dc3545 !important;
+        }
+
+        .select2-container--bootstrap-5 .select2-results__option {
+            color: #000 !important;
+        }
+
+        .select2-container--bootstrap-5 .select2-results__option--highlighted {
+            background-color: #dc3545 !important;
+            color: #fff !important;
+        }
+
+        .select2-container--bootstrap-5 .select2-results__option--selected {
+            background-color: rgba(220, 53, 69, .2) !important;
+            color: #000 !important;
+        }
+
+        .select2-container--bootstrap-5 *:focus {
+            outline: none !important;
+        }
+
+        /* NORMAL: belum klik */
+        .select2-container--bootstrap-5 .select2-selection {
+            border-color: #ced4da !important;
+            box-shadow: none !important;
+        }
+
+        /* focus & focus-within TIDAK BOLEH ubah warna */
+        .select2-container--bootstrap-5.select2-container--focus .select2-selection,
+        .select2-container--bootstrap-5:focus-within .select2-selection {
+            border-color: #ced4da !important;
+            box-shadow: none !important;
+        }
+
+        /* hover tetap normal */
+        .select2-container--bootstrap-5 .select2-selection:hover {
+            border-color: #ced4da !important;
+        }
+
+        /*HANYA SAAT DIKLIK / DROPDOWN TERBUKA */
+        .select2-container--bootstrap-5.select2-container--open .select2-selection {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 .25rem rgba(220, 53, 69, .25) !important;
+        }
+    </style>
 
 
     @yield('style')
@@ -270,27 +298,27 @@
             })
         }
     </script>
-<script>
-$(document).ready(function () {
+    <script>
+        $(document).ready(function() {
 
-    $('textarea.form-control').each(function () {
-        if ($(this).val()) {
-            $(this).closest('.input-group').addClass('is-filled');
-        }
-    });
+            $('textarea.form-control').each(function() {
+                if ($(this).val()) {
+                    $(this).closest('.input-group').addClass('is-filled');
+                }
+            });
 
-    $('textarea.form-control').on('focus input', function () {
-        $(this).closest('.input-group').addClass('is-filled');
-    });
+            $('textarea.form-control').on('focus input', function() {
+                $(this).closest('.input-group').addClass('is-filled');
+            });
 
-    $('textarea.form-control').on('blur', function () {
-        if (!$(this).val()) {
-            $(this).closest('.input-group').removeClass('is-filled');
-        }
-    });
+            $('textarea.form-control').on('blur', function() {
+                if (!$(this).val()) {
+                    $(this).closest('.input-group').removeClass('is-filled');
+                }
+            });
 
-});
-</script>
+        });
+    </script>
     @if (session('success'))
         <script>
             Swal.fire({
