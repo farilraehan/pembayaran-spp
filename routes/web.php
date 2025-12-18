@@ -24,6 +24,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::get('/Transaksi/pembayaran-spp', [TransaksiController::class, 'pembayaranSPP']);
     Route::get('/transaksi/daftar-inventaris', [TransaksiController::class, 'daftarInventaris']);
+    Route::post('/transaksi/ProsesPembayaran', [TransaksiController::class, 'pembayaranSPPStore']);
     Route::resource('/Transaksi', TransaksiController::class);
 
     Route::resource('/Jenis-biaya', JenisBiayaController::class);

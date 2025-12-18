@@ -270,7 +270,27 @@
             })
         }
     </script>
+<script>
+$(document).ready(function () {
 
+    $('textarea.form-control').each(function () {
+        if ($(this).val()) {
+            $(this).closest('.input-group').addClass('is-filled');
+        }
+    });
+
+    $('textarea.form-control').on('focus input', function () {
+        $(this).closest('.input-group').addClass('is-filled');
+    });
+
+    $('textarea.form-control').on('blur', function () {
+        if (!$(this).val()) {
+            $(this).closest('.input-group').removeClass('is-filled');
+        }
+    });
+
+});
+</script>
     @if (session('success'))
         <script>
             Swal.fire({

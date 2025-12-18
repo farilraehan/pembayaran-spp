@@ -49,7 +49,6 @@ class SppController extends Controller
                 'view' => '<div class="text-center text-muted py-3">Data siswa tidak ditemukan</div>'
             ]);
         }
-
         return response()->json([
             'success' => true,
             'view' => view('transaksi.map_arsip.form_spp')

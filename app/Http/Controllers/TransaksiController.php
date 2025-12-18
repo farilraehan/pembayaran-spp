@@ -23,13 +23,6 @@ class TransaksiController extends Controller
         return view('transaksi.index', compact('title', 'jenisTransaksi', 'rekening'));
     }
 
-    public function pembayaranSPP()
-    {
-        $title = 'Pembayaran SPP';
-
-        return view('transaksi.pembayaran-spp', compact('title'));
-    }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -266,6 +259,7 @@ class TransaksiController extends Controller
         ]);
     }
 
+
     /**
      * Display the specified resource.
      */
@@ -296,5 +290,30 @@ class TransaksiController extends Controller
     public function destroy(Transaksi $Transaksi)
     {
         //
+    }
+
+    //PEMBAYARAN SPP
+
+    public function pembayaranSPP()
+    {
+        $title = 'Pembayaran SPP';
+
+        return view('transaksi.pembayaran-spp', compact('title'));
+    }
+
+    public function pembayaranSPPStore(Request $request)
+    {
+        $data = $request->only([
+            'tanggal',
+            'siswa_id',
+            'siswa_nama',
+            'jenis_biaya',
+            'kelas',
+            'nominal',
+            'bulan_dibayar',
+            'keterangan',
+        ]);
+
+        dd($data);
     }
 }

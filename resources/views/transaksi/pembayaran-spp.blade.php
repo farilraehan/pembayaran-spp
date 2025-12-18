@@ -72,5 +72,40 @@
             };
         });
     }
+
+    $(document).on('click', '#SPPsimpan', function(e) {
+            e.preventDefault();
+            var form = $('#FormPembayaranSPP')[0];
+            var actionUrl = $('#FormPembayaranSPP').attr('action');
+            var formData = new FormData(form);
+            $.ajax({
+                type: 'POST',
+                url: actionUrl,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(result) {
+                    if (result.success) {
+                        Swal.fire({
+                            title: result.msg,
+                            text: "Simpan Data Pembayaran SPP?",
+                            icon: "success",
+                            showDenyButton: true,
+                            confirmButtonText: "Lanjutkan",
+                            denyButtonText: `Tidak`
+                        }).then((res) => {
+                            if (res.isConfirmed) {
+                                window.location.reload();
+                            } else if (res.isDenied) {
+                                window.location.href = '/print/spp/' + result.pembayaran_id;
+                            }
+                        });
+                    }
+                },
+                error: function(result) {
+                    Swal.fire('Error', 'Cek kembali input yang anda masukkan', 'error');
+                }
+            });
+        });
 </script>
 @endsection

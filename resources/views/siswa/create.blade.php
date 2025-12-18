@@ -146,8 +146,8 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="input-group input-group-outline mb-3">
-                                                <textarea name="alamat" id="alamat" rows="1" placeholder="Alamat Lengkap" class="form-control"
-                                                    rows="3"></textarea>
+                                                <label class="form-label">Alamat Lengkap</label>
+                                                <textarea name="alamat" rows="1" id="alamat" rows="3" class="form-control"></textarea>
                                             </div>
                                         </div>
                                     </div>
