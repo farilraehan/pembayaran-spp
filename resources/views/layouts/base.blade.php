@@ -213,6 +213,38 @@
             outline: none !important;
         }
 
+        /* teks yang tampil di select */
+        .select2-container--bootstrap-5 .select2-selection__rendered {
+            font-family: inherit !important;
+            font-size: 0.875rem !important;
+            /* sama dengan .form-control */
+            font-weight: 400 !important;
+            /* ini yang bikin tidak tebal */
+            line-height: 1.5 !important;
+            padding-left: 0.75rem !important;
+        }
+
+        /* input search di dropdown */
+        .select2-container--bootstrap-5 .select2-search__field {
+            font-family: inherit !important;
+            font-size: 0.875rem !important;
+            font-weight: 400 !important;
+            line-height: 1.5 !important;
+        }
+
+        /* tinggi & alignment box select */
+        .select2-container--bootstrap-5 .select2-selection {
+            min-height: calc(1.5em + .75rem + 2px);
+            display: flex;
+            align-items: center;
+        }
+
+        /* arrow biar sejajar */
+        .select2-container--bootstrap-5 .select2-selection__arrow {
+            height: 100% !important;
+        }
+
+
         /* NORMAL: belum klik */
         .select2-container--bootstrap-5 .select2-selection {
             border-color: #ced4da !important;
