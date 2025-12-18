@@ -30,6 +30,10 @@
     <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
 
     <style>
+        .card-body {
+            transition: all 0.3s ease;
+        }
+
         #editor,
         .ql-container {
             min-height: 20px

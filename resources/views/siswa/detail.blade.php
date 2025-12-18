@@ -42,7 +42,7 @@
                                         <div class="d-flex justify-content-end mb-2">
                                             <span
                                                 class="badge 
-                                                {{ $siswa->status_siswa == 'Aktif' ? 'bg-success' : 'bg-danger' }}">
+                                                {{ $siswa->status_siswa == 'aktif' ? 'bg-success' : 'bg-danger' }}">
                                                 {{ $siswa->status_siswa }}
                                             </span>
                                         </div>

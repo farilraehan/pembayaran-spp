@@ -4,10 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaksi;
 use App\Models\Jenis_transaksi;
+use App\Models\Siswa;
+use App\Models\Spp;
 use App\Models\Inventaris;
 use App\Utils\UtilsInventaris;
 use App\Models\Rekening;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Response;
+use Yajra\DataTables\Facades\DataTables;
+use App\Utils\Keuangan;
+
+
 
 class TransaksiController extends Controller
 {
@@ -309,11 +318,65 @@ class TransaksiController extends Controller
             'siswa_nama',
             'jenis_biaya',
             'kelas',
-            'nominal',
+            'spp_ke',
+            'spp_id',
             'bulan_dibayar',
+            'nominal',
             'keterangan',
         ]);
+        $rules = [
+            'tanggal' => 'required',
+            'siswa_id' => 'required',
+            'jenis_biaya' => 'required',
+            'nominal' => 'required',
+            'keterangan' => 'required',
+        ];
 
-        dd($data);
+        $validate = Validator::make($data, $rules);
+        if ($validate->fails()) {
+            return response()->json($validate->errors(), Response::HTTP_MOVED_PERMANENTLY);
+        }
+
+        if ($request->jenis_biaya !== '1.1.03.01') {
+            $request->merge([
+                'spp_ke' => [''],
+                'bulan_dibayar' => [''],
+            ]);
+        }
+
+        $spp_ke = json_encode($request->spp_ke);
+        $bulan_dibayar = json_encode($request->bulan_dibayar);
+
+        $transaksi = Transaksi::create([
+            'tanggal_transaksi' => $data['tanggal'],
+            'invoice_id' => '0',
+            'rekening_debit' => '1.1.01.01',
+            'rekening_kredit' =>  $data['jenis_biaya'],
+            'spp_ke' => $spp_ke,
+            'siswa_id' => $data['siswa_id'],
+            'jumlah' => str_replace(',', '', str_replace('.00', '', $data['nominal'])),
+            'keterangan' => $data['keterangan'],
+            'urutan' => '0',
+            'user_id' => auth()->user()->id,
+        ]);
+
+        if (!empty($data['spp_id']) && is_array($data['spp_id'])) {
+            $spp = Spp::whereIn('id', $data['spp_id'])->get();
+            foreach ($spp as $item) {
+                $item->update([
+                    'status' => 'L',
+                ]);
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Pembayaran berhasil disimpan',
+            'data' => $transaksi,
+            'tipe' => $data['jenis_biaya'] === '1.1.03.01' ? 'spp' : 'daftar_ulang',
+            'nominal' => $transaksi->jumlah,
+            'keterangan' => $transaksi->keterangan,
+            'tanggal' => $transaksi->tanggal_transaksi,
+        ]);
     }
 }
