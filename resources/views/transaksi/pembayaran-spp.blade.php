@@ -79,7 +79,7 @@
                 <button type="button" class="btn btn-secondary" id="btnPrintAllDetail">
                     <i class="bi bi-printer-fill me-1"></i> Print All
                 </button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-danger" id="btnTutupDetail">
                     <i class="bi bi-x-circle me-1"></i> Tutup
                 </button>
             </div>
@@ -106,7 +106,7 @@
                 <button type="button" class="btn btn-success" id="btnCetak">
                     <i class="bi bi-printer-fill me-1"></i> Cetak
                 </button>
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-danger" id="btnTutupCakbox">
                     <i class="bi bi-x-circle me-1"></i> Tutup
                 </button>
             </div>
@@ -253,6 +253,11 @@
         let url = '/app/transaksi/pembayaran/printAllSelected?ids=' + ids.join(',');
         window.open(url, '_blank');
     });
+
+    $(document).on('click', '#detail .btn-danger, #CakboxAll .btn-danger', function() {
+        window.location.href = '/app/Transaksi/pembayaran-spp';
+    });
+
 
     //simpan pembayaran spp
     $(document).on('click', '#SPPsimpan', function (e) {
