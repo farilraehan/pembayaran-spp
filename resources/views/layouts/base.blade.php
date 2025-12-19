@@ -30,10 +30,16 @@
     <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
 
     <style>
+        .modal-fullscreen {
+            z-index: 2000 !important;
+        }
+        .modal-backdrop.show {
+            z-index: 1999 !important;
+        }
+
         .card-body {
             transition: all 0.3s ease;
         }
-
         #editor,
         .ql-container {
             min-height: 20px
@@ -307,9 +313,8 @@
                 @include('layouts.footer')
             </footer>
         </div>
-
-        @yield('modal')
     </main>
+    @yield('modal')
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -326,7 +331,19 @@
     <script src="/assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="/assets/js/plugins/chartjs.min.js"></script>
     <script src="/assets/js/material-dashboard.min.js?v=3.2.0"></script>
+   <script>
+    const sideBar = document.querySelector('.sidenav'); 
+    const modals = document.querySelectorAll('.modal-fullscreen');
 
+    modals.forEach(modal => {
+        modal.addEventListener('show.bs.modal', () => {
+            sideBar.style.display = 'none'; // sembunyikan sidebar
+        });
+        modal.addEventListener('hidden.bs.modal', () => {
+            sideBar.style.display = ''; // tampilkan lagi
+        });
+    });
+</script>
     <script>
         if (navigator.platform.includes('Win') && document.querySelector('#sidenav-scrollbar')) {
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), {
