@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('rekening_debit');
             $table->string('rekening_kredit');
             $table->integer('spp_id');
+            $table->integer('siswa_id');
             $table->string('jumlah');
             $table->string('keterangan');
             $table->string('urutan');

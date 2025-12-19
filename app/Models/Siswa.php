@@ -15,7 +15,7 @@ class Siswa extends Model
     {
         return $this->belongsTo(Tahun_akademik::class, '');
     }
-    
+
     public function getKelas()
     {
         return $this->belongsTo(Kelas::class, '');
@@ -24,5 +24,9 @@ class Siswa extends Model
     public function getAnggotaKelas()
     {
         return $this->belongsTo(Anggota_Kelas::class, '');
+    }
+    public function getTransaksi()
+    {
+        return $this->hasMany(Transaksi::class, 'siswa_id');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Transaksi;
 use App\Models\Jenis_transaksi;
+use App\Models\Profil;
 use App\Models\Siswa;
 use App\Models\Spp;
 use App\Models\Inventaris;
@@ -383,26 +384,48 @@ class TransaksiController extends Controller
     /**
      * Detail PEMBAYARAN SPP
      */
-    public function pembayaranSPPDetail(Transaksi $Transaksi)
+    public function pembayaranSPPDetail($id)
     {
-        //
+        $siswa = Siswa::with([
+            'getKelas',
+            'getTransaksi.spp' // load relasi spp dari transaksi
+        ])->findOrFail($id);
+
+        return view('transaksi.map_arsip.detail', compact('siswa'));
+    }
+    public function pembayaranSPPPrintAll($id)
+    {
+        $siswa = Siswa::with([
+            'getKelas',
+            'getTransaksi.spp' // load relasi spp dari transaksi
+        ])->findOrFail($id);
+
+        return view('transaksi.map_arsip.detail_cetak', compact('siswa'));
     }
 
     /**
      * Print PEMBAYARAN SPP
      */
-
     public function pembayaranSPPPrint(Request $request)
     {
         $ids = explode(',', $request->query('ids'));
 
-        $transaksis = Transaksi::with(['siswa'])
+        $transaksis = Transaksi::with('siswa')
             ->whereIn('id', $ids)
             ->get();
+
+        if ($transaksis->isEmpty()) {
+            abort(404);
+        }
+
+        $header = $transaksis->first();
+        $lembaga = Profil::first()->nama;
+        $allSpps = collect();
 
         foreach ($transaksis as $transaksi) {
 
             $rawSpp = $transaksi->spp_id;
+
             if (is_string($rawSpp)) {
                 $decoded = json_decode($rawSpp, true);
                 $sppIds = is_array($decoded) ? $decoded : [$rawSpp];
@@ -412,14 +435,15 @@ class TransaksiController extends Controller
                 $sppIds = [];
             }
 
-            $transaksi->spps = Spp::with('anggota_kelas')
-                ->whereIn('id', $sppIds)
-                ->get();
+            $spps = Spp::whereIn('id', $sppIds)->get();
+            $allSpps = $allSpps->merge($spps);
         }
 
         $data = [
-            'title'      => 'Kwitansi Pembayaran SPP',
-            'transaksis' => $transaksis
+            'title'         => 'Kwitansi Pembayaran SPP',
+            'header'        => $header,
+            'spps'          => $allSpps,
+            'nama_lembaga'  => $lembaga,
         ];
 
         $pdf = Pdf::loadView('transaksi.map_arsip.kwitansi_spp', $data)
@@ -428,11 +452,47 @@ class TransaksiController extends Controller
         return $pdf->stream('kwitansi_spp.pdf');
     }
 
+    public function printAllSelected(Request $request)
+    {
+        $ids = explode(',', $request->query('ids'));
+
+        $transaksis = Transaksi::with('siswa')
+            ->whereIn('id', $ids)
+            ->get();
+
+        if ($transaksis->isEmpty()) {
+            abort(404, 'Transaksi tidak ditemukan.');
+        }
+
+        $header = $transaksis->first();
+
+        $lembaga = Profil::first()->nama;
+        $data = [
+            'title'        => 'Kwitansi Pembayaran',
+            'header'       => $header,
+            'transaksis'   => $transaksis,
+            'nama_lembaga' => $lembaga,
+        ];
+        $pdf = Pdf::loadView('transaksi.map_arsip.cetak', $data)
+            ->setPaper('A4', 'portrait');
+
+        return $pdf->stream('cetak.pdf');
+    }
+
     /**
      * Remove PEMBAYARAN SPP
      */
     public function pembayaranSPPDestroy(Transaksi $Transaksi)
     {
-        //
+        $sppId = $Transaksi->spp_id;
+        if ($sppId && is_numeric($sppId)) {
+            Spp::where('id', $sppId)->update(['status' => 'B']);
+        }
+
+        $Transaksi->delete();
+        return response()->json([
+            'success' => true,
+            'msg' => 'Transaksi pembayaran SPP berhasil dihapus.'
+        ]);
     }
 }

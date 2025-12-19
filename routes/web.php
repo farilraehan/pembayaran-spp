@@ -26,6 +26,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/transaksi/daftar-inventaris', [TransaksiController::class, 'daftarInventaris']);
     Route::post('/transaksi/ProsesPembayaran', [TransaksiController::class, 'pembayaranSPPStore']);
     Route::get('/transaksi/kwitansi-spp', [TransaksiController::class, 'pembayaranSPPPrint']);
+    Route::get('/transaksi/pembayaran/printAllSelected', [TransaksiController::class, 'printAllSelected']);
+    Route::get('/transaksi/pembayaran/printAll/{id}', [TransaksiController::class, 'pembayaranSPPPrintAll']);
+    Route::get('/transaksi/pembayaranSPPDetail/{id}', [TransaksiController::class, 'pembayaranSPPDetail']);
+    Route::delete('/transaksi/pembayaranSPPDestroy/{Transaksi}', [TransaksiController::class, 'pembayaranSPPDestroy']);
     Route::resource('/Transaksi', TransaksiController::class);
 
     Route::resource('/Jenis-biaya', JenisBiayaController::class);
