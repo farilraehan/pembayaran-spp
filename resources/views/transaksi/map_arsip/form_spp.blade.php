@@ -129,161 +129,98 @@
     </div>
 </div>
 <script>
-    const pieColors = [
-        "#ff6384",
-        "#36a2eb", 
-        "#ffcd56"  
-    ];
-
-    const sppPerBulan = {{ $spp_perbulan ?? 0 }};
-    const targetBulan = {{ $target_bulan ?? 0 }};
-    const sdBulanIni = {{ $sd_bulan_ini ?? 0 }};
-
-    const pieData = {
-        labels: ['SPP Per Bulan', 'Target Bulan', 'SD Bulan Ini'],
-        datasets: [{
-            data: [sppPerBulan, targetBulan, sdBulanIni],
-            backgroundColor: pieColors,
-            borderWidth: 1
-        }]
-    };
-
-    const pieConfig = {
-        type: 'pie',
-        data: pieData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'bottom',
-                    align: 'center',
-                    labels: {
-                        usePointStyle: true,
-                        pointStyle: 'circle',
-                        padding: 5,
-                        boxWidth: 12,
-                        font: {
-                            size: 10
-                        }
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: (ctx) => `${ctx.label}: ${ctx.raw.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}`
-                    }
-                }
-            }
+const pieColors=["#ff6384","#36a2eb","#ffcd56"];
+const sppPerBulan={{ $spp_perbulan ?? 0 }};
+const targetBulan={{ $target_bulan ?? 0 }};
+const sdBulanIni={{ $sd_bulan_ini ?? 0 }};
+new Chart(document.getElementById("pie"),{
+    type:"pie",
+    data:{
+        labels:["SPP Per Bulan","Target Bulan","SD Bulan Ini"],
+        datasets:[{data:[sppPerBulan,targetBulan,sdBulanIni],backgroundColor:pieColors,borderWidth:1}]
+    },
+    options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{
+            legend:{display:true,position:"bottom",labels:{usePointStyle:true,pointStyle:"circle",padding:5,boxWidth:12,font:{size:10}}},
+            tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw.toLocaleString("id-ID",{style:"currency",currency:"IDR"})}`}}
         }
-    };
-    new Chart(document.getElementById('pie'), pieConfig);
+    }
+});
 </script>
+
 <script>
-    $('#keterangan').val('-').trigger('focus').trigger('blur');
+$('#keterangan').val('-').trigger('focus').trigger('blur');
 
-    $(document).ready(function () {
-        $('.select2').select2({
-            theme: 'bootstrap-5'
-        });
-        flatpickr('.datepicker', {
-            dateFormat: 'Y-m-d'
-        });
+$(document).ready(function(){
+    $('.select2').select2({theme:'bootstrap-5'});
+    flatpickr('.datepicker',{dateFormat:'Y-m-d'});
+    $('.nominal').maskMoney({thousands:'.',decimal:',',precision:2,allowZero:true});
 
-        $('.nominal').maskMoney({
-            thousands: '.',
-            decimal: ',',
-            precision: 2,
-            allowZero: true
-        });
+    $('#jenis_biaya').on('change',function(){
+        const jenis=$(this).val();
+        const nama=$('#siswa_nama').val();
+        $('#bulanWrapper').toggle(jenis==='1.1.03.01');
+        $('.spp-checkbox').prop('checked',false).prop('disabled',false);
+        $('#sppIDContainer').empty();
+        $('#nominal').val(0).maskMoney('mask');
+        if(jenis==='1.1.03.01'){
+            $('#nominal').prop('readonly',true);
+            $('#keterangan').val('Pembayaran SPP an. '+nama);
+        }else if(jenis==='1.1.03.02'){
+            $('#nominal').prop('readonly',false).val('');
+            $('#keterangan').val('Pembayaran Daftar Ulang an. '+nama+' kelas '+$('#kelas').val());
+        }else{
+            $('#keterangan').val('');
+        }
+    });
 
-        $('#jenis_biaya').on('change', function () {
-            const jenis = $(this).val();
-            const nama = $('#siswa_nama').val();
+    $('.spp-checkbox').on('change', function () {
+    let total = 0;
+    $('#sppIDContainer').empty();
 
-            if (jenis === '1.1.03.01') {
-                $('#bulanWrapper').show();
-                $('#nominal').prop('readonly', true).val(0).maskMoney('mask');
-                $('#keterangan').val('Pembayaran SPP an. ' + nama);
-            } else if (jenis === '1.1.03.02') {
-                $('#bulanWrapper').hide();
-                $('.spp-checkbox').prop('checked', false);
-                $('#nominal').prop('readonly', false).val('');
-                $('#keterangan').val('Pembayaran Daftar Ulang an. ' + nama + ' kelas ' + $('#kelas').val());
-            } else {
-                $('#bulanWrapper').hide();
-                $('#nominal').val('');
-                $('#keterangan').val('');
-            }
-        });
+    $('.spp-checkbox:checked:not(:disabled)').each(function () {
+        const id = $(this).data('id');
+        const nominal = parseInt($(this).data('nominal'));
 
-        $('.spp-checkbox').on('change', function () {
-            let total = 0;
-            let sppKE = [];
-            let sppID = [];
+        total += nominal;
 
-            $('.spp-checkbox:checked:not(:disabled)').each(function () {
-                total += parseInt($(this).data('nominal'));
+        $('#sppIDContainer').append(`
+            <input type="hidden" name="spp_id[]" value="${id}">
+            <input type="hidden" name="nominal_spp[]" value="${nominal}">
+        `);
+    });
 
-                const spp_ke = $(this).data('spp_ke');
-                const spp_id = $(this).data('id');
+    $('#nominal').maskMoney('mask', total);
+});
 
-                if (spp_ke !== undefined) sppKE.push(spp_ke);
-                if (spp_id !== undefined) sppID.push(spp_id);
-            });
-
-            $('#nominal').maskMoney('mask', total);
-            $('#sppKEContainer').html('');
-            $('#sppIDContainer').html('');
-
-            sppKE.forEach(v => {
-                $('#sppKEContainer').append(
-                    `<input type="hidden" name="spp_ke[]" value="${v}">`
-                );
-            });
-
-            sppID.forEach(v => {
-                $('#sppIDContainer').append(
-                    `<input type="hidden" name="spp_id[]" value="${v}">`
-                );
-            });
-        });
-
-        document.querySelectorAll('.btn-check').forEach(input => {
-            const label = document.querySelector(`label[for="${input.id}"]`);
-            if (input.checked && !label.querySelector('.check-icon')) {
-                label.insertAdjacentHTML('afterbegin', '<span class="check-icon me-0">✓</span>');
-            }
-
-            input.addEventListener('change', function () {
-                if (this.checked) {
-                    if (!label.querySelector('.check-icon')) {
-                        label.insertAdjacentHTML('afterbegin',
-                            '<span class="check-icon me-0">✓</span>');
-                    }
-                } else {
-                    const icon = label.querySelector('.check-icon');
-                    if (icon) icon.remove();
+    document.querySelectorAll('.btn-check').forEach(input=>{
+        const label=document.querySelector(`label[for="${input.id}"]`);
+        if(input.checked&&!label.querySelector('.check-icon')){
+            label.insertAdjacentHTML('afterbegin','<span class="check-icon me-0">✓</span>');
+        }
+        input.addEventListener('change',function(){
+            if(this.checked){
+                if(!label.querySelector('.check-icon')){
+                    label.insertAdjacentHTML('afterbegin','<span class="check-icon me-0">✓</span>');
                 }
-            });
+            }else{
+                const icon=label.querySelector('.check-icon');
+                if(icon)icon.remove();
+            }
         });
     });
 
-    $(document).ready(function () {
-        const $ta = $('textarea.form-control');
-        function updateState(el) {
-            const group = el.closest('.input-group');
-            group.toggleClass('is-filled is-focused', el.val().trim() !== '');
-        }
-        $ta.each(function () {
-            updateState($(this));
-        });
-        $ta.on('focus input', function () {
-            $(this).closest('.input-group')
-                .addClass('is-filled is-focused');
-        });
-        $ta.on('blur', function () {
-            updateState($(this));
-        });
-    })
+    const $ta=$('textarea.form-control');
+    function updateState(el){
+        const g=el.closest('.input-group');
+        g.toggleClass('is-filled is-focused',el.val().trim()!=='');
+    }
+    $ta.each(function(){updateState($(this));});
+    $ta.on('focus input',function(){
+        $(this).closest('.input-group').addClass('is-filled is-focused');
+    });
+    $ta.on('blur',function(){updateState($(this));});
+});
 </script>

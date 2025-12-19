@@ -33,15 +33,20 @@
 </div>
 <div class="col-md-12 mt-3 d-none" id="riwayat-transaksi">
     <div class="card h-100 position-relative">
+
         <button type="button"
                 id="closeRiwayat"
                 class="btn btn-link p-0 position-absolute top-0 end-0 m-3 text-secondary">
             <i class="material-symbols-rounded fs-5">close</i>
         </button>
+
         <div class="card-body pt-4 p-3">
-            <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">
-                Riwayat Transaksi
-            </h6>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-0">
+                    Riwayat Transaksi
+                    <span id="riwayat-tanggal" class="text-xs text-muted"></span>
+                </h6>
+            </div>
             <ul class="list-group mb-3" id="list-riwayat"></ul>
         </div>
     </div>
@@ -93,7 +98,7 @@
             };
         });
     }
-
+    
     $(document).on('click', '#SPPsimpan', function (e) {
         e.preventDefault();
 
@@ -112,6 +117,7 @@
             processData: false,
             success: function (result) {
                 if (!result.success) return;
+
                 $('#riwayat-transaksi').removeClass('d-none');
                 $('#list-riwayat').empty();
 
@@ -126,10 +132,30 @@
                     title = 'Daftar Ulang';
                 }
 
+                let detailHtml = '';
+                if (result.detail_spp && result.detail_spp.length) {
+                    detailHtml = '<ul class="ps-3 mb-1">';
+                    result.detail_spp.forEach(item => {
+                        detailHtml += `
+                            <li class="text-xs">
+                                ${item.bulan}
+                                <span class="text-muted">(Rp ${numFormat.format(item.nominal)})</span>
+                            </li>
+                        `;
+                    });
+                    detailHtml += '</ul>';
+                }
+
+                let transaksiIds = Array.isArray(result.id_transaksi)
+                    ? result.id_transaksi.join(',')
+                    : result.id_transaksi;
+
+                    $('#riwayat-tanggal').text(result.tanggal);
+
                 $('#list-riwayat').prepend(`
                     <li class="list-group-item border-0 ps-0 mb-2 border-radius-lg position-relative">
                         <div class="d-flex justify-content-between align-items-start">
-                            <div class="d-flex align-items-center">
+                            <div class="d-flex align-items-start">
                                 <button class="btn btn-icon-only btn-rounded btn-outline-${color} me-3 p-3 btn-sm d-flex align-items-center justify-content-center">
                                     <i class="material-symbols-rounded text-lg">${icon}</i>
                                 </button>
@@ -137,7 +163,7 @@
                                 <div class="d-flex flex-column">
                                     <h6 class="mb-1 text-dark text-sm">${title}</h6>
                                     <span class="text-xs">${result.keterangan}</span>
-                                    <span class="text-xs text-muted">${result.tanggal}</span>
+                                    ${detailHtml}
                                 </div>
                             </div>
 
@@ -148,11 +174,13 @@
                             </div>
                         </div>
 
-                        <a href="/app/transaksi/struk/${result.id_transaksi}"
+                        <div class="text-end mt-2">
+                            <a href="/app/transaksi/kwitansi-spp?ids=${transaksiIds}"
                             target="_blank"
-                            class="btn btn-outline-secondary btn-sm px-1 py-1 position-absolute end-0">
-                            <i class="bi bi-printer"></i> Cetak Struk
-                        </a>
+                            class="btn btn-outline-secondary btn-sm px-2 py-1">
+                                <i class="bi bi-printer"></i> Cetak Struk
+                            </a>
+                        </div>
                     </li>
                 `);
 
@@ -173,5 +201,6 @@
             }
         });
     });
+
 </script>
 @endsection
