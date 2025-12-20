@@ -1,8 +1,8 @@
 @extends('layouts.base')
 @section('content')
     <div class="row">
-        <div class="col-12">
-            <form action="/app/laporan/preview" method="GET" target="_blank">
+        <form action="/app/laporan/preview" method="GET" target="_blank">
+            <div class="col-12">
                 <div class="card my-4">
                     <div class="card-body px-0 pb-2">
                         <div class="table-responsive p-3">
@@ -28,9 +28,9 @@
                                     <select class="form-control select2" name="tahun_akademik_id">
                                         <option value="">-- Semua Tahun Akademik --</option>
                                         @foreach ($tahunAkademik as $ta)
-                                            <option value="{{ $ta->id }}">
-                                                {{ $ta->nama_tahun }}
-                                            </option>
+                                        <option value="{{ $ta->id }}">
+                                            {{ $ta->nama_tahun }}
+                                        </option>
                                         @endforeach
                                     </select>
 
@@ -51,9 +51,9 @@
                                     <select class="form-control select2" name="kelas_id">
                                         <option value="">-- Semua Kelas --</option>
                                         @foreach ($kelas as $k)
-                                            <option value="{{ $k->id }}">
-                                                {{ $k->tingkat }} - {{ $k->nama_kelas }}
-                                            </option>
+                                        <option value="{{ $k->id }}">
+                                            {{ $k->tingkat }} - {{ $k->nama_kelas }}
+                                        </option>
                                         @endforeach
                                     </select>
 
@@ -61,31 +61,36 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end gap-2 mt-3 me-3">
+                </div>
+            </div>
+            <div class="col-12 ">
+                <div class="card my-2">
+                    <div class="d-flex justify-content-between mt-3 me-3 ms-3">
+                        <a href="/app/Transaksi/pembayaran-spp" class="btn btn-secondary">Kembali</a>
                         <button type="submit" name="action" value="preview" class="btn btn-primary">
-                            Preview
+                            Preview Laporan
                         </button>
                     </div>
-
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 @endsection
 @section('script')
-    <script>
-        $(document).ready(function() {
-            $('.select2').select2({
-                theme: 'bootstrap-5'
-            });
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            theme: 'bootstrap-5'
         });
+    });
 
-        flatpickr('.datepicker', {
-            dateFormat: "Y-m-d"
-        });
+    flatpickr('.datepicker', {
+        dateFormat: "Y-m-d"
+    });
 
-        $('.datepicker').on('change', function() {
-            $(this).parent().addClass('is-filled');
-        });
-    </script>
+    $('.datepicker').on('change', function () {
+        $(this).parent().addClass('is-filled');
+    });
+
+</script>
 @endsection

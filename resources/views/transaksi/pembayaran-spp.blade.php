@@ -10,7 +10,7 @@
                             class="form-control form-search" autocomplete="off">
                     </div>
                     <div class="col-md-3 col-12 gap-3">
-                        <button class="btn btn-danger w-100" id="btnDetailSiswa" type="button">Detail Siswa</button>
+                        <a href="/app/laporan" class="btn btn-danger w-100">Laporan Pembayaran</a>
                     </div>
                 </div>
             </div>
