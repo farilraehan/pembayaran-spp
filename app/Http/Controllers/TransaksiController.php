@@ -332,7 +332,7 @@ class TransaksiController extends Controller
                     'spp_id' => $sppId,
                     'siswa_id' => $request->siswa_id,
                     'jumlah' => $nilai,
-                    'keterangan' => $request->keterangan,
+                    'keterangan' => $request->keterangan . ' - Bulan ' . Tanggal::NamaBulan(Spp::find($sppId)->tanggal),
                     'urutan' => $i + 1,
                     'user_id' => auth()->id(),
                 ]);

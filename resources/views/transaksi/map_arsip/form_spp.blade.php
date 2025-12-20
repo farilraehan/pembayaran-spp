@@ -170,7 +170,7 @@ $(document).ready(function(){
             $('#keterangan').val('Pembayaran SPP an. '+nama);
         }else if(jenis==='1.1.03.02'){
             $('#nominal').prop('readonly',false).val('');
-            $('#keterangan').val('Pembayaran Daftar Ulang an. '+nama+' kelas '+$('#kelas').val());
+            $('#keterangan').val('Pembayaran Daftar Ulang an. '+nama+' - kelas '+$('#kelas').val());
         }else{
             $('#keterangan').val('');
         }
