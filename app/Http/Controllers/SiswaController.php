@@ -60,19 +60,19 @@ class SiswaController extends Controller
                             <button class="btn btn-secondary btnMutasi" id="btnMutasi"
                                     data-id="' . $row->id . '"
                                     data-tahun="' . $request->tahun_akademik . '"
-                                    data-kelas="' . $request->kelas . '">
+                                    data-kelas="' . $request->kelas . '" title="Mutasi Siswa">
                                 <i class="fa-solid fa-right-left"></i>
                             </button>
                             <a href="' . $detail . '" class="btn btn-info">
-                                <i class="fa-solid fa-circle-info"></i>
+                                <i class="fa-solid fa-circle-info" title="Detail Siswa"></i>
                             </a>
-                            <a href="' . $edit . '" class="btn btn-warning">
+                            <a href="' . $edit . '" class="btn btn-warning" title="Edit Siswa">
                                 <i class="fa-solid fa-pen-to-square"></i>
                             </a>
                             <button class="btn btn-danger btnDelete"
                                 data-id="' . $row->id . '"
                                 data-tahun="' . $request->tahun_akademik . '"
-                                data-kelas="' . $request->kelas . '">
+                                data-kelas="' . $request->kelas . '" title="Hapus Siswa">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </div>

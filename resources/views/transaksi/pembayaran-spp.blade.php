@@ -255,9 +255,8 @@
     });
 
     $(document).on('click', '#detail .btn-danger, #CakboxAll .btn-danger', function() {
-        window.location.href = '/app/Transaksi/pembayaran-spp';
+        $('.modal.show').modal('hide');
     });
-
 
     //simpan pembayaran spp
     $(document).on('click', '#SPPsimpan', function (e) {

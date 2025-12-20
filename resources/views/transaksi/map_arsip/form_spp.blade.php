@@ -111,7 +111,7 @@
 
                     <div class="d-flex justify-content-end mt-3  gap-1">
                         <button class="btn btn-danger" id="btnDetailSiswa" type="button">Detail</button>
-                        <button type="submit" id="SPPsimpan" class="btn btn-secondary">Proses Pembayaran</button>
+                        <button type="submit" id="SPPsimpan" class="btn btn-info">Proses Pembayaran</button>
                     </div>
                 </form>
             </div>

@@ -156,7 +156,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-dark">Simpan Transaksi</button>
+                        <button type="submit" class="btn btn-info">Simpan Transaksi</button>
                     </div>
                 </form>
             </div>
