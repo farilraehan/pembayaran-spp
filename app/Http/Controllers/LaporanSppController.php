@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Tahun_Akademik;
 use App\Models\Kelas;
 use App\Models\Spp;
+use App\Models\Transaksi;
 use App\Models\Anggota_Kelas;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -147,15 +148,66 @@ class LaporanSppController extends Controller
 
     private function daftar_ulang(array $data)
     {
-        $pdf = Pdf::loadView('laporan_spp.views.daftar_ulang', $data)
-        ->setOptions([
-            'margin-top'    => 30,
-            'margin-bottom' => 15,
-            'margin-left'   => 25,
-            'margin-right'  => 20,
-            'enable-local-file-access' => true,
-        ]);
+        $data['title'] = 'Laporan Pembayaran Daftar Ulang';
 
-        return $pdf->stream('laporan-spp.pdf');
+        $data['kelas'] = !empty($data['kelas_id'])
+            ? Kelas::find($data['kelas_id'])
+            : null;
+
+        $tglAwal  = Carbon::parse($data['tgl_awal'])->startOfDay();
+        $tglAkhir = Carbon::parse($data['tgl_akhir'])->endOfDay();
+
+        $data['periode'] = [
+            'awal'  => $tglAwal->locale('id'),
+            'akhir' => $tglAkhir->locale('id'),
+        ];
+
+        $anggotaKelas = Anggota_Kelas::with(['getSiswa', 'getTahunAkademik'])
+            ->where('status', 'aktif')
+            ->when(!empty($data['kelas_id']), function ($q) use ($data) {
+                $kelas = Kelas::find($data['kelas_id']);
+                if ($kelas) {
+                    $q->where('kode_kelas', $kelas->kode_kelas);
+                }
+            })
+            ->when(!empty($data['tahun_akademik_id']), function ($q) use ($data) {
+                $tahun = Tahun_Akademik::find($data['tahun_akademik_id']);
+                if ($tahun) {
+                    $q->where('tahun_akademik', $tahun->nama_tahun);
+                }
+            })
+            ->orderBy('id')
+            ->get()
+            ->map(function ($row) use ($tglAwal, $tglAkhir) {
+
+                // target = SPP nominal (1x)
+                $row->target = $row->getSiswa->spp_nominal ?? 0;
+
+                // realisasi
+                $row->realisasi = Transaksi::where('siswa_id', $row->getSiswa->id ?? 0)
+                    ->where('rekening_kredit', '1.1.03.02') // Daftar Ulang
+                    ->whereBetween('tanggal_transaksi', [$tglAwal, $tglAkhir])
+                    ->sum('jumlah');
+
+                // sisa/kekurangan
+                $row->sisa = $row->target - $row->realisasi;
+
+                return $row;
+            });
+
+        $data['anggotaKelas'] = $anggotaKelas;
+
+        $pdf = Pdf::loadView('laporan_spp.views.daftar_ulang', $data)
+            ->setPaper('A4', 'landscape')
+            ->setOptions([
+                'margin-top'    => 30,
+                'margin-bottom' => 15,
+                'margin-left'   => 20,
+                'margin-right'  => 20,
+                'enable-local-file-access' => true,
+            ]);
+
+        return $pdf->stream('laporan-daftar-ulang.pdf');
     }
+
 }
