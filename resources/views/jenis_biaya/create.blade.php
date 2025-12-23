@@ -1,10 +1,6 @@
 @extends('layouts.base')
 @section('content')
     <div class="row">
-        <div class="ms-3">
-            <h3 class="mb-0 h4 font-weight-bolder">Jenis Biaya</h3>
-            <p class="mb-4">Management System Pembayaran SPP</p>
-        </div>
         <div class="col-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">

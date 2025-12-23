@@ -16,7 +16,7 @@ use App\Utils\Tanggal;
                                     </div>
                                 </th>
                                 <th width="15%">Tanggal Trx</th>
-                                <th width="15%">Bulan SPP</th>
+                                <th width="15%">Alokasi </th>
                                 <th width="15%">Nominal</th>
                                 <th width="45%">Keterangan</th>
                             </tr>

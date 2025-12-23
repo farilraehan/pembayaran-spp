@@ -1,10 +1,9 @@
+@php
+    use App\Utils\Tanggal;
+@endphp
 @extends('layouts.base')
 @section('content')
     <div class="row">
-        <div class="ms-3">
-            <h3 class="mb-0 h4 fw-bold">{{ $title }}</h3>
-            <p class="mb-4 text-muted">Management System Pembayaran SPP</p>
-        </div>
         <div class="col-12">
             <div class="card my-4 shadow-sm">
                 <div class="card-header p-1  position-relative mt-n4 mx-3 bg-white rounded-3">
@@ -21,6 +20,13 @@
                                 data-bs-toggle="tab" href="#tabWali">
                                 <i class="material-symbols-rounded fs-5">people</i>
                                 <span>Data Orang tua / Wali</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link d-flex align-items-center justify-content-center gap-1 py-2"
+                                data-bs-toggle="tab" href="#tabRiwayatPembayaran">
+                                <i class="material-symbols-rounded fs-5">receipt</i>
+                                <span>Riwayat Pembayaran</span>
                             </a>
                         </li>
                     </ul>
@@ -352,17 +358,180 @@
                             </div>
                         </div>
                     </div>
+                    <div class="tab-pane fade p-3" id="tabRiwayatPembayaran">
+                        <h6 class="text-dark mb-3 d-flex align-items-center justify-content-between">
+                            <span>
+                                <i class="material-symbols-rounded text-info me-1">history</i>
+                                Riwayat Pembayaran
+                            </span>
+                            <button class="btn btn-sm btn-primary" data-id="{{ $siswa->id }}" id="btnCetakRiwayat">
+                                Cetak Riwayat
+                            </button>
+                        </h6>
+                        <div class="row g-4">
+                            <div class="col-lg-12">
+                                <div class="card shadow-sm p-3" style="background:#f7faff;">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-sm" id="TBriwayat">
+                                            <thead>
+                                                <tr>
+                                                    <th width="15%">Tanggal Transaksi</th>
+                                                    <th width="15%">Alokasi</th>
+                                                    <th width="60%">Keterangan</th>
+                                                    <th width="10%" class="text-end">Nominal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @forelse ($riwayat as $item)
+                                                    <tr>
+                                                        <td width="15%">{{ $item->tanggal_transaksi }}</td>
+                                                        <td width="15%">
+                                                           {{ $item->spp ? Tanggal::namabulan($item->spp->tanggal) : 'Daftar Ulang' }}
+                                                        </td>
+                                                        <td width="60%" class="text-wrap">{{ $item->keterangan }}</td>
+                                                        <td width="10%" class="text-end">{{ number_format($item->jumlah,2) }}</td>
+                                                    </tr>
+                                                @empty
+                                                    <tr>
+                                                        <td colspan="4" class="text-center">Belum ada data</td>
+                                                    </tr>
+                                                @endforelse
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-12 mb-1">
-            <div class="card my-4 shadow-sm mb-1">
-                <div class="card-body d-flex align-items-center p-2 pb-1">
-                    <a href="{{ url()->previous() }}" class="kembali btn btn-secondary p-2 mb-1 ms-auto">
-                        Kembali ke halaman siswa
-                    </a>
+        <div class="col-12 p-0">
+            <div class="card shadow-sm m-0">
+                <div class="card-body d-flex justify-content-between align-items-center p-2">
+                    <div>
+                        <a href="{{ route('siswa.index', request()->query()) }}"
+                        class="btn btn-secondary m-0">
+                            Kembali ke halaman siswa
+                        </a>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <a href="{{ route('siswa.edit', $siswa->id) }}?{{ http_build_query(request()->query()) }}"
+                        class="btn btn-warning m-0">
+                            <i class="fa-solid fa-pen-to-square"></i> Edit Siswa
+                        </a>
+                        <button class="btn btn-danger m-0"
+                                data-id="{{ $siswa->id }}" id="btnDelete">
+                            <i class="fa-solid fa-ban"></i> Blokir Siswa
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
+    <form action="" method="post" id="FormHapusSiswa">
+        @method('DELETE')
+        @csrf
+    </form>
+@endsection
+@section('script')
+    <script>   
+        let tbRiwayat;
+
+        $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function (e) {
+            if ($(e.target).attr('href') === '#tabRiwayatPembayaran') {
+
+                if (!$.fn.DataTable.isDataTable('#TBriwayat')) {
+                    tbRiwayat = $('#TBriwayat').DataTable({
+                        ordering: false,
+                        pageLength: 10,
+                        lengthChange: true, 
+                        searching: true,    
+                        info: true,
+                        autoWidth: false
+                    });
+                } else {
+                    tbRiwayat.columns.adjust().draw();
+                }
+            }
+        });
+
+        $(document).on('click', '#btnDelete', function(e) {
+            e.preventDefault();
+            let hapus_id = $(this).attr('data-id');
+            let actionUrl = '/app/siswa/' + hapus_id;
+            let urlParams = new URLSearchParams(window.location.search);
+            let qs_tahun = urlParams.get('tahun_akademik');
+            let qs_kelas = urlParams.get('kelas');
+
+            Swal.fire({
+                title: "Apakah Anda yakin?",
+                text: "Data akan diblokir secara permanen dari aplikasi!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Lanjutkan",
+                cancelButtonText: "Batal",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let form = $('#FormHapusSiswa');
+                    $.ajax({
+                        type: form.attr('method'),
+                        url: actionUrl,
+                        data: form.serialize(),
+                        success: function(result) {
+                            if (result.success) {
+                                Swal.fire({
+                                    title: "Berhasil!",
+                                    text: result.msg,
+                                    icon: "success",
+                                    confirmButtonText: "OK"
+                                }).then((res) => {
+                                    if (res.isConfirmed) {
+                                        window.location.href =
+                                            '/app/siswa?tahun_akademik=' + qs_tahun +
+                                            '&kelas=' + qs_kelas;
+                                    }
+                                });
+                            } else {
+                                Swal.fire({
+                                    title: "Gagal",
+                                    text: result.msg,
+                                    icon: "info",
+                                    confirmButtonText: "OK"
+                                });
+                            }
+                        },
+                        error: function(response) {
+                            let msg = "Terjadi kesalahan pada server. Silakan coba lagi.";
+                            if (response.responseJSON && response.responseJSON.msg) {
+                                msg = response.responseJSON.msg;
+                            }
+                            Swal.fire({
+                                title: "Gagal",
+                                text: msg,
+                                icon: "error",
+                                confirmButtonText: "OK"
+                            });
+                        }
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: "Dibatalkan",
+                        text: "Data tidak jadi diblokir.",
+                        icon: "info",
+                        confirmButtonText: "OK"
+                    });
+                }
+            });
+        });
+
+        $(document).on('click', '#btnCetakRiwayat', function(e) {
+            e.preventDefault();
+            let id_siswa = $(this).attr('data-id');
+            let url = '/app/siswa/riwayatPembayaran/' + id_siswa;
+            window.open(url, '_blank');
+        })
+        </script>
 @endsection

@@ -9,14 +9,13 @@
                             <input type="text" id="pembayaranSPP" placeholder="Search NISN / Nama Siswa ...."
                                 class="form-control form-search" autocomplete="off">
                         </div>
-                        <div class="col-md-3 col-12 d-flex align-items-end" style="height: 66px;">
-                            <a href="/app/laporan" class="btn btn-danger w-100">Laporan Pembayaran</a>
+                        <div class="col-md-3 col-12 d-flex align-items-end">
+                            <a href="/app/laporan" class="btn btn-danger mb-0 w-100">Laporan Pembayaran</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <div id="accordion" class="col-12">
             <div class="mt-7">
                 <div class="card-body text-center py-4">
@@ -29,25 +28,6 @@
                         Silakan lakukan pencarian atau periksa kembali NISN / Nama siswa.
                     </p>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-12 mt-3 d-none" id="riwayat-transaksi">
-        <div class="card h-100 position-relative">
-
-            <button type="button" id="closeRiwayat"
-                class="btn btn-link p-0 position-absolute top-0 end-0 m-3 text-secondary">
-                <i class="material-symbols-rounded fs-5">close</i>
-            </button>
-
-            <div class="card-body pt-4 p-3">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-0">
-                        Riwayat Transaksi
-                        <span id="riwayat-tanggal" class="text-xs text-muted"></span>
-                    </h6>
-                </div>
-                <ul class="list-group mb-3" id="list-riwayat"></ul>
             </div>
         </div>
     </div>
@@ -79,7 +59,7 @@
                     <button type="button" class="btn btn-secondary" id="btnPrintAllDetail">
                         <i class="bi bi-printer-fill me-1"></i> Print All
                     </button>
-                    <button type="button" class="btn btn-danger" id="btnTutupDetail">
+                    <button type="button" class="btn btn-danger btn-close-modal" id="btnTutupDetail">
                         <i class="bi bi-x-circle me-1"></i> Tutup
                     </button>
                 </div>
@@ -106,7 +86,7 @@
                     <button type="button" class="btn btn-success" id="btnCetak">
                         <i class="bi bi-printer-fill me-1"></i> Cetak
                     </button>
-                    <button type="button" class="btn btn-danger" id="btnTutupCakbox">
+                    <button type="button" class="btn btn-danger btn-close-modal" id="btnTutupCakbox">
                         <i class="bi bi-x-circle me-1"></i> Tutup
                     </button>
                 </div>
@@ -117,6 +97,7 @@
 
 @section('script')
     <script>
+        let lastTransaksiIds = null;
         var numFormat = new Intl.NumberFormat('id-ID');
         var dataCustomer;
 
@@ -254,12 +235,12 @@
             window.open(url, '_blank');
         });
 
-        $(document).on('click', '#detail .btn-danger, #CakboxAll .btn-danger', function() {
+        $(document).on('click', '#detail .btn-close-modal, #CakboxAll .btn-close-modal', function() {
             $('.modal.show').modal('hide');
         });
 
         //simpan pembayaran spp
-        $(document).on('click', '#SPPsimpan', function(e) {
+       $(document).on('click', '#SPPsimpan', function (e) {
             e.preventDefault();
 
             let $btn = $(this);
@@ -275,91 +256,83 @@
                 data: formData,
                 contentType: false,
                 processData: false,
-                success: function(result) {
+                success: function (result) {
                     if (!result.success) return;
 
-                    $('#riwayat-transaksi').removeClass('d-none');
-                    $('#list-riwayat').empty();
+                    lastTransaksiIds = Array.isArray(result.id_transaksi)
+                        ? result.id_transaksi.join(',')
+                        : result.id_transaksi;
 
-                    let color, icon, title;
-                    if (result.tipe === 'spp') {
-                        color = 'success';
-                        icon = 'payments';
-                        title = 'Pembayaran SPP';
-                    } else {
-                        color = 'warning';
-                        icon = 'assignment';
-                        title = 'Daftar Ulang';
-                    }
+                    $('#kuitansi').removeClass('d-none');
+                    $('#CetakPadaKartu').removeClass('d-none');
 
                     let detailHtml = '';
-                    if (result.detail_spp && result.detail_spp.length) {
-                        detailHtml = '<ul class="ps-3 mb-1">';
-                        result.detail_spp.forEach(item => {
-                            detailHtml += `
-                            <li class="text-xs">
-                                ${item.bulan}
-                                <span class="text-muted">(Rp ${numFormat.format(item.nominal)})</span>
-                            </li>
-                        `;
-                        });
-                        detailHtml += '</ul>';
-                    }
 
-                    let transaksiIds = Array.isArray(result.id_transaksi) ?
-                        result.id_transaksi.join(',') :
-                        result.id_transaksi;
+                        if (result.detail_spp && result.detail_spp.length) {
+                            let bulanAwal = result.detail_spp[0].bulan;
+                            let bulanAkhir = result.detail_spp[result.detail_spp.length - 1].bulan;
 
-                    $('#riwayat-tanggal').text(result.tanggal);
-                    $('#list-riwayat').prepend(`
-                    <li class="list-group-item border-0 ps-0 mb-2 border-radius-lg position-relative">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div class="d-flex align-items-start">
-                                <button class="btn btn-icon-only btn-rounded btn-outline-${color} me-3 p-3 btn-sm d-flex align-items-center justify-content-center">
-                                    <i class="material-symbols-rounded text-lg">${icon}</i>
-                                </button>
+                            let rangeBulan = bulanAwal === bulanAkhir
+                                ? bulanAwal
+                                : `${bulanAwal} – ${bulanAkhir}`;
 
-                                <div class="d-flex flex-column">
-                                    <h6 class="mb-1 text-dark text-sm">${title}</h6>
-                                    <span class="text-xs">${result.keterangan}</span>
-                                    ${detailHtml}
+                            detailHtml = `
+                                <div class="text-start mb-2">
+                                    <strong>Periode:</strong>
+                                    ${rangeBulan}
                                 </div>
-                            </div>
-
-                            <div class="text-end">
-                                <div class="text-${color} text-sm fw-bold mb-1">
-                                    Rp ${numFormat.format(result.nominal)}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="text-end mt-2">
-                            <a href="/app/transaksi/kwitansi-spp?ids=${transaksiIds}"
-                            target="_blank"
-                            class="btn btn-outline-secondary btn-sm px-2 py-1">
-                                <i class="bi bi-printer"></i> Cetak Struk
-                            </a>
-                        </div>
-                    </li>
-                `);
+                            `;
+                        }
 
                     Swal.fire({
                         icon: 'success',
                         title: 'Transaksi Berhasil',
-                        text: result.msg,
-                        confirmButtonText: 'OK Lanjutkan',
+                        html: `
+                            <div class="text-center mb-2">
+                                ${result.keterangan}
+                            </div>
+                            ${detailHtml}
+                            <div class="text-end mb-2">
+                                <strong>Total:</strong>
+                                <span class="fw-bold text-success">
+                                    Rp ${numFormat.format(result.nominal)}
+                                </span>
+                            </div>
+                        `,
+                        confirmButtonText: 'OK Lanjutkan'
                     });
 
                     $('#FormPembayaranSPP')[0].reset();
                 },
-                error: function() {
+                error: function () {
                     Swal.fire('Error', 'Cek kembali input yang anda masukkan', 'error');
                 },
-                complete: function() {
+                complete: function () {
                     $btn.prop('disabled', false);
                 }
             });
         });
+
+        $(document).on('click', '#kuitansi', function () {
+            if (!lastTransaksiIds) return;
+            window.open(
+                `/app/transaksi/kwitansi-spp?ids=${lastTransaksiIds}`,
+                '_blank'
+            );
+        });
+
+        $(document).on('click', '#CetakPadaKartu', function () {
+            if (!lastTransaksiIds) return;
+            window.open(
+                `/app/transaksi/cetakPadaKartu?ids=${lastTransaksiIds}`,
+                '_blank'
+            );
+        });
+
+        function resetCetakButton() {
+            lastTransaksiIds = null;
+            $('#kuitansi, #CetakPadaKartu').addClass('d-none');
+        }
 
         //hapus
         $(document).on('click', '.btnDelete', function(e) {

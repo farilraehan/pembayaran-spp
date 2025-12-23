@@ -1,10 +1,6 @@
 @extends('layouts.base')
 @section('content')
     <div class="row">
-        <div class="ms-3">
-            <h3 class="mb-0 h4 fw-bold">{{ $title }}</h3>
-            <p class="mb-4 text-muted">Management System Pembayaran SPP</p>
-        </div>
         <form id="FormSiswa" method="PUT" action="/app/siswa/{{ $siswa->id }}" class="text-start"
             enctype="multipart/form-data">
             @csrf
@@ -673,22 +669,16 @@
                             timer: 3000,
                             timerProgressBar: true
                         });
+
                         setTimeout(() => {
-                            let params = new URLSearchParams(window.location.search);
-                            let tahun = params.get('tahun_akademik');
-                            let kelas = params.get('kelas');
-                            window.location.href = `/app/siswa?tahun_akademik=${tahun}&kelas=${kelas}`;
-                        }, 1500);
-                    } else {
-                        Swal.fire({
-                            toast: true,
-                            position: 'top-end',
-                            icon: 'error',
-                            title: result.message ?? "Gagal update data",
-                            showConfirmButton: false,
-                            timer: 3000,
-                            timerProgressBar: true
-                        });
+                        let params = new URLSearchParams(window.location.search);
+                        let tahun = params.get('tahun_akademik');
+                        let kelas = params.get('kelas');
+                        let id = result.data.id;
+
+                        window.location.href =
+                            `/app/siswa/${id}?tahun_akademik=${tahun}&kelas=${kelas}`;
+                    }, 1500);
                     }
                 },
                 error: function(xhr) {

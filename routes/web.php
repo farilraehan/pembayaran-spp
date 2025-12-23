@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/transaksi/pembayaran/printAllSelected', [TransaksiController::class, 'printAllSelected']);
     Route::get('/transaksi/pembayaran/printAll/{id}', [TransaksiController::class, 'pembayaranSPPPrintAll']);
     Route::get('/transaksi/pembayaranSPPDetail/{id}', [TransaksiController::class, 'pembayaranSPPDetail']);
+    Route::get('/transaksi/cetakPadaKartu', [TransaksiController::class, 'CetakPadaKartu']);
     Route::delete('/transaksi/pembayaranSPPDestroy/{Transaksi}', [TransaksiController::class, 'pembayaranSPPDestroy']);
     Route::resource('/Transaksi', TransaksiController::class);
 
@@ -57,6 +58,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/siswa/listKelas', [SiswaController::class, 'listKelas']);
     Route::get('/siswa/printSiswa', [SiswaController::class, 'printSiswa']);
     Route::post('/siswa/mutasi', [SiswaController::class, 'mutasi']);
+    Route::get('/siswa/riwayatPembayaran/{id}', [SiswaController::class, 'riwayatPembayaran']);
     Route::resource('/siswa', SiswaController::class);
 
     Route::get('/laporan-keuangan', [LaporanController::class, 'index']);

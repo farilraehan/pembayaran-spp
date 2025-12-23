@@ -1,10 +1,6 @@
 @extends('layouts.base')
 @section('content')
     <div class="row">
-        <div class="ms-3">
-            <h3 class="mb-0 h4 fw-bold">{{ $title }}</h3>
-            <p class="mb-4 text-muted">Management System Pembayaran SPP</p>
-        </div>
         <form id="FormSiswa" method="POST" action="/app/siswa" class="text-start" enctype="multipart/form-data">
             @csrf
             <div class="col-12">

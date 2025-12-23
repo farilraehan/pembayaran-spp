@@ -73,13 +73,13 @@
             <div class="collapse" id="submenuTransaksi">
                 <ul class="nav ms-4">
                     <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app/Transaksi">
-                            <span class="sidenav-normal">Jurnal Umum</span>
+                        <a class="nav-link text-dark py-2" href="/app/Transaksi/pembayaran-spp">
+                            <span class="sidenav-normal">Tagihan Siswa</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app/Transaksi/pembayaran-spp">
-                            <span class="sidenav-normal">Tagihan Siswa</span>
+                        <a class="nav-link text-dark py-2" href="/app/Transaksi">
+                            <span class="sidenav-normal">Jurnal Umum</span>
                         </a>
                     </li>
                 </ul>

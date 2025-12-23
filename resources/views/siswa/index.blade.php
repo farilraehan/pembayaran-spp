@@ -1,17 +1,12 @@
 @extends('layouts.base')
 @section('content')
     <div class="row">
-        <div class="ms-3">
-            <h3 class="mb-0 h4 font-weight-bolder">Siswa</h3>
-            <p class="mb-4">Management System Pembayaran SPP</p>
-        </div>
-
         <div class="col-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div
                         class="bg-gradient-secondary shadow-secondary border-radius-lg pt-3 pb-1 d-flex justify-content-between align-items-center">
-                        <h6 class="text-white text-capitalize ps-3">Filter Data Siswa</h6>
+                        <h6 class="text-white text-capitalize ps-3">&nbsp;</h6>
                         <div class="d-flex align-items-center gap-3 pe-3">
                             <div class="input-group input-group-outline mb-3" style="width: 220px;">
                                 <select id="tahun_akademik" class="form-control select2 text-white">
@@ -25,14 +20,14 @@
                             </div>
 
                             <button id="btnFilter" class="btn btn-info text-white px-4">Lihat</button>
-                            <button id="btnPrint" class="btn btn-success text-white px-4 btnPrint">Print Siswa</button>
+                            <button id="btnPrint" class="btn btn-success text-white px-4 btnPrint">Cetak Siswa</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body px-3 pb-3">
                     <div id="notifikasi">
-                        <div class="alert alert-light alert-dismissible text-white" role="alert">
+                        <div class="alert alert-light alert-dismissible text-secondary" role="alert">
                             Silakan gunakan fitur Filter untuk menampilkan data siswa.
                             <button type="button" class="btn-close text-lg opacity-10" data-bs-dismiss="alert"></button>
                         </div>
@@ -50,6 +45,7 @@
                                     <th>Nama</th>
                                     <th>Angkatan</th>
                                     <th>Kode Kelas</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -71,10 +67,6 @@
         </div>
     </div>
 
-    <form action="" method="post" id="FormHapusSiswa">
-        @method('DELETE')
-        @csrf
-    </form>
 @endsection
 @section('script')
     <script>
@@ -143,6 +135,7 @@
                 info: true,
                 autoWidth: true,
                 scrollX: true,
+                rowId: 'id',
                 ajax: {
                     url: '/app/siswa',
                     data: function(d) {
@@ -151,7 +144,7 @@
                     }
                 },
                 columns: [{
-                        width: "7%",
+                        width: "10%",
                         data: 'checkbox',
                         orderable: false,
                         searchable: false
@@ -162,7 +155,7 @@
                         data: 'nisn'
                     },
                     {
-                        width: "28%",
+                        width: "25%",
                         nama: 'nama',
                         data: 'nama'
                     },
@@ -172,12 +165,32 @@
                         data: 'angkatan'
                     },
                     {
-                        width: "8%",
+                        width: "15%",
                         nama: 'kode_kelas',
                         data: 'kode_kelas'
                     },
                     {
-                        width: "27%",
+                        width: "10%",
+                        data: 'status_siswa',
+                        name: 'status_siswa',
+                        render: function (data, type, row) {
+                            if (type === 'display') {
+                                if (data === 'aktif') {
+                                    return '<span class="badge bg-success">Aktif</span>';
+                                } 
+                                else if (data === 'nonaktif') {
+                                    return '<span class="badge bg-warning text-dark">Nonaktif</span>';
+                                } 
+                                else if (data === 'blokir') {
+                                    return '<span class="badge bg-danger">Blokir</span>';
+                                }
+                                return '<span class="badge bg-secondary">Unknown</span>';
+                            }
+                            return data;
+                        }
+                    },
+                    {
+                        width: "10%",
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -190,22 +203,23 @@
                 }
             });
             
-            table.on('draw.dt', function() {
-                $('.btnDetail').off('click').on('click', function() {
-                    let id = $(this).data('id');
-                    let tahun = $('#tahun_akademik').val();
-                    let kelas = $('#kelas').val();
-                    window.location.href =
-                        `/app/siswa/${id}?tahun_akademik=${tahun}&kelas=${kelas}`;
-                });
+            $('#siswa tbody').on('click', 'tr', function (e) {
+                if (
+                    $(e.target).closest('input[type="checkbox"]').length ||
+                    $(e.target).closest('button').length ||
+                    $(e.target).closest('a').length
+                ) {
+                    return;
+                }
 
-                $('.btnEdit').off('click').on('click', function() {
-                    let id = $(this).data('id');
-                    let tahun = $('#tahun_akademik').val();
-                    let kelas = $('#kelas').val();
-                    window.location.href =
-                        `/app/siswa/${id}/edit?tahun_akademik=${tahun}&kelas=${kelas}`;
-                });
+                let data = table.row(this).data();
+                if (!data) return;
+
+                let tahun = $('#tahun_akademik').val();
+                let kelas = $('#kelas').val();
+
+                window.location.href =
+                    `/app/siswa/${data.id}?tahun_akademik=${tahun}&kelas=${kelas}`;
             });
 
             if (qs_tahun || qs_kelas) {
@@ -430,78 +444,5 @@
                 }
             });
         }
-
-        //hapus siswa        
-        $(document).on('click', '.btnDelete', function(e) {
-            e.preventDefault();
-            let hapus_id = $(this).attr('data-id');
-            let actionUrl = '/app/siswa/' + hapus_id;
-            let urlParams = new URLSearchParams(window.location.search);
-            let qs_tahun = urlParams.get('tahun_akademik');
-            let qs_kelas = urlParams.get('kelas');
-
-            Swal.fire({
-                title: "Apakah Anda yakin?",
-                text: "Data akan dihapus secara permanen dari aplikasi dan tidak bisa dikembalikan!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Hapus",
-                cancelButtonText: "Batal",
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    let form = $('#FormHapusSiswa');
-                    $.ajax({
-                        type: form.attr('method'),
-                        url: actionUrl,
-                        data: form.serialize(),
-                        success: function(result) {
-                            if (result.success) {
-                                Swal.fire({
-                                    title: "Berhasil!",
-                                    text: result.msg,
-                                    icon: "success",
-                                    confirmButtonText: "OK"
-                                }).then((res) => {
-                                    if (res.isConfirmed) {
-                                        window.location.href =
-                                            '/app/siswa?tahun_akademik=' + qs_tahun +
-                                            '&kelas=' + qs_kelas;
-                                    }
-                                });
-                            } else {
-                                Swal.fire({
-                                    title: "Gagal",
-                                    text: result.msg,
-                                    icon: "info",
-                                    confirmButtonText: "OK"
-                                });
-                            }
-                        },
-                        error: function(response) {
-                            // Tangkap pesan error khusus dari controller
-                            let msg = "Terjadi kesalahan pada server. Silakan coba lagi.";
-                            if (response.responseJSON && response.responseJSON.msg) {
-                                msg = response.responseJSON.msg;
-                            }
-                            Swal.fire({
-                                title: "Gagal",
-                                text: msg,
-                                icon: "error",
-                                confirmButtonText: "OK"
-                            });
-                        }
-                    });
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    Swal.fire({
-                        title: "Dibatalkan",
-                        text: "Data tidak jadi dihapus.",
-                        icon: "info",
-                        confirmButtonText: "OK"
-                    });
-                }
-            });
-        });
-
     </script>
 @endsection

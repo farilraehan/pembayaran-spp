@@ -45,6 +45,14 @@
             min-height: 20px
         }
 
+        .table tbody tr {
+            cursor: pointer;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
         .swal2-container {
             z-index: 99999 !important
         }
@@ -57,7 +65,17 @@
         .table tbody tr {
             height: 48px
         }
-
+        .table thead th{
+            font-size: 16px;
+        }
+        .table tbody td {
+            font-size: 13px;
+        }
+        .table td input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            transform: scale(1);
+        }
         .table td,
         .table th {
             white-space: nowrap;

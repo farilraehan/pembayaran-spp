@@ -2,10 +2,6 @@
 
  @section('content')
  <div class="row">
-     <div class="ms-3 ">
-         <h3 class="mb-0 h4 font-weight-bolder">Chart of Account (COA)</h3>
-         <p class="mb-4">Management System Pembayaran SPP</p>
-     </div>
      <div class="col-md-12">
          <div class="card my-4">
              <div class="card-body">

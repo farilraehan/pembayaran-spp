@@ -13,6 +13,7 @@ use App\Models\Jurusan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Models\Transaksi;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,7 @@ class SiswaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Siswa::select('id', 'nisn', 'nama', 'angkatan', 'kode_kelas');
+            $query = Siswa::select('id', 'nisn', 'nama', 'angkatan', 'kode_kelas', 'status_siswa');
 
             // Filter tahun akademik
             if ($request->tahun_akademik) {
@@ -49,34 +50,13 @@ class SiswaController extends Controller
                             </div>';
                 })
                 ->addColumn('action', function ($row) use ($request) {
-                    $qs = http_build_query([
-                        'tahun_akademik' => $request->tahun_akademik,
-                        'kelas' => $request->kelas,
-                    ]);
-                    $detail = url("/app/siswa/{$row->id}?{$qs}");
-                    $edit   = url("/app/siswa/{$row->id}/edit?{$qs}");
                     return '
-                        <div class="d-inline-flex gap-1">
-                            <button class="btn btn-secondary btnMutasi" id="btnMutasi"
+                                <button class="btn btn-secondary btnMutasi"
                                     data-id="' . $row->id . '"
-                                    data-tahun="' . $request->tahun_akademik . '"
-                                    data-kelas="' . $request->kelas . '" title="Mutasi Siswa">
-                                <i class="fa-solid fa-right-left"></i>
-                            </button>
-                            <a href="' . $detail . '" class="btn btn-info">
-                                <i class="fa-solid fa-circle-info" title="Detail Siswa"></i>
-                            </a>
-                            <a href="' . $edit . '" class="btn btn-warning" title="Edit Siswa">
-                                <i class="fa-solid fa-pen-to-square"></i>
-                            </a>
-                            <button class="btn btn-danger btnDelete"
-                                data-id="' . $row->id . '"
-                                data-tahun="' . $request->tahun_akademik . '"
-                                data-kelas="' . $request->kelas . '" title="Hapus Siswa">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-                        </div>
-                    ';
+                                    title="Mutasi Siswa">
+                                    <i class="fa-solid fa-right-left"></i>
+                                </button>
+                            ';
                 })
                 ->rawColumns(['checkbox', 'action'])
                 ->toJson();
@@ -89,7 +69,8 @@ class SiswaController extends Controller
     {
         $search = $request->get('q');
 
-        $query = Tahun_akademik::select('id', 'nama_tahun')->where('status', 'aktif');;
+        $query = Tahun_akademik::select('id', 'nama_tahun')->where('status', 'aktif')
+            ->orderByDesc('nama_tahun');
         if ($search) {
             $query->where('nama_tahun', 'like', "%{$search}%");
         }
@@ -479,7 +460,6 @@ class SiswaController extends Controller
         ]);
     }
 
-
     /**
      * Display the specified resource.
      */
@@ -487,10 +467,27 @@ class SiswaController extends Controller
     {
         $title = "Detail Siswa";
         $siswa = Siswa::where('id', $siswa->id)->first();
+        $riwayat = Transaksi::with('spp')->where('siswa_id', $siswa->id)->get();
 
-        return view('siswa.detail', compact('title', 'siswa'));
+        return view('siswa.detail', compact('title', 'siswa', 'riwayat'));
     }
 
+    public function riwayatPembayaran($id)
+    {
+        $siswa = Siswa::where('id', $id)->first();
+        $riwayat = Transaksi::with('spp')->where('siswa_id', $siswa->id)->get();
+
+        $title = "Riwayat Pembayaran Siswa";
+        $data = [
+            'title' => $title,
+            'riwayat' => $riwayat,
+            'siswa' => $siswa
+        ];
+
+        $pdf = Pdf::loadView('siswa.view.riwayatPembayaran', $data);
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('Riwayat_pembayaran.pdf');
+    }
     /**
      * Show the form for editing the specified resource.
      */
@@ -713,32 +710,13 @@ class SiswaController extends Controller
      */
     public function destroy(Siswa $siswa)
     {
-        $anggotaKelas = Anggota_Kelas::where('id_siswa', $siswa->id)->get();
-        $hasSpp = false;
-
-        foreach ($anggotaKelas as $anggota) {
-            if (Spp::where('anggota_kelas', $anggota->id)->exists()) {
-                $hasSpp = true;
-                break;
-            }
-        }
-
-        if ($hasSpp) {
-            return response()->json([
-                'success' => false,
-                'msg'     => 'Siswa tidak bisa dihapus karena sudah memiliki riwayat SPP',
-            ], 400);
-        }
-
-        foreach ($anggotaKelas as $anggota) {
-            $anggota->delete();
-        }
-
-        $siswa->delete();
+        $siswa->update([
+            'status_siswa' => 'blokir'
+        ]);
 
         return response()->json([
             'success' => true,
-            'msg'     => 'Data Siswa berhasil dihapus',
+            'msg' => 'Siswa berhasil diblokir',
         ]);
     }
 }

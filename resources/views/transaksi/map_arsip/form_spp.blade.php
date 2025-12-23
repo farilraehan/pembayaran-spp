@@ -1,22 +1,20 @@
 <br>
-<div class="row  d-flex align-items-stretch">
+<div class="row d-flex align-items-stretch">
     <div class="col-md-8 d-flex">
         <div class="card my-4 flex-fill">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                 <div
                     class="bg-gradient-secondary shadow-secondary border-radius-lg pt-3 pb-1 d-flex justify-content-between align-items-center">
                     <h6 class="text-white text-capitalize ps-3">
-                        Pembayaran SPP - tahun ajaran {{ $siswa->tahun_akademik }}
+                        Rekap - tahun ajaran {{ $siswa->tahun_akademik }}
                     </h6>
                 </div>
             </div>
-
             <div class="card-body">
                 <form method="POST" action="/app/transaksi/ProsesPembayaran" id="FormPembayaranSPP">
                     @csrf
                     <input type="hidden" name="siswa_id" value="{{ $siswa->id }}">
                     <input type="hidden" name="siswa_nama" id="siswa_nama" value="{{ $siswa->nama }}">
-
                     <div class="row mt-3">
                         <div class="col-md-4">
                             <div
@@ -33,7 +31,6 @@
                                 <option value="1.1.03.02">Daftar Ulang</option>
                             </select>
                         </div>
-
                         <div class="col-md-4">
                             <div
                                 class="input-group input-group-outline mb-3 {{ old('kelas', $siswa->kode_kelas) ? 'is-filled' : '' }}">
@@ -56,10 +53,9 @@
                                     data-id="{{ $item->id }}" data-nominal="{{ $item->nominal }}"
                                     id="tgl_{{ $item->id }}" value="{{ $item->tanggal }}"data-spp_ke="{{ $item->spp_ke }}"
                                     {{ $item->status == 'L' ? 'checked disabled' : '' }}>
-
                                 <label class="btn btn-sm rounded-pill flex-fill text-center
                                     {{ $item->status == 'L' ? 'btn-info' : 'btn-outline-info' }}" for="tgl_{{ $item->id }}">
-                                    {{ \App\Utils\Tanggal::NamaBulan($item->tanggal) }}
+                                    {{ \App\Utils\Tanggal::namaBulan($item->tanggal) }}
                                 </label>
                                 @endif
                                 @endforeach
@@ -74,11 +70,10 @@
                                     data-nominal="{{ $item->nominal }}" id="tgl_{{ $item->id }}"
                                     value="{{ $item->tanggal }}"
                                     {{ $item->status == 'L' ? 'checked disabled' : '' }}>
-
                                     <label class="btn btn-sm rounded-pill flex-fill text-center
                                         {{ $item->status == 'L' ? 'btn-danger' : 'btn-outline-danger' }}"
                                         for="tgl_{{ $item->id }}">
-                                        {{ \App\Utils\Tanggal::NamaBulan($item->tanggal) }}
+                                        {{ \App\Utils\Tanggal::namaBulan($item->tanggal) }}
                                     </label>
                                     @endif
                                     @endforeach
@@ -87,7 +82,6 @@
                         <div id="sppKEContainer"></div>
                         <div id="sppIDContainer"></div>
                     </div>
-
                     <div class="row mt-2">
                         <div class="col-md-12">
                             <div
@@ -98,7 +92,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row mt-2">
                         <div class="col-md-12">
                             <div
@@ -108,8 +101,9 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="d-flex justify-content-end mt-3  gap-1">
+                    <div class="d-flex justify-content-end mt-3 gap-2">
+                        <button type="button" id="kuitansi" class="btn btn-outline-secondary btn-sm d-none">Kuitansi</button>
+                        <button type="button" id="CetakPadaKartu" class="btn btn-outline-secondary btn-sm d-none">Cetak Pada Kartu</button>
                         <button class="btn btn-danger" id="btnDetailSiswa" type="button">Detail</button>
                         <button type="submit" id="SPPsimpan" class="btn btn-info">Proses Pembayaran</button>
                     </div>
@@ -150,7 +144,6 @@ new Chart(document.getElementById("pie"),{
     }
 });
 </script>
-
 <script>
 $('#keterangan').val('-').trigger('focus').trigger('blur');
 
@@ -169,8 +162,10 @@ $(document).ready(function(){
         if(jenis==='1.1.03.01'){
             $('#nominal').prop('readonly',true);
             $('#keterangan').val('Pembayaran SPP an. '+nama);
+            $('#kuitansi, #CetakPadaKartu').addClass('d-none');
         }else if(jenis==='1.1.03.02'){
             $('#nominal').prop('readonly',false).val('');
+            $('#kuitansi, #CetakPadaKartu').addClass('d-none');
             $('#keterangan').val('Pembayaran Daftar Ulang an. '+nama+' - kelas '+$('#kelas').val());
         }else{
             $('#keterangan').val('');

@@ -333,8 +333,9 @@ class TransaksiController extends Controller
                     'siswa_id' => $request->siswa_id,
                     'jumlah' => $nilai,
                     'keterangan' => $request->keterangan . ' - Bulan ' . Tanggal::NamaBulan(Spp::find($sppId)->tanggal),
-                    'urutan' => $i + 1,
-                    'user_id' => auth()->id(),
+                    'urutan' => null,
+                    'deleted_at' => null,
+                    'user_id' => auth()->user()->id,
                 ]);
 
                 Spp::where('id', $sppId)->update(['status' => 'L']);
@@ -362,8 +363,9 @@ class TransaksiController extends Controller
                 'siswa_id' => $request->siswa_id,
                 'jumlah' => $nilai,
                 'keterangan' => $request->keterangan,
-                'urutan' => 1,
-                'user_id' => auth()->id(),
+                'urutan' => null,
+                'deleted_at' => null,
+                'user_id' => auth()->user()->id,
             ]);
 
             $transaksiList[] = $transaksi;
@@ -388,7 +390,11 @@ class TransaksiController extends Controller
     {
         $siswa = Siswa::with([
             'getKelas',
-            'getTransaksi.spp' // load relasi spp dari transaksi
+            'getTransaksi' => function ($q) {
+                $q->whereNull('deleted_at')
+                    ->orderByDesc('id')
+                    ->with('spp');
+            }
         ])->findOrFail($id);
 
         return view('transaksi.map_arsip.detail', compact('siswa'));
@@ -397,7 +403,11 @@ class TransaksiController extends Controller
     {
         $siswa = Siswa::with([
             'getKelas',
-            'getTransaksi.spp' // load relasi spp dari transaksi
+            'getTransaksi' => function ($q) {
+                $q->whereNull('deleted_at')
+                    ->orderByDesc('id')
+                    ->with('spp');
+            }
         ])->findOrFail($id);
 
         return view('transaksi.map_arsip.detail_cetak', compact('siswa'));
@@ -423,9 +433,7 @@ class TransaksiController extends Controller
         $allSpps = collect();
 
         foreach ($transaksis as $transaksi) {
-
             $rawSpp = $transaksi->spp_id;
-
             if (is_string($rawSpp)) {
                 $decoded = json_decode($rawSpp, true);
                 $sppIds = is_array($decoded) ? $decoded : [$rawSpp];
@@ -446,7 +454,7 @@ class TransaksiController extends Controller
             'nama_lembaga'  => $lembaga,
         ];
 
-        $pdf = Pdf::loadView('transaksi.map_arsip.kwitansi_spp', $data)
+        $pdf = Pdf::loadView('transaksi.map_arsip.view.kwitansi_spp', $data)
             ->setPaper('A4', 'portrait');
 
         return $pdf->stream('kwitansi_spp.pdf');
@@ -473,11 +481,28 @@ class TransaksiController extends Controller
             'transaksis'   => $transaksis,
             'nama_lembaga' => $lembaga,
         ];
-        $pdf = Pdf::loadView('transaksi.map_arsip.cetak', $data)
+        $pdf = Pdf::loadView('transaksi.map_arsip.view.cetak', $data)
             ->setPaper('A4', 'portrait');
 
         return $pdf->stream('cetak.pdf');
     }
+
+    public function CetakPadaKartu(Request $request)
+    {
+        $ids = explode(',', $request->query('ids'));
+        $transaksis = Transaksi::with('siswa', 'spp')
+            ->whereIn('id', $ids)
+            ->get();
+
+        if ($transaksis->isEmpty()) {
+            abort(404, 'Transaksi tidak ditemukan.');
+        }
+
+        return view('transaksi.map_arsip.view.cetakPadaKartu', [
+            'transaksis' => $transaksis
+        ]);
+    }
+
 
     /**
      * Remove PEMBAYARAN SPP
@@ -489,7 +514,7 @@ class TransaksiController extends Controller
             Spp::where('id', $sppId)->update(['status' => 'B']);
         }
 
-        $Transaksi->delete();
+        $Transaksi->update(['deleted_at' => now()]);
         return response()->json([
             'success' => true,
             'msg' => 'Transaksi pembayaran SPP berhasil dihapus.'

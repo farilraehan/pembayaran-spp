@@ -19,6 +19,8 @@ class DashboardController extends Controller
         $siswaAktif = Siswa::where('status_siswa', 'aktif')->count();
         $siswaNonaktif = Siswa::where('status_siswa', 'nonaktif')->count();
 
-        return view('dashboard.index', compact('siswa', 'siswaCount', 'jenis_biaya', 'siswaAktif', 'siswaNonaktif'));
+        $title = 'Dashboard';
+
+        return view('dashboard.index', compact('title', 'siswa', 'siswaCount', 'jenis_biaya', 'siswaAktif', 'siswaNonaktif'));
     }
 }
