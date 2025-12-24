@@ -243,7 +243,7 @@
                     </div>
                 </div>
                     <div class="d-flex justify-content-end mt-4 mb-1">
-                        <button type="submit" class="btn btn-primary">Detail Transaksi</button>
+                        <button type="submit" class="btn btn-danger">Detail Transaksi</button>
                     </div>
             </div>
         </div>

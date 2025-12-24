@@ -202,14 +202,15 @@
         const donutCtx = document.getElementById('donutChart').getContext('2d');
         const siswaAktif = {{ $siswaAktif }};
         const siswaNonaktif = {{ $siswaNonaktif }};
+        const siswaBlokir = {{ $siswaBlokir }};
 
         new Chart(donutCtx, {
             type: 'doughnut',
             data: {
-                labels: ['Aktif', 'Nonaktif'],
+                labels: ['Aktif', 'Nonaktif', 'Blokir'],
                 datasets: [{
-                    data: [siswaAktif, siswaNonaktif],
-                    backgroundColor: ['#4bc0c0', '#e9ecef'],
+                    data: [siswaAktif, siswaNonaktif, siswaBlokir],
+                    backgroundColor: ['#4bc0c0', '#e9ecef', '#ff6a6a'],
                     cutout: '70%'
                 }]
             },
