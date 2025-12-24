@@ -122,7 +122,7 @@
 
         .form-search:focus {
             box-shadow: none;
-            border-bottom-color: #dc3545;
+            border-bottom-color: #37d17c;
         }
 
         .tt-menu {
@@ -131,7 +131,7 @@
             left: 0;
             width: 100%;
             margin-top: 6px;
-            background: #f70606;
+            background: #37d17c;
             max-height: 360px;
             z-index: 9999;
             border-radius: 10px;
@@ -185,17 +185,17 @@
         }
 
         .select2-container--bootstrap-5 * {
-            --bs-primary: #dc3545;
+            --bs-primary: #37d17c;
         }
 
         .select2-container--bootstrap-5 .select2-selection {
-            border: 1px solid #dc3545 !important;
+            border: 1px solid #37d17c !important;
             box-shadow: none !important;
         }
 
         .select2-container--bootstrap-5.select2-container--focus .select2-selection {
-            border-color: #dc3545 !important;
-            box-shadow: 0 0 0 .25rem rgba(220, 53, 69, .25) !important;
+            border-color: #37d17c !important;
+            box-shadow: 0 0 0 .25rem rgba(53, 220, 89, 0.25) !important;
         }
 
         .select2-container--bootstrap-5 .select2-selection__rendered {
@@ -207,20 +207,20 @@
         }
 
         .select2-container--bootstrap-5 .select2-search--dropdown .select2-search__field {
-            border: 1px solid #dc3545 !important;
+            border: 1px solid #37d17c !important;
             outline: none !important;
             box-shadow: none !important;
             color: #000 !important;
         }
 
         .select2-container--bootstrap-5 .select2-search--dropdown .select2-search__field:focus {
-            border-color: #dc3545 !important;
+            border-color: #37d17c !important;
             outline: none !important;
-            box-shadow: 0 0 0 .2rem rgba(220, 53, 69, .25) !important;
+            box-shadow: 0 0 0 .2rem rgba(42, 249, 128, 0.25) !important;
         }
 
         .select2-container--bootstrap-5 .select2-dropdown {
-            border: 1px solid #dc3545 !important;
+            border: 1px solid #37d17c !important;
         }
 
         .select2-container--bootstrap-5 .select2-results__option {
@@ -228,12 +228,12 @@
         }
 
         .select2-container--bootstrap-5 .select2-results__option--highlighted {
-            background-color: #dc3545 !important;
+            background-color: #37d17c !important;
             color: #fff !important;
         }
 
         .select2-container--bootstrap-5 .select2-results__option--selected {
-            background-color: rgba(220, 53, 69, .2) !important;
+            background-color: rgba(53, 220, 73, 0.2) !important;
             color: #000 !important;
         }
 
@@ -293,8 +293,8 @@
 
         /*HANYA SAAT DIKLIK / DROPDOWN TERBUKA */
         .select2-container--bootstrap-5.select2-container--open .select2-selection {
-            border-color: #dc3545 !important;
-            box-shadow: 0 0 0 .25rem rgba(220, 53, 69, .25) !important;
+            border-color: #37d17c !important;
+            box-shadow: 0 0 0 .25rem rgba(53, 220, 103, 0.25) !important;
         }
     </style>
 
