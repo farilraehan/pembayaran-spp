@@ -70,27 +70,46 @@ use App\Utils\Tanggal;
                 <td>: {{ Tanggal::tglIndo($header->tanggal) }}</td>
             </tr>
         </table>
-        <br>
+       <br>
         <div class="line"></div>
         <br>
-        <table>
-            @php $total = 0; @endphp
-            @foreach ($spps as $spp)
-            @php $total += $spp->nominal; @endphp
-            <tr>
-                <td>{{ Tanggal::namabulan($spp->tanggal) }}</td>
-                <td class="right">{{ number_format($spp->nominal,0,',','.') }}</td>
-            </tr>
-            @endforeach
-        </table>
+
+        @if($spps->isNotEmpty())
+            <table>
+                @php $total = 0; @endphp
+                @foreach ($spps as $spp)
+                    @php $total += $spp->nominal; @endphp
+                    <tr>
+                        <td>{{ Tanggal::namabulan($spp->tanggal) }}</td>
+                        <td class="right">{{ number_format($spp->nominal,0,',','.') }}</td>
+                    </tr>
+                @endforeach
+            </table>
+            <br>
+            <div class="line"></div>
+            <table>
+                <tr>
+                    <td><strong>TOTAL</strong></td>
+                    <td class="right"><strong>{{ number_format($total,0,',','.') }}</strong></td>
+                </tr>
+            </table>
+        @else
+            <table>
+                <tr>
+                    <td>Nomor urut</td>
+                    <td>: {{ $header->id }}</td>
+                </tr>
+                <tr>
+                    <td>Jumlah Bayar</td>
+                    <td>: {{ number_format($header->jumlah,0,',','.') }}</td>
+                </tr>
+                <tr>
+                    <td>Keterangan</td>
+                    <td>: {{ $header->keterangan ?? '-' }}</td>
+                </tr>
+            </table>
+        @endif
         <br>
-        <div class="line"></div>
-        <table>
-            <tr>
-                <td><strong>TOTAL</strong></td>
-                <td class="right"><strong>{{ number_format($total,0,',','.') }}</strong></td>
-            </tr>
-        </table>
         <div class="line"></div>
         <div class="center">
             Terima kasih

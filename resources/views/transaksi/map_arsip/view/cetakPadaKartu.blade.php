@@ -37,7 +37,6 @@
                 80px;    /* ID */
             align-items: center;
         }
-
         .right {
             text-align: right;
         }

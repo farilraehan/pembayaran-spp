@@ -451,6 +451,7 @@ class TransaksiController extends Controller
             'title'         => 'Kwitansi Pembayaran SPP',
             'header'        => $header,
             'spps'          => $allSpps,
+            'transaksis'    => $transaksis,
             'nama_lembaga'  => $lembaga,
         ];
 
@@ -502,7 +503,6 @@ class TransaksiController extends Controller
             'transaksis' => $transaksis
         ]);
     }
-
 
     /**
      * Remove PEMBAYARAN SPP
