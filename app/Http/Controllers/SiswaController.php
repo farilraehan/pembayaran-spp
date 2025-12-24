@@ -199,8 +199,9 @@ class SiswaController extends Controller
         |--------------------------------------------------------------------------
         */
             $anggota_kelas_id = $anggotaBaru->id;
-            $awal  = $tgl_masuk->copy()->startOfMonth();
-            $akhir = $awal->copy()->addYear()->subMonth();
+            $tahunMasuk = $tgl_masuk->year;
+            $awal = Carbon::create($tahunMasuk, 7, 1);
+            $akhir = $awal->copy()->addYear()->subDay();
 
             while ($awal->lte($akhir)) {
                 Spp::create([
@@ -208,6 +209,7 @@ class SiswaController extends Controller
                     'anggota_kelas' => $anggota_kelas_id,
                     'nominal'       => $nominal_spp,
                 ]);
+
                 $awal->addMonth();
             }
         }
@@ -440,8 +442,9 @@ class SiswaController extends Controller
             'status'            => 'aktif',
         ]);
 
-        $mulai = Carbon::parse($request->tanggal_masuk)->startOfMonth();
-        $akhir = $mulai->copy()->addYear()->subMonth();
+        $tahunMasuk = Carbon::parse($request->tanggal_masuk)->year;
+        $mulai = Carbon::create($tahunMasuk, 7, 1);
+        $akhir = $mulai->copy()->addYear()->subDay();
 
         while ($mulai->lte($akhir)) {
             Spp::create([

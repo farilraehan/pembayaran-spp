@@ -46,39 +46,67 @@
                         </div>
                         <div class="col-md-12">
                             <div class="d-flex flex-wrap gap-0 mt-1">
-                                @foreach ($spp as $item)
-                                @php $bulan = \Carbon\Carbon::parse($item->tanggal)->month; @endphp
-                                @if ($bulan > 6)
-                                <input type="checkbox" name="bulan_dibayar[]" class="btn-check spp-checkbox"
-                                    data-id="{{ $item->id }}" data-nominal="{{ $item->nominal }}"
-                                    id="tgl_{{ $item->id }}" value="{{ $item->tanggal }}"data-spp_ke="{{ $item->spp_ke }}"
-                                    {{ $item->status == 'L' ? 'checked disabled' : '' }}>
-                                <label class="btn btn-sm rounded-pill flex-fill text-center
-                                    {{ $item->status == 'L' ? 'btn-info' : 'btn-outline-info' }}" for="tgl_{{ $item->id }}">
-                                    {{ \App\Utils\Tanggal::namaBulan($item->tanggal) }}
-                                </label>
-                                @endif
+                                @foreach (
+                                    $spp->sortBy(function ($item) {
+                                        return \Carbon\Carbon::parse($item->tanggal)->month;
+                                    }) as $item
+                                )
+                                    @php
+                                        $bulan = \Carbon\Carbon::parse($item->tanggal)->month;
+                                    @endphp
+
+                                    @if ($bulan > 6)
+                                        <input type="checkbox"
+                                            name="bulan_dibayar[]"
+                                            class="btn-check spp-checkbox"
+                                            data-id="{{ $item->id }}"
+                                            data-nominal="{{ $item->nominal }}"
+                                            id="tgl_{{ $item->id }}"
+                                            value="{{ $item->tanggal }}"
+                                            data-spp_ke="{{ $item->spp_ke }}"
+                                            {{ $item->status == 'L' ? 'checked disabled' : '' }}>
+
+                                        <label class="btn btn-sm rounded-pill flex-fill text-center
+                                            {{ $item->status == 'L' ? 'btn-info' : 'btn-outline-info' }}"
+                                            for="tgl_{{ $item->id }}">
+                                            {{ \App\Utils\Tanggal::namaBulan($item->tanggal) }}
+                                        </label>
+                                    @endif
                                 @endforeach
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="d-flex flex-wrap gap-0 mt-1">
-                                @foreach ($spp as $item)
-                                @php $bulan = \Carbon\Carbon::parse($item->tanggal)->month; @endphp
-                                @if ($bulan <= 6) <input type="checkbox" name="bulan_dibayar[]"
-                                    class="btn-check spp-checkbox" data-id="{{ $item->id }}"data-spp_ke="{{ $item->spp_ke }}"
-                                    data-nominal="{{ $item->nominal }}" id="tgl_{{ $item->id }}"
-                                    value="{{ $item->tanggal }}"
-                                    {{ $item->status == 'L' ? 'checked disabled' : '' }}>
-                                    <label class="btn btn-sm rounded-pill flex-fill text-center
-                                        {{ $item->status == 'L' ? 'btn-danger' : 'btn-outline-danger' }}"
-                                        for="tgl_{{ $item->id }}">
-                                        {{ \App\Utils\Tanggal::namaBulan($item->tanggal) }}
-                                    </label>
+                                @foreach (
+                                    $spp->sortBy(function ($item) {
+                                        return \Carbon\Carbon::parse($item->tanggal)->month;
+                                    }) as $item
+                                )
+                                    @php
+                                        $bulan = \Carbon\Carbon::parse($item->tanggal)->month;
+                                    @endphp
+
+                                    @if ($bulan <= 6)
+                                        <input type="checkbox"
+                                            name="bulan_dibayar[]"
+                                            class="btn-check spp-checkbox"
+                                            data-id="{{ $item->id }}"
+                                            data-spp_ke="{{ $item->spp_ke }}"
+                                            data-nominal="{{ $item->nominal }}"
+                                            id="tgl_{{ $item->id }}"
+                                            value="{{ $item->tanggal }}"
+                                            {{ $item->status == 'L' ? 'checked disabled' : '' }}>
+
+                                        <label class="btn btn-sm rounded-pill flex-fill text-center
+                                            {{ $item->status == 'L' ? 'btn-danger' : 'btn-outline-danger' }}"
+                                            for="tgl_{{ $item->id }}">
+                                            {{ \App\Utils\Tanggal::namaBulan($item->tanggal) }}
+                                        </label>
                                     @endif
-                                    @endforeach
+                                @endforeach
                             </div>
                         </div>
+
                         <div id="sppKEContainer"></div>
                         <div id="sppIDContainer"></div>
                     </div>
@@ -114,7 +142,7 @@
     <div class="col-md-4 d-flex">
         <div class="card my-4 flex-fill">
             <div class="card-header bg-gradient-white text-dark">
-                <h6 class="mb-0 text-bold">Penjabaran SPP</h6>
+                <h6 class="mb-0 text-bold">Grafik SPP</h6>
             </div>
             <hr class="horizontal dark my-1">
             <div class="card-body text-center pt-0">
