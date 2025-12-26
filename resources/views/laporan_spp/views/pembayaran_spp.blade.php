@@ -92,7 +92,7 @@
                     {{-- Keterangan --}}
                     <td
                         style="border:1px solid #000; text-align:center;
-    color: {{ $row->sisa > 0 ? 'red' : 'black' }};">
+                 color: {{ $row->sisa > 0 ? 'red' : 'black' }};">
                         @if ($row->sisa > 0)
                             ({{ number_format($row->sisa, 2, ',', '.') }})
                         @else

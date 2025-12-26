@@ -48,16 +48,16 @@
 
                                 <div class="col-md-6">
                                     <label class="form-label">Kelas</label>
-                                    <select class="form-control select2" name="kelas_id">
+                                    <select class="form-control select2" name="kode_kelas">
                                         <option value="">-- Semua Kelas --</option>
                                         @foreach ($kelas as $k)
-                                            <option value="{{ $k->id }}">
-                                                {{ $k->tingkat }} - {{ $k->nama_kelas }}
+                                            <option value="{{ $k->kode_kelas }}">
+                                                {{ $k->kode_kelas }} - {{ $k->nama_kelas }}
                                             </option>
                                         @endforeach
                                     </select>
-
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                         <a href="/app/Transaksi/pembayaran-spp" class="btn btn-secondary">
                             Kembali
                         </a>
-                        <button type="submit" name="action" value="preview" class="btn btn-primary">
+                        <button type="submit" name="action" value="preview" class="btn btn-info">
                             Preview
                         </button>
                     </div>

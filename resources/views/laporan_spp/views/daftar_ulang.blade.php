@@ -27,15 +27,15 @@
 
         <thead>
             <tr style="text-align:center; font-weight:bold;">
-                <th style="border:1px solid #000; width:4%;">No</th>
+                <th style="border:1px solid #000; width:5%;">No</th>
                 <th style="border:1px solid #000; width:10%;">NISN</th>
-                <th style="border:1px solid #000; width:20%;">Nama Siswa</th>
+                <th style="border:1px solid #000; width:30%;">Nama Siswa</th>
 
-                <th style="border:1px solid #000; width:16%;">
+                <th style="border:1px solid #000; width:20%;">
                     Target Pembayaran
                 </th>
 
-                <th style="border:1px solid #000; width:30%;">
+                <th style="border:1px solid #000; width:20%;">
                     Realisasi Pembayaran
                 </th>
 

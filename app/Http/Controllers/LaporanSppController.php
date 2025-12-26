@@ -27,7 +27,19 @@ class LaporanSppController extends Controller
             ->orderBy('nama_tahun', 'desc')
             ->get();
 
-        $kelas = Kelas::orderBy('nama_kelas')->get();
+        $kelas = Anggota_Kelas::where('status', 'aktif')
+            ->select('kode_kelas')
+            ->distinct()
+            ->orderBy('kode_kelas')
+            ->get()
+            ->map(function ($row) {
+                $kelas = Kelas::where('kode_kelas', $row->kode_kelas)->first();
+
+                return (object) [
+                    'kode_kelas' => $row->kode_kelas,
+                    'nama_kelas' => $kelas->nama_kelas ?? $row->kode_kelas,
+                ];
+            });
 
         return view('laporan_spp.index', compact(
             'title',
@@ -37,6 +49,7 @@ class LaporanSppController extends Controller
             'kelas'
         ));
     }
+
 
     public function preview(Request $request)
     {
@@ -81,67 +94,55 @@ class LaporanSppController extends Controller
             'akhir' => Carbon::parse($data['tgl_akhir'])->locale('id'),
         ];
 
-        $anggotaKelas = Anggota_Kelas::with(['getSiswa', 'getTahunAkademik'])
-        ->where('status', 'aktif')
-        ->when(!empty($data['kelas_id']), function ($q) use ($data) {
-            $kelas = Kelas::find($data['kelas_id']);
-            if ($kelas) {
-                $q->where('kode_kelas', $kelas->kode_kelas);
-            }
-        })
-        ->when(!empty($data['tahun_akademik_id']), function ($q) use ($data) {
-            $tahun = Tahun_Akademik::find($data['tahun_akademik_id']);
-            if ($tahun) {
-                $q->where('tahun_akademik', $tahun->nama_tahun);
-            }
-        })
-        ->orderBy('id')
-        ->get()
-        ->map(function ($row) use ($data) {
+        $tglAwal  = Carbon::parse($data['tgl_awal'])->startOfMonth();
+        $tglAkhir = Carbon::parse($data['tgl_akhir'])->endOfMonth();
 
-            $tglAwal  = Carbon::parse($data['tgl_awal'])->startOfMonth();
-            $tglAkhir = Carbon::parse($data['tgl_akhir'])->endOfMonth();
+        $anggotaKelas = Anggota_Kelas::with(['getSiswa'])
+            ->when(!empty($data['kelas_id']), function ($q) use ($data) {
+                $kelas = Kelas::find($data['kelas_id']);
+                if ($kelas) {
+                    $q->where('kode_kelas', $kelas->kode_kelas);
+                }
+            })
+            ->when(!empty($data['tahun_akademik_id']), function ($q) use ($data) {
+                $tahun = Tahun_Akademik::find($data['tahun_akademik_id']);
+                if ($tahun) {
+                    $q->where('tahun_akademik', $tahun->nama_tahun);
+                }
+            })
+            ->orderBy('id')
+            ->get()
+            ->map(function ($row) use ($tglAwal, $tglAkhir) {
 
-            // jumlah bulan periode
-            $jumlahBulan = $tglAwal->diffInMonths($tglAkhir) + 1;
+                $jumlahBulan = $tglAwal->diffInMonths($tglAkhir) + 1;
 
-            // SPP per bulan
-            $row->per_bulan = $row->getSiswa->spp_nominal ?? 0;
+            
+                $row->per_bulan = $row->getSiswa->spp_nominal ?? 0;
 
-            // TARGET s.d saat ini
-            $row->target_sd_saat_ini = $jumlahBulan * $row->per_bulan;
 
-            // REALISASI s.d periode lalu (yg LUNAS)
-            $row->sd_periode_lalu = Spp::where('anggota_kelas', $row->id)
-                ->where('status', 'L')
-                ->where('tanggal', '<', $tglAwal)
-                ->sum('nominal');
+                $row->target_sd_saat_ini = $jumlahBulan * $row->per_bulan;
 
-            // REALISASI periode ini (yg LUNAS)
-            $row->periode_ini = Spp::where('anggota_kelas', $row->id)
-                ->where('status', 'L')
-                ->whereBetween('tanggal', [$tglAwal, $tglAkhir])
-                ->sum('nominal');
+                $row->sd_periode_lalu = Spp::where('anggota_kelas', $row->id)
+                    ->where('status', 'L')
+                    ->where('tanggal', '<', $tglAwal)
+                    ->sum('nominal');
 
-            // TOTAL REALISASI
-            $row->sd_periode_ini = $row->sd_periode_lalu + $row->periode_ini;
+                $row->periode_ini = Spp::where('anggota_kelas', $row->id)
+                    ->where('status', 'L')
+                    ->whereBetween('tanggal', [$tglAwal, $tglAkhir])
+                    ->sum('nominal');
 
-            // SISA / TUNGGAKAN
-            $row->sisa = $row->target_sd_saat_ini - $row->sd_periode_ini;
+                $row->sd_periode_ini = $row->sd_periode_lalu + $row->periode_ini;
 
-            return $row;
-        });
+                $row->sisa = $row->target_sd_saat_ini - $row->sd_periode_ini;
+
+                return $row;
+            });
 
         $data['anggotaKelas'] = $anggotaKelas;
+
         $pdf = Pdf::loadView('laporan_spp.views.pembayaran_spp', $data)
-            ->setPaper('A4', 'landscape')
-            ->setOptions([
-                'margin-top'    => 30,
-                'margin-bottom' => 15,
-                'margin-left'   => 20,
-                'margin-right'  => 20,
-                'enable-local-file-access' => true,
-            ]);
+            ->setPaper('A4', 'landscape');
 
         return $pdf->stream('laporan-spp.pdf');
     }
@@ -163,7 +164,6 @@ class LaporanSppController extends Controller
         ];
 
         $anggotaKelas = Anggota_Kelas::with(['getSiswa', 'getTahunAkademik'])
-            ->where('status', 'aktif')
             ->when(!empty($data['kelas_id']), function ($q) use ($data) {
                 $kelas = Kelas::find($data['kelas_id']);
                 if ($kelas) {
@@ -180,16 +180,13 @@ class LaporanSppController extends Controller
             ->get()
             ->map(function ($row) use ($tglAwal, $tglAkhir) {
 
-                // target = SPP nominal (1x)
                 $row->target = $row->getSiswa->spp_nominal ?? 0;
 
-                // realisasi
                 $row->realisasi = Transaksi::where('siswa_id', $row->getSiswa->id ?? 0)
-                    ->where('rekening_kredit', '1.1.03.02') // Daftar Ulang
+                    ->where('rekening_kredit', '1.1.03.02')
                     ->whereBetween('tanggal_transaksi', [$tglAwal, $tglAkhir])
                     ->sum('jumlah');
 
-                // sisa/kekurangan
                 $row->sisa = $row->target - $row->realisasi;
 
                 return $row;
@@ -209,5 +206,6 @@ class LaporanSppController extends Controller
 
         return $pdf->stream('laporan-daftar-ulang.pdf');
     }
+
 
 }
