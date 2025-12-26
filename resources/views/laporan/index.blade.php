@@ -76,7 +76,7 @@
                     <div class="col-12">
                         <div class="d-flex justify-content-end gap-2 mt-3">
                             <button type="submit" name="action" value="excel" class="btn btn-success">Excel</button>
-                            <button type="submit" name="action" value="preview" class="btn btn-primary">Preview</button>
+                            <button type="submit" name="action" value="preview" class="btn btn-info">Preview</button>
                         </div>
                     </div>
             </form>
