@@ -15,7 +15,7 @@
             <div class="collapse" id="submenusettigs">
                 <ul class="nav ms-4">
                     <li class="nav-item">
-                        <a class="nav-link text-dark py-2" href="/app">
+                        <a class="nav-link text-dark py-2" href="/app/pengaturan/sop">
                             <span class="sidenav-normal">Personalisasi SOP</span>
                         </a>
                     </li>

@@ -235,9 +235,9 @@
             });
 
             table = $('#siswaTable').DataTable({
-                ordering: false,
-                paging: false,
-                info: false
+                ordering: true,
+                paging: true,
+                info: true
             });
 
             $(document).on('click', '#filterStatus .nav-link', function (e) {

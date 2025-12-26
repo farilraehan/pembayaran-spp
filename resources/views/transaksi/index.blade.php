@@ -158,7 +158,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 mt-3">
+    <div class="col-md-4 mt-3 d-none">
         <div class="card h-100">
             <div class="card-body pt-4 p-3">
                 <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">

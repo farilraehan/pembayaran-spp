@@ -50,8 +50,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/spp/Pembayaran-spp/{id}', [SppController::class, 'spp']);
     Route::resource('/spp', SppController::class);
 
+    Route::get('/pengaturan/sop', [PengaturanController::class, 'sop']);
     Route::get('/pengaturan/coa', [PengaturanController::class, 'coa']);
     Route::get('/pengaturan/ttd-pelaporan', [PengaturanController::class, 'ttdPelaporan']);
+    Route::put('/pengaturan/lembaga/{id}', [PengaturanController::class, 'lembaga']);
+    Route::put('/pengaturan/logo/{id}', [PengaturanController::class, 'logo']);
     Route::resource('/pengaturan', PengaturanController::class);
 
     Route::get('/siswa/listTahun', [SiswaController::class, 'listTahun']);
