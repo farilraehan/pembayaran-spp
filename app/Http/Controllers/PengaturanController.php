@@ -17,11 +17,9 @@ class PengaturanController extends Controller
     public function sop()
     {
         $profil = Profil::first();
-        $kelas = Kelas::orderBy('id', 'desc')->first();
-        $tablekelas = Kelas::get();
 
         $title = "Personalisasi SOP";
-        return view('pengaturan.index', compact('title', 'profil', 'kelas', 'tablekelas'));
+        return view('pengaturan.index', compact('title', 'profil',));
     }
 
     public function coa()
