@@ -24,8 +24,8 @@
             }
 
             /* =======================
-                TABLE DATA
-                ======================== */
+                                    TABLE DATA
+                                    ======================== */
             .table-data {
                 width: 100%;
                 border-collapse: collapse;
@@ -54,8 +54,8 @@
             }
 
             /* =======================
-                TABLE TANDA TANGAN
-                ======================== */
+                                    TABLE TANDA TANGAN
+                                    ======================== */
             .table-signature {
                 width: 100%;
                 border-collapse: collapse;
@@ -70,10 +70,19 @@
         </style>
     </head>
 
+    <table border="0" width="100%" cellspacing="0" cellpadding="0" style="font-size: 11px;">
+        <tr>
+            <td colspan="8" align="center">
+                <div style="font-size: 18px; font-weight: bold;">RIWAYAT PEMBAYARAN SISWA</div>
+
+        </tr>
+        <tr>
+            <td colspan="8" height="8"></td>
+        </tr>
+    </table>
+    <br>
+
     <body>
-
-        <h2>RIWAYAT PEMBAYARAN SPP</h2>
-
         <table border="0">
             <tr>
                 <td width="40%">Nama Siswa </td>
@@ -88,7 +97,7 @@
                 <td width="60%">: {{ $siswa->tahun_akademik }}</td>
             </tr>
         </table>
-        <br><br>
+        <br>
         <table class="table-data">
             <thead>
                 <tr>
