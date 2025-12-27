@@ -310,7 +310,7 @@ class LaporanController extends Controller
 
     private function arus_kas(array $data)
     {
-         $thn  = $data['tahun'];
+        $thn  = $data['tahun'];
         $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
         $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
 

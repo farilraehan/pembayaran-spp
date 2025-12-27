@@ -13,12 +13,20 @@ class Rekening extends Model
 
     public function transaksiDebit()
     {
-        return $this->hasMany(Transaksi::class, 'rekening_debit', 'id');
+        return $this->hasMany(
+            Transaksi::class,
+            'rekening_debit',   
+            'kode_akun'         
+        );
     }
 
     public function transaksiKredit()
     {
-        return $this->hasMany(Transaksi::class, 'rekening_kredit', 'id');
+        return $this->hasMany(
+            Transaksi::class,
+            'rekening_kredit',
+            'kode_akun'
+        );
     }
     
      public function transaksi()

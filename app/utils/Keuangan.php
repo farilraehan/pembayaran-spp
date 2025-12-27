@@ -166,7 +166,7 @@ class Keuangan
         // Ambil semua rekening kas (id)
         $rekeningKas = Rekening::where('kode_akun', 'like', '1.1.01%')
                         ->orWhere('kode_akun', 'like', '1.1.02%')
-                        ->pluck('id');
+                        ->pluck('kode_akun');
 
         // Hitung total debit & kredit dari transaksi
         $total_debit = Transaksi::whereIn('rekening_debit', $rekeningKas)

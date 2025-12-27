@@ -27,11 +27,20 @@ class Transaksi extends Model
 
     public function rekeningDebit()
     {
-        return $this->belongsTo(Rekening::class, 'rekening_debit');
+        return $this->belongsTo(
+            Rekening::class,
+            'rekening_debit',    
+            'kode_akun'          
+        );
     }
 
     public function rekeningKredit()
     {
-        return $this->belongsTo(Rekening::class, 'rekening_kredit');
+        return $this->belongsTo(
+            Rekening::class,
+            'rekening_kredit',
+            'kode_akun'
+        );
     }
+
 }
