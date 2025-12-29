@@ -112,7 +112,11 @@ class SiswaController extends Controller
             'title' => $title,
             'siswa' => $siswa
         ];
-
+        $logoPath = public_path('assets/img/apple-icon.png');
+        if (file_exists($logoPath)) {
+            $data['logo'] = base64_encode(file_get_contents($logoPath));
+            $data['logo_type'] = pathinfo($logoPath, PATHINFO_EXTENSION);
+        }
         $pdf = Pdf::loadView('siswa.view.print', $data);
         $pdf->setPaper('A4', 'portrait');
         return $pdf->stream('daftar_siswa.pdf');
@@ -476,28 +480,28 @@ class SiswaController extends Controller
     }
 
     public function riwayatPembayaran($id)
-{
-    $siswa = Siswa::where('id', $id)->first();
-    $riwayat = Transaksi::with('spp')
-        ->where('siswa_id', $siswa->id)
-        ->get();
+    {
+        $siswa = Siswa::where('id', $id)->first();
+        $riwayat = Transaksi::with('spp')
+            ->where('siswa_id', $siswa->id)
+            ->get();
 
-    $data = [
-        'title'   => 'Riwayat Pembayaran Siswa',
-        'riwayat' => $riwayat,
-        'siswa'   => $siswa,
-    ];
+        $data = [
+            'title'   => 'Riwayat Pembayaran Siswa',
+            'riwayat' => $riwayat,
+            'siswa'   => $siswa,
+        ];
 
-    $logoPath = public_path('assets/img/apple-icon.png');
-    if (file_exists($logoPath)) {
-        $data['logo'] = base64_encode(file_get_contents($logoPath));
-        $data['logo_type'] = pathinfo($logoPath, PATHINFO_EXTENSION);
+        $logoPath = public_path('assets/img/apple-icon.png');
+        if (file_exists($logoPath)) {
+            $data['logo'] = base64_encode(file_get_contents($logoPath));
+            $data['logo_type'] = pathinfo($logoPath, PATHINFO_EXTENSION);
+        }
+
+        $pdf = Pdf::loadView('siswa.view.riwayatPembayaran', $data);
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('Riwayat_pembayaran.pdf');
     }
-
-    $pdf = Pdf::loadView('siswa.view.riwayatPembayaran', $data);
-    $pdf->setPaper('A4', 'portrait');
-    return $pdf->stream('Riwayat_pembayaran.pdf');
-}
 
     /**
      * Show the form for editing the specified resource.

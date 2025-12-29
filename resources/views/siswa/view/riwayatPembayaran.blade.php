@@ -5,76 +5,63 @@
     @php
         use App\Utils\Tanggal;
     @endphp
-    <!DOCTYPE html>
-    <html lang="id">
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 12px;
+        }
 
-    <head>
-        <meta charset="UTF-8">
-        <title>Semua Data Siswa Kelas I.A</title>
-        <style>
-            body {
-                font-family: sans-serif;
-                font-size: 12px;
-                color: #000;
-            }
+        h2 {
+            text-align: center;
+            margin: 0 0 15px 0;
+        }
 
-            h2 {
-                text-align: center;
-                margin: 0 0 15px 0;
-            }
+        /* =======================
+           TABLE DATA
+        ======================== */
+        .table-data {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-            /* =======================
-                                    TABLE DATA
-                                    ======================== */
-            .table-data {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 40px;
-                /* jarak konsisten ke tabel bawah */
-            }
+        .table-data th,
+        .table-data td {
+            border: 1px solid #000;
+            padding: 6px;
+        }
 
-            .table-data th,
-            .table-data td {
-                border: 1px solid #000;
-                padding: 6px;
-                vertical-align: top;
-            }
+        .table-data th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
 
-            .table-data th {
-                background-color: #f2f2f2;
-                text-align: left;
-            }
+        .text-end {
+            text-align: right;
+        }
 
-            .text-end {
-                text-align: right;
-            }
+        .text-center {
+            text-align: center;
+        }
 
-            .text-center {
-                text-align: center;
-            }
+        /* =======================
+           TABLE TANDA TANGAN
+        ======================== */
+        .table-signature {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-            /* =======================
-                                    TABLE TANDA TANGAN
-                                    ======================== */
-            .table-signature {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 30px;
-            }
-
-            .table-signature td {
-                border: none;
-                padding: 30px 0;
-                text-align: center;
-            }
-        </style>
-    </head>
+        .table-signature td {
+            padding: 30px 0;
+            text-align: center;
+        }
+    </style>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="0" style="font-size: 11px;">
         <tr>
             <td colspan="8" align="center">
                 <div style="font-size: 18px; font-weight: bold;">RIWAYAT PEMBAYARAN SISWA</div>
-
+            </td>
         </tr>
         <tr>
             <td colspan="8" height="8"></td>
@@ -101,7 +88,7 @@
         <table class="table-data">
             <thead>
                 <tr>
-                    <th width="15%">Tanggal</th>
+                    <th align="center" width="15%">Tanggal</th>
                     <th width="15%">Alokasi</th>
                     <th width="60%">Keterangan</th>
                     <th width="10%" class="text-end">Nominal</th>
@@ -146,6 +133,4 @@
             </tr>
         </table>
     </body>
-
-    </html>
 @endsection
