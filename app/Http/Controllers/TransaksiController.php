@@ -297,10 +297,11 @@ class TransaksiController extends Controller
         $request->validate([
             'tanggal' => 'required|date',
             'siswa_id' => 'required',
+            'sumber_dana' => 'required',
             'jenis_biaya' => 'required',
             'keterangan' => 'required',
-            'spp_id' => 'required_if:jenis_biaya,1.1.03.01|array|min:1',
-            'nominal_spp' => 'required_if:jenis_biaya,1.1.03.01|array',
+            'spp_id' => 'required_if:jenis_biaya,4.1.01.01|array|min:1',
+            'nominal_spp' => 'required_if:jenis_biaya,4.1.01.01|array',
         ]);
 
         $sppIds   = $request->input('spp_id', []);
@@ -310,7 +311,7 @@ class TransaksiController extends Controller
         $detailSpp = [];
         $total = 0;
 
-        if ($request->jenis_biaya === '1.1.03.01') {
+        if ($request->jenis_biaya === '4.1.01.01') {
 
             if (count($sppIds) !== count($nominals)) {
                 return response()->json([
@@ -327,7 +328,7 @@ class TransaksiController extends Controller
                 $transaksi = Transaksi::create([
                     'tanggal_transaksi' => $request->tanggal,
                     'invoice_id' => '0',
-                    'rekening_debit' => '1.1.01.01',
+                    'rekening_debit' => $request->sumber_dana,
                     'rekening_kredit' => $request->jenis_biaya,
                     'spp_id' => $sppId,
                     'siswa_id' => $request->siswa_id,
@@ -357,7 +358,7 @@ class TransaksiController extends Controller
             $transaksi = Transaksi::create([
                 'tanggal_transaksi' => $request->tanggal,
                 'invoice_id' => '0',
-                'rekening_debit' => '1.1.01.01',
+                'rekening_debit' => $request->sumber_dana,
                 'rekening_kredit' => $request->jenis_biaya,
                 'spp_id' => '0',
                 'siswa_id' => $request->siswa_id,
@@ -374,7 +375,99 @@ class TransaksiController extends Controller
         return response()->json([
             'success' => true,
             'msg' => 'Pembayaran berhasil disimpan',
-            'tipe' => $request->jenis_biaya === '1.1.03.01' ? 'spp' : 'daftar_ulang',
+            'tipe' => $request->jenis_biaya === '4.1.01.01' ? 'spp' : 'daftar_ulang',
+            'nominal' => $total,
+            'keterangan' => $request->keterangan,
+            'tanggal' => $request->tanggal,
+            'id_transaksi' => collect($transaksiList)->pluck('id')->toArray(),
+            'detail_spp' => $detailSpp,
+        ]);
+    }
+
+    public function pembayaranSPPKeringananStore(Request $request)
+    {
+        $request->validate([
+            'tanggal' => 'required|date',
+            'siswa_id' => 'required',
+            'sumber_dana' => 'required',
+            'jenis_biaya' => 'required',
+            'keterangan' => 'required',
+            'spp_id' => 'required_if:jenis_biaya,4.1.01.01|array|min:1',
+            'nominal_spp' => 'required_if:jenis_biaya,4.1.01.01|array',
+        ]);
+
+        $sppIds   = $request->input('spp_id', []);
+        $nominals = $request->input('nominal_spp', []);
+
+        $transaksiList = [];
+        $detailSpp = [];
+        $total = 0;
+
+        if ($request->jenis_biaya === '4.1.01.01') {
+
+            if (count($sppIds) !== count($nominals)) {
+                return response()->json([
+                    'success' => false,
+                    'msg' => 'Data SPP tidak sinkron'
+                ], 422);
+            }
+
+            foreach ($sppIds as $i => $sppId) {
+
+                $nilai = (int) str_replace(['.', ','], '', $nominals[$i]);
+                $total += $nilai;
+
+                $transaksi = Transaksi::create([
+                    'tanggal_transaksi' => $request->tanggal,
+                    'invoice_id' => '0',
+                    'rekening_debit' => '1.1.04.01',
+                    'rekening_kredit' => '1.1.03.01',
+                    'spp_id' => $sppId,
+                    'siswa_id' => $request->siswa_id,
+                    'jumlah' => $nilai,
+                    'keterangan' => $request->keterangan . ' - Bulan ' . Tanggal::NamaBulan(Spp::find($sppId)->tanggal),
+                    'urutan' => null,
+                    'deleted_at' => null,
+                    'user_id' => auth()->user()->id,
+                ]);
+
+                Spp::where('id', $sppId)->update(['status' => 'L']);
+
+                $spp = Spp::find($sppId);
+                $detailSpp[] = [
+                    'bulan' => \App\Utils\Tanggal::NamaBulan($spp->tanggal),
+                    'tanggal' => $spp->tanggal,
+                    'nominal' => $nilai,
+                ];
+
+                $transaksiList[] = $transaksi;
+            }
+        } else {
+
+            $nilai = (int) str_replace(['.', ','], '', $request->nominal);
+            $total = $nilai;
+
+            $transaksi = Transaksi::create([
+                'tanggal_transaksi' => $request->tanggal,
+                'invoice_id' => '0',
+                'rekening_debit' => $request->sumber_dana,
+                'rekening_kredit' => $request->jenis_biaya,
+                'spp_id' => '0',
+                'siswa_id' => $request->siswa_id,
+                'jumlah' => $nilai,
+                'keterangan' => $request->keterangan,
+                'urutan' => null,
+                'deleted_at' => null,
+                'user_id' => auth()->user()->id,
+            ]);
+
+            $transaksiList[] = $transaksi;
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Pembayaran berhasil disimpan',
+            'tipe' => $request->jenis_biaya === '4.1.01.01' ? 'spp' : 'daftar_ulang',
             'nominal' => $total,
             'keterangan' => $request->keterangan,
             'tanggal' => $request->tanggal,

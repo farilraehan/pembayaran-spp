@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Spp;
 use App\Models\Siswa;
 use App\Models\Rekening;
+use App\Models\Jenis_Biaya;
 use App\Models\Anggota_Kelas;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -55,6 +56,8 @@ class SppController extends Controller
         $spp_perbulan = $anggota_kelas->getSiswa->spp_nominal;
         $target_bulan = $anggota_kelas->getSpp->SUM('nominal');
         $sd_bulan_ini = $anggota_kelas->getSpp->where('status', 'L')->SUM('nominal');
+        $sumber_dana = Rekening::where('kode_akun', 'like', '1.1.01.%')->get();
+        $jenis_biaya = Rekening::where('kode_akun', 'like', '4.1.01.%')->get();
 
         return response()->json([
             'success' => true,
@@ -65,6 +68,8 @@ class SppController extends Controller
                     'spp_perbulan'  => $spp_perbulan,
                     'target_bulan'  => $target_bulan,
                     'sd_bulan_ini'  => $sd_bulan_ini,
+                    'sumber_dana'   => $sumber_dana,
+                    'jenis_biaya'   => $jenis_biaya
                 ])
                 ->render(),
         ]);

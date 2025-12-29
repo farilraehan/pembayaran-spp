@@ -240,7 +240,7 @@
         });
 
         //simpan pembayaran spp
-       $(document).on('click', '#SPPsimpan', function (e) {
+        $(document).on('click', '#SPPsimpan', function (e) {
             e.preventDefault();
 
             let $btn = $(this);
@@ -292,12 +292,74 @@
                                 ${result.keterangan}
                             </div>
                             ${detailHtml}
-                            <div class="text-end mb-2">
-                                <strong>Total:</strong>
-                                <span class="fw-bold text-success">
-                                    Rp ${numFormat.format(result.nominal)}
-                                </span>
+                        `,
+                        confirmButtonText: 'OK Lanjutkan'
+                    });
+
+                    $('#FormPembayaranSPP')[0].reset();
+                },
+                error: function () {
+                    Swal.fire('Error', 'Cek kembali input yang anda masukkan', 'error');
+                },
+                complete: function () {
+                    $btn.prop('disabled', false);
+                }
+            });
+        });
+
+        //Keringanan SPP
+        $(document).on('click', '#SPPkeringanan', function (e) {
+            e.preventDefault();
+
+            let $btn = $(this);
+            $btn.prop('disabled', true);
+
+            let form = $('#FormPembayaranSPP')[0];
+            let actionUrl = '/app/transaksi/ProsesPembayaran/keringanan';
+            let formData = new FormData(form);
+
+            $.ajax({
+                type: 'POST',
+                url: actionUrl,
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                    if (!result.success) return;
+
+                    lastTransaksiIds = Array.isArray(result.id_transaksi)
+                        ? result.id_transaksi.join(',')
+                        : result.id_transaksi;
+
+                    $('#kuitansi').removeClass('d-none');
+                    $('#CetakPadaKartu').removeClass('d-none');
+
+                    let detailHtml = '';
+
+                        if (result.detail_spp && result.detail_spp.length) {
+                            let bulanAwal = result.detail_spp[0].bulan;
+                            let bulanAkhir = result.detail_spp[result.detail_spp.length - 1].bulan;
+
+                            let rangeBulan = bulanAwal === bulanAkhir
+                                ? bulanAwal
+                                : `${bulanAwal} – ${bulanAkhir}`;
+
+                            detailHtml = `
+                                <div class="text-start mb-2">
+                                    <strong>Periode:</strong>
+                                    ${rangeBulan}
+                                </div>
+                            `;
+                        }
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Transaksi Berhasil',
+                        html: `
+                            <div class="text-center mb-2">
+                                ${result.keterangan}
                             </div>
+                            ${detailHtml}
                         `,
                         confirmButtonText: 'OK Lanjutkan'
                     });

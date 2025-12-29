@@ -16,7 +16,7 @@
                     <input type="hidden" name="siswa_id" value="{{ $siswa->id }}">
                     <input type="hidden" name="siswa_nama" id="siswa_nama" value="{{ $siswa->nama }}">
                     <div class="row mt-3">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div
                                 class="input-group input-group-outline mb-3 {{ old('tanggal', date('Y-m-d')) ? 'is-filled' : '' }}">
                                 <label class="form-label">Tanggal</label>
@@ -24,14 +24,7 @@
                                     value="{{ date('Y-m-d') }}">
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <select name="jenis_biaya" id="jenis_biaya" class="form-control select2">
-                                <option value="0">Pilih Jenis Biaya</option>
-                                <option value="1.1.03.01">SPP</option>
-                                <option value="1.1.03.02">Daftar Ulang</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div
                                 class="input-group input-group-outline mb-3 {{ old('kelas', $siswa->kode_kelas) ? 'is-filled' : '' }}">
                                 <label class="form-label">Kelas</label>
@@ -40,11 +33,29 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" id="bulanWrapper" style="display: none;">
-                        <div class="col-12">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <select name="sumber_dana" id="sumber_dana" class="form-control select2">
+                                <option value="0">Sumber Pembayaran</option>
+                                @foreach ($sumber_dana as $sd) 
+                                <option value="{{ $sd->kode_akun }}">{{ $sd->nama_akun }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select name="jenis_biaya" id="jenis_biaya" class="form-control select2">
+                                <option value="0">Pilih Jenis Biaya</option>
+                                @foreach ($jenis_biaya as $jb)
+                                <option value="{{ $jb->kode_akun }}">{{ $jb->nama_akun }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mt-2" id="bulanWrapper" style="display: none;">
+                        <div class="col-12 mt-2">
                             <label>Bulan Dibayar</label>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 mt-2">
                             <div class="d-flex flex-wrap gap-0 mt-1">
                                 @foreach (
                                     $spp->sortBy(function ($item) {
@@ -75,7 +86,7 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12 mt-2">
                             <div class="d-flex flex-wrap gap-0 mt-1">
                                 @foreach (
                                     $spp->sortBy(function ($item) {
@@ -129,11 +140,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end mt-3 gap-2">
-                        <button type="button" id="kuitansi" class="btn btn-outline-secondary btn-sm d-none">Kuitansi</button>
-                        <button type="button" id="CetakPadaKartu" class="btn btn-outline-secondary btn-sm d-none">Cetak Pada Kartu</button>
-                        <button class="btn btn-danger" id="btnDetailSiswa" type="button">Detail</button>
-                        <button type="submit" id="SPPsimpan" class="btn btn-info">Proses Pembayaran</button>
+                    <div class="d-flex align-items-center gap-2 mt-3">
+                        <button type="submit" id="SPPkeringanan" class="btn btn-warning me-auto">
+                            Keringanan
+                        </button>
+                        <button type="button" id="kuitansi" class="btn btn-outline-secondary btn-sm d-none">
+                            Kuitansi
+                        </button>
+                        <button type="button" id="CetakPadaKartu" class="btn btn-outline-secondary btn-sm d-none">
+                            Cetak Pada Kartu
+                        </button>
+                        <button class="btn btn-danger" id="btnDetailSiswa" type="button">
+                            Detail
+                        </button>
+                        <button type="submit" id="SPPsimpan" class="btn btn-info">
+                            Proses Pembayaran
+                        </button>
                     </div>
                 </form>
             </div>
@@ -152,25 +174,25 @@
     </div>
 </div>
 <script>
-const pieColors=["#ff6384","#36a2eb","#ffcd56"];
-const sppPerBulan={{ $spp_perbulan ?? 0 }};
-const targetBulan={{ $target_bulan ?? 0 }};
-const sdBulanIni={{ $sd_bulan_ini ?? 0 }};
-new Chart(document.getElementById("pie"),{
-    type:"pie",
-    data:{
-        labels:["SPP Per Bulan","Target Bulan","SD Bulan Ini"],
-        datasets:[{data:[sppPerBulan,targetBulan,sdBulanIni],backgroundColor:pieColors,borderWidth:1}]
-    },
-    options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{
-            legend:{display:true,position:"bottom",labels:{usePointStyle:true,pointStyle:"circle",padding:5,boxWidth:12,font:{size:10}}},
-            tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw.toLocaleString("id-ID",{style:"currency",currency:"IDR"})}`}}
+    const pieColors=["#ff6384","#36a2eb","#ffcd56"];
+    const sppPerBulan={{ $spp_perbulan ?? 0 }};
+    const targetBulan={{ $target_bulan ?? 0 }};
+    const sdBulanIni={{ $sd_bulan_ini ?? 0 }};
+    new Chart(document.getElementById("pie"),{
+        type:"pie",
+        data:{
+            labels:["SPP Per Bulan","Target Bulan","SD Bulan Ini"],
+            datasets:[{data:[sppPerBulan,targetBulan,sdBulanIni],backgroundColor:pieColors,borderWidth:1}]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            plugins:{
+                legend:{display:true,position:"bottom",labels:{usePointStyle:true,pointStyle:"circle",padding:5,boxWidth:12,font:{size:10}}},
+                tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw.toLocaleString("id-ID",{style:"currency",currency:"IDR"})}`}}
+            }
         }
-    }
-});
+    });
 </script>
 <script>
 $('#keterangan').val('-').trigger('focus').trigger('blur');
@@ -179,23 +201,28 @@ $(document).ready(function(){
     $('.select2').select2({theme:'bootstrap-5'});
     flatpickr('.datepicker',{dateFormat:'Y-m-d'});
     $('.nominal').maskMoney({thousands:'.',decimal:',',precision:2,allowZero:true});
+    
+    $('#jenis_biaya').on('change', function () {
 
-    $('#jenis_biaya').on('change',function(){
-        const jenis=$(this).val();
-        const nama=$('#siswa_nama').val();
-        $('#bulanWrapper').toggle(jenis==='1.1.03.01');
-        $('.spp-checkbox').prop('checked',false).prop('disabled',false);
+        const jenis = $(this).val();
+        const nama = $('#siswa_nama').val();
+        const namaAkun = $('#jenis_biaya option:selected').text();
+
+        $('#bulanWrapper').toggle(jenis === '4.1.01.01');
+        $('.spp-checkbox').prop('checked', false).prop('disabled', false);
         $('#sppIDContainer').empty();
+
         $('#nominal').val(0).maskMoney('mask');
-        if(jenis==='1.1.03.01'){
-            $('#nominal').prop('readonly',true);
-            $('#keterangan').val('Pembayaran SPP an. '+nama);
+
+        if (jenis === '4.1.01.01') {
+            $('#nominal').prop('readonly', true);
+            $('#keterangan').val(`Pembayaran ${namaAkun} an. ${nama}`);
             $('#kuitansi, #CetakPadaKartu').addClass('d-none');
-        }else if(jenis==='1.1.03.02'){
-            $('#nominal').prop('readonly',false).val('');
+        } else if (jenis.startsWith('4.1.01.')) {
+            $('#nominal').prop('readonly', false).val('');
             $('#kuitansi, #CetakPadaKartu').addClass('d-none');
-            $('#keterangan').val('Pembayaran Daftar Ulang an. '+nama+' - kelas '+$('#kelas').val());
-        }else{
+            $('#keterangan').val(`Pembayaran ${namaAkun} an. ${nama}`);
+        } else {
             $('#keterangan').val('');
         }
     });
