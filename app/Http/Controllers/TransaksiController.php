@@ -351,10 +351,6 @@ class TransaksiController extends Controller
                 $transaksiList[] = $transaksi;
             }
         } else {
-
-            $nilai = (int) str_replace(['.', ','], '', $request->nominal);
-            $total = $nilai;
-
             $transaksi = Transaksi::create([
                 'tanggal_transaksi' => $request->tanggal,
                 'invoice_id' => '0',
@@ -362,7 +358,7 @@ class TransaksiController extends Controller
                 'rekening_kredit' => $request->jenis_biaya,
                 'spp_id' => '0',
                 'siswa_id' => $request->siswa_id,
-                'jumlah' => $nilai,
+                'jumlah' => str_replace(',', '', str_replace('.00', '', $request->nominal)),
                 'keterangan' => $request->keterangan,
                 'urutan' => null,
                 'deleted_at' => null,
@@ -375,8 +371,6 @@ class TransaksiController extends Controller
         return response()->json([
             'success' => true,
             'msg' => 'Pembayaran berhasil disimpan',
-            'tipe' => $request->jenis_biaya === '4.1.01.01' ? 'spp' : 'daftar_ulang',
-            'nominal' => $total,
             'keterangan' => $request->keterangan,
             'tanggal' => $request->tanggal,
             'id_transaksi' => collect($transaksiList)->pluck('id')->toArray(),
@@ -443,10 +437,6 @@ class TransaksiController extends Controller
                 $transaksiList[] = $transaksi;
             }
         } else {
-
-            $nilai = (int) str_replace(['.', ','], '', $request->nominal);
-            $total = $nilai;
-
             $transaksi = Transaksi::create([
                 'tanggal_transaksi' => $request->tanggal,
                 'invoice_id' => '0',
@@ -454,7 +444,7 @@ class TransaksiController extends Controller
                 'rekening_kredit' => $request->jenis_biaya,
                 'spp_id' => '0',
                 'siswa_id' => $request->siswa_id,
-                'jumlah' => $nilai,
+                'jumlah' => str_replace(',', '', str_replace('.00', '', $request->nominal)),
                 'keterangan' => $request->keterangan,
                 'urutan' => null,
                 'deleted_at' => null,
@@ -467,8 +457,6 @@ class TransaksiController extends Controller
         return response()->json([
             'success' => true,
             'msg' => 'Pembayaran berhasil disimpan',
-            'tipe' => $request->jenis_biaya === '4.1.01.01' ? 'spp' : 'daftar_ulang',
-            'nominal' => $total,
             'keterangan' => $request->keterangan,
             'tanggal' => $request->tanggal,
             'id_transaksi' => collect($transaksiList)->pluck('id')->toArray(),
