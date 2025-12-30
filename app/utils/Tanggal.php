@@ -34,7 +34,10 @@ class Tanggal
         $tgl = Carbon::createFromFormat('d/m/Y', $tanggal)->format('Y-m-d');
         return $tgl;
     }
-
+    public static function tglKwitansi($tanggal)
+    {
+        return self::tglLatin($tanggal);
+    }
     public static function tglRomawi($tanggal)
     {
         $keuangan = new Keuangan;

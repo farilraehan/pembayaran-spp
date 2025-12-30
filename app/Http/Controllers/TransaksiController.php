@@ -535,7 +535,11 @@ class TransaksiController extends Controller
             'transaksis'    => $transaksis,
             'nama_lembaga'  => $lembaga,
         ];
-
+        $logoPath = public_path('assets/img/apple-icon.png');
+        if (file_exists($logoPath)) {
+            $data['logo'] = base64_encode(file_get_contents($logoPath));
+            $data['logo_type'] = pathinfo($logoPath, PATHINFO_EXTENSION);
+        }
         $pdf = Pdf::loadView('transaksi.map_arsip.view.kwitansi_spp', $data)
             ->setPaper('A4', 'portrait');
 
