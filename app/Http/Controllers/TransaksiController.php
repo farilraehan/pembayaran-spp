@@ -562,7 +562,7 @@ class TransaksiController extends Controller
 
         $lembaga = Profil::first()->nama;
         $data = [
-            'title'        => 'Kwitansi Pembayaran',
+            'title'        => 'Riwayat Pembayaran',
             'header'       => $header,
             'transaksis'   => $transaksis,
             'nama_lembaga' => $lembaga,
