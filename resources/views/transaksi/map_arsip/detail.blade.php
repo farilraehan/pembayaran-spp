@@ -14,7 +14,7 @@
                                 <th width="15%">Bulan SPP</th>
                                 <th width="15%">Nominal</th>
                                 <th width="40%">Keterangan</th>
-                                <th width="15%">Action</th>
+                                <th width="15%" style="padding-left:60px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -35,17 +35,19 @@
                                     </td>
                                     <td>{{ $item->keterangan }}</td>
                                     <td class="text-nowrap">
-                                    <a href="/app/transaksi/kwitansi-spp?ids={{ $item->id }}"
-                                    target="_blank"
-                                    class="btn btn-sm btn-primary"
-                                    title="Cetak Kwitansi">
-                                        <i class="material-symbols-rounded fs-6">print</i>
-                                    </a>
-                                    <button type="submit"
-                                            class="btn btn-sm btn-danger btnDelete" data-id="{{  $item->id }}">
-                                        <i class="material-symbols-rounded fs-6">delete</i>
-                                    </button>
-                                </td>
+                                        <a href="/app/transaksi/kwitansi-spp?ids={{ $item->id }}" target="_blank"
+                                            class="btn btn-sm btn-primary" title="Cetak Kwitansi">
+                                            <i class="material-symbols-rounded fs-6">print</i>
+                                        </a>
+                                        <a href="/app/transaksi/cetakPadaKartu?ids={{ $item->id }}" target="_blank"
+                                            class="btn btn-sm btn-info" title="Cetak Pada Kartu">
+                                            <i class="material-symbols-rounded fs-6">print</i>
+                                        </a>
+                                        <button type="submit" class="btn btn-sm btn-danger btnDelete"
+                                            data-id="{{ $item->id }}">
+                                            <i class="material-symbols-rounded fs-6">delete</i>
+                                        </button>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
