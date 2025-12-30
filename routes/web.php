@@ -32,6 +32,7 @@ Route::get('/link', function () {
 Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
+    Route::put('/profile/update/{id}', [ProfilController::class, 'update']);
     Route::get('/profile', [ProfilController::class, 'index']);
 
     Route::get('/Transaksi/pembayaran-spp', [TransaksiController::class, 'pembayaranSPP']);
