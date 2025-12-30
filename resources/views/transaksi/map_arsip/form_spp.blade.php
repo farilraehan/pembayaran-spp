@@ -37,8 +37,8 @@
                         <div class="col-md-6">
                             <select name="sumber_dana" id="sumber_dana" class="form-control select2">
                                 <option value="0">Sumber Pembayaran</option>
-                                @foreach ($sumber_dana as $sd) 
-                                <option value="{{ $sd->kode_akun }}">{{ $sd->nama_akun }}</option>
+                                @foreach ($sumber_dana as $sd)
+                                    <option value="{{ $sd->kode_akun }}">{{ $sd->nama_akun }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -46,7 +46,7 @@
                             <select name="jenis_biaya" id="jenis_biaya" class="form-control select2">
                                 <option value="0">Pilih Jenis Biaya</option>
                                 @foreach ($jenis_biaya as $jb)
-                                <option value="{{ $jb->kode_akun }}">{{ $jb->nama_akun }}</option>
+                                    <option value="{{ $jb->kode_akun }}">{{ $jb->nama_akun }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -57,27 +57,22 @@
                         </div>
                         <div class="col-md-12 mt-2">
                             <div class="d-flex flex-wrap gap-0 mt-1">
-                                @foreach (
-                                    $spp->sortBy(function ($item) {
-                                        return \Carbon\Carbon::parse($item->tanggal)->month;
-                                    }) as $item
-                                )
+                                @foreach ($spp->sortBy(function ($item) {
+        return \Carbon\Carbon::parse($item->tanggal)->month;
+    }) as $item)
                                     @php
                                         $bulan = \Carbon\Carbon::parse($item->tanggal)->month;
                                     @endphp
 
                                     @if ($bulan > 6)
-                                        <input type="checkbox"
-                                            name="bulan_dibayar[]"
-                                            class="btn-check spp-checkbox"
-                                            data-id="{{ $item->id }}"
-                                            data-nominal="{{ $item->nominal }}"
-                                            id="tgl_{{ $item->id }}"
-                                            value="{{ $item->tanggal }}"
+                                        <input type="checkbox" name="bulan_dibayar[]" class="btn-check spp-checkbox"
+                                            data-id="{{ $item->id }}" data-nominal="{{ $item->nominal }}"
+                                            id="tgl_{{ $item->id }}" value="{{ $item->tanggal }}"
                                             data-spp_ke="{{ $item->spp_ke }}"
                                             {{ $item->status == 'L' ? 'checked disabled' : '' }}>
 
-                                        <label class="btn btn-sm rounded-pill flex-fill text-center
+                                        <label
+                                            class="btn btn-sm rounded-pill flex-fill text-center
                                             {{ $item->status == 'L' ? 'btn-info' : 'btn-outline-info' }}"
                                             for="tgl_{{ $item->id }}">
                                             {{ \App\Utils\Tanggal::namaBulan($item->tanggal) }}
@@ -88,27 +83,22 @@
                         </div>
                         <div class="col-md-12 mt-2">
                             <div class="d-flex flex-wrap gap-0 mt-1">
-                                @foreach (
-                                    $spp->sortBy(function ($item) {
-                                        return \Carbon\Carbon::parse($item->tanggal)->month;
-                                    }) as $item
-                                )
+                                @foreach ($spp->sortBy(function ($item) {
+        return \Carbon\Carbon::parse($item->tanggal)->month;
+    }) as $item)
                                     @php
                                         $bulan = \Carbon\Carbon::parse($item->tanggal)->month;
                                     @endphp
 
                                     @if ($bulan <= 6)
-                                        <input type="checkbox"
-                                            name="bulan_dibayar[]"
-                                            class="btn-check spp-checkbox"
-                                            data-id="{{ $item->id }}"
-                                            data-spp_ke="{{ $item->spp_ke }}"
-                                            data-nominal="{{ $item->nominal }}"
-                                            id="tgl_{{ $item->id }}"
+                                        <input type="checkbox" name="bulan_dibayar[]" class="btn-check spp-checkbox"
+                                            data-id="{{ $item->id }}" data-spp_ke="{{ $item->spp_ke }}"
+                                            data-nominal="{{ $item->nominal }}" id="tgl_{{ $item->id }}"
                                             value="{{ $item->tanggal }}"
                                             {{ $item->status == 'L' ? 'checked disabled' : '' }}>
 
-                                        <label class="btn btn-sm rounded-pill flex-fill text-center
+                                        <label
+                                            class="btn btn-sm rounded-pill flex-fill text-center
                                             {{ $item->status == 'L' ? 'btn-danger' : 'btn-outline-danger' }}"
                                             for="tgl_{{ $item->id }}">
                                             {{ \App\Utils\Tanggal::namaBulan($item->tanggal) }}
@@ -126,8 +116,7 @@
                             <div
                                 class="input-group input-group-outline mb-3 {{ old('keterangan') ? 'is-filled' : '' }}">
                                 <label class="form-label">Keterangan</label>
-                                <textarea name="keterangan" id="keterangan" rows="1"
-                                    class="form-control">{{ old('keterangan') }}</textarea>
+                                <textarea name="keterangan" id="keterangan" rows="1" class="form-control">{{ old('keterangan') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -136,7 +125,8 @@
                             <div
                                 class="input-group input-group-outline mb-3 {{ old('nominal', $siswa->spp_nominal) ? 'is-filled' : '' }}">
                                 <label class="form-label">Nominal</label>
-                                <input type="text" name="nominal" id="nominal" class="form-control nominal" readonly>
+                                <input type="text" name="nominal" id="nominal" class="form-control nominal"
+                                    readonly>
                             </div>
                         </div>
                     </div>
@@ -145,7 +135,7 @@
                             Keringanan
                         </button>
                         <button type="button" id="kuitansi" class="btn btn-outline-secondary btn-sm d-none">
-                            Kuitansi
+                            Kwitansi
                         </button>
                         <button type="button" id="CetakPadaKartu" class="btn btn-outline-secondary btn-sm d-none">
                             Cetak Pada Kartu
@@ -174,104 +164,140 @@
     </div>
 </div>
 <script>
-    const pieColors=["#ff6384","#36a2eb","#ffcd56"];
-    const sppPerBulan={{ $spp_perbulan ?? 0 }};
-    const targetBulan={{ $target_bulan ?? 0 }};
-    const sdBulanIni={{ $sd_bulan_ini ?? 0 }};
-    new Chart(document.getElementById("pie"),{
-        type:"pie",
-        data:{
-            labels:["SPP Per Bulan","Target Bulan","SD Bulan Ini"],
-            datasets:[{data:[sppPerBulan,targetBulan,sdBulanIni],backgroundColor:pieColors,borderWidth:1}]
+    const pieColors = ["#ff6384", "#36a2eb", "#ffcd56"];
+    const sppPerBulan = {{ $spp_perbulan ?? 0 }};
+    const targetBulan = {{ $target_bulan ?? 0 }};
+    const sdBulanIni = {{ $sd_bulan_ini ?? 0 }};
+    new Chart(document.getElementById("pie"), {
+        type: "pie",
+        data: {
+            labels: ["SPP Per Bulan", "Target Bulan", "SD Bulan Ini"],
+            datasets: [{
+                data: [sppPerBulan, targetBulan, sdBulanIni],
+                backgroundColor: pieColors,
+                borderWidth: 1
+            }]
         },
-        options:{
-            responsive:true,
-            maintainAspectRatio:false,
-            plugins:{
-                legend:{display:true,position:"bottom",labels:{usePointStyle:true,pointStyle:"circle",padding:5,boxWidth:12,font:{size:10}}},
-                tooltip:{callbacks:{label:c=>`${c.label}: ${c.raw.toLocaleString("id-ID",{style:"currency",currency:"IDR"})}`}}
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: "bottom",
+                    labels: {
+                        usePointStyle: true,
+                        pointStyle: "circle",
+                        padding: 5,
+                        boxWidth: 12,
+                        font: {
+                            size: 10
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: c =>
+                            `${c.label}: ${c.raw.toLocaleString("id-ID",{style:"currency",currency:"IDR"})}`
+                    }
+                }
             }
         }
     });
 </script>
 <script>
-$('#keterangan').val('-').trigger('focus').trigger('blur');
+    $('#keterangan').val('-').trigger('focus').trigger('blur');
 
-$(document).ready(function(){
-    $('.select2').select2({theme:'bootstrap-5'});
-    flatpickr('.datepicker',{dateFormat:'Y-m-d'});
-    $('.nominal').maskMoney({thousands:'.',decimal:',',precision:2,allowZero:true});
-    
-    $('#jenis_biaya').on('change', function () {
+    $(document).ready(function() {
+        $('.select2').select2({
+            theme: 'bootstrap-5'
+        });
+        flatpickr('.datepicker', {
+            dateFormat: 'Y-m-d'
+        });
+        $('.nominal').maskMoney({
+            thousands: '.',
+            decimal: ',',
+            precision: 2,
+            allowZero: true
+        });
 
-        const jenis = $(this).val();
-        const nama = $('#siswa_nama').val();
-        const namaAkun = $('#jenis_biaya option:selected').text();
+        $('#jenis_biaya').on('change', function() {
 
-        $('#bulanWrapper').toggle(jenis === '4.1.01.01');
-        $('.spp-checkbox').prop('checked', false).prop('disabled', false);
-        $('#sppIDContainer').empty();
+            const jenis = $(this).val();
+            const nama = $('#siswa_nama').val();
+            const namaAkun = $('#jenis_biaya option:selected').text();
 
-        $('#nominal').val(0).maskMoney('mask');
+            $('#bulanWrapper').toggle(jenis === '4.1.01.01');
+            $('.spp-checkbox').prop('checked', false).prop('disabled', false);
+            $('#sppIDContainer').empty();
 
-        if (jenis === '4.1.01.01') {
-            $('#nominal').prop('readonly', true);
-            $('#keterangan').val(`Pembayaran ${namaAkun} an. ${nama}`);
-            $('#kuitansi, #CetakPadaKartu').addClass('d-none');
-        } else if (jenis.startsWith('4.1.01.')) {
-            $('#nominal').prop('readonly', false).val('');
-            $('#kuitansi, #CetakPadaKartu').addClass('d-none');
-            $('#keterangan').val(`Pembayaran ${namaAkun} an. ${nama}`);
-        } else {
-            $('#keterangan').val('');
-        }
-    });
+            $('#nominal').val(0).maskMoney('mask');
 
-    $('.spp-checkbox').on('change', function () {
-    let total = 0;
-    $('#sppIDContainer').empty();
+            if (jenis === '4.1.01.01') {
+                $('#nominal').prop('readonly', true);
+                $('#keterangan').val(`Pembayaran ${namaAkun} an. ${nama}`);
+                $('#kuitansi, #CetakPadaKartu').addClass('d-none');
+            } else if (jenis.startsWith('4.1.01.')) {
+                $('#nominal').prop('readonly', false).val('');
+                $('#kuitansi, #CetakPadaKartu').addClass('d-none');
+                $('#keterangan').val(`Pembayaran ${namaAkun} an. ${nama}`);
+            } else {
+                $('#keterangan').val('');
+            }
+        });
 
-    $('.spp-checkbox:checked:not(:disabled)').each(function () {
-        const id = $(this).data('id');
-        const nominal = parseInt($(this).data('nominal'));
+        $('.spp-checkbox').on('change', function() {
+            let total = 0;
+            $('#sppIDContainer').empty();
 
-        total += nominal;
+            $('.spp-checkbox:checked:not(:disabled)').each(function() {
+                const id = $(this).data('id');
+                const nominal = parseInt($(this).data('nominal'));
 
-        $('#sppIDContainer').append(`
+                total += nominal;
+
+                $('#sppIDContainer').append(`
             <input type="hidden" name="spp_id[]" value="${id}">
             <input type="hidden" name="nominal_spp[]" value="${nominal}">
         `);
-    });
+            });
 
-    $('#nominal').maskMoney('mask', total);
-});
+            $('#nominal').maskMoney('mask', total);
+        });
 
-    document.querySelectorAll('.btn-check').forEach(input=>{
-        const label=document.querySelector(`label[for="${input.id}"]`);
-        if(input.checked&&!label.querySelector('.check-icon')){
-            label.insertAdjacentHTML('afterbegin','<span class="check-icon me-0">✓</span>');
-        }
-        input.addEventListener('change',function(){
-            if(this.checked){
-                if(!label.querySelector('.check-icon')){
-                    label.insertAdjacentHTML('afterbegin','<span class="check-icon me-0">✓</span>');
-                }
-            }else{
-                const icon=label.querySelector('.check-icon');
-                if(icon)icon.remove();
+        document.querySelectorAll('.btn-check').forEach(input => {
+            const label = document.querySelector(`label[for="${input.id}"]`);
+            if (input.checked && !label.querySelector('.check-icon')) {
+                label.insertAdjacentHTML('afterbegin', '<span class="check-icon me-0">✓</span>');
             }
+            input.addEventListener('change', function() {
+                if (this.checked) {
+                    if (!label.querySelector('.check-icon')) {
+                        label.insertAdjacentHTML('afterbegin',
+                            '<span class="check-icon me-0">✓</span>');
+                    }
+                } else {
+                    const icon = label.querySelector('.check-icon');
+                    if (icon) icon.remove();
+                }
+            });
+        });
+
+        const $ta = $('textarea.form-control');
+
+        function updateState(el) {
+            const g = el.closest('.input-group');
+            g.toggleClass('is-filled is-focused', el.val().trim() !== '');
+        }
+        $ta.each(function() {
+            updateState($(this));
+        });
+        $ta.on('focus input', function() {
+            $(this).closest('.input-group').addClass('is-filled is-focused');
+        });
+        $ta.on('blur', function() {
+            updateState($(this));
         });
     });
-
-    const $ta=$('textarea.form-control');
-    function updateState(el){
-        const g=el.closest('.input-group');
-        g.toggleClass('is-filled is-focused',el.val().trim()!=='');
-    }
-    $ta.each(function(){updateState($(this));});
-    $ta.on('focus input',function(){
-        $(this).closest('.input-group').addClass('is-filled is-focused');
-    });
-    $ta.on('blur',function(){updateState($(this));});
-});
 </script>

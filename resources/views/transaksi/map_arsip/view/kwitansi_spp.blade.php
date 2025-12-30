@@ -1,119 +1,171 @@
-@php
-use App\Utils\Tanggal;
-@endphp
-<!DOCTYPE html>
-<html lang="id">
+<title>{{ $title }}</title>
+@extends('laporan.layout.base')
 
-<head>
-    <meta charset="UTF-8">
-    <title>{{ $title }}</title>
+@section('content')
     <style>
         body {
-            font-family: "Courier New", monospace;
+            font-family: Arial, Helvetica, sans-serif;
             font-size: 12px;
         }
 
-        .struk {
-            width: 650px;
-            margin: 10px auto;
-            padding: 15px 20px;
+        .kwitansi {
+            width: 170mm;
             border: 1px solid #000;
-            box-sizing: border-box;
+            padding: 20px;
+            margin: auto;
         }
 
-        .center {
+        .judul {
             text-align: center;
+            font-weight: bold;
+            letter-spacing: 6px;
+            font-size: 18px;
         }
 
-        .right {
-            text-align: right;
-        }
-
-        .line {
-            border-top: 1px dashed #000;
-            margin: 6px 0;
+        .subjudul {
+            text-align: center;
+            margin-bottom: 15px;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
         }
 
         td {
-            padding: 3px 0;
+            padding: 6px 4px;
+            vertical-align: top;
         }
 
-    </style>
-</head>
-<body>
-    <div class="struk">
-        <br>
-        <div class="center">
-            <strong>{{ $nama_lembaga }}</strong><br><br>
-            <strong>KWITANSI</strong>
-        </div>
-        <br>
-        <div class="line"></div>
-        <div class="line"></div>
-        <br>
-        <table>
-            <tr>
-                <td>Siswa</td>
-                <td>: {{ $header->siswa->nama }}</td>
-            </tr>
-            <tr>
-                <td>Kelas</td>
-                <td>: {{ $header->siswa->kode_kelas }}</td>
-            </tr>
-            <tr>
-                <td>Tanggal</td>
-                <td>: {{ Tanggal::tglIndo($header->tanggal) }}</td>
-            </tr>
-        </table>
-       <br>
-        <div class="line"></div>
-        <br>
+        .label {
+            width: 25%;
+        }
 
-        @if($spps->isNotEmpty())
+        .colon {
+            width: 3%;
+        }
+
+        .isi {
+            width: 72%;
+            border-bottom: 1px solid #000;
+        }
+
+        .nominal {
+            margin-top: 30px;
+            width: 220px;
+            border-top: 1px solid #000;
+            text-align: center;
+            font-weight: bold;
+            padding-top: 5px;
+        }
+
+        .kanan {
+            text-align: center;
+        }
+
+        .ttd {
+            margin-top: 40px;
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
+
+    <body>
+
+        <div class="kwitansi">
+            {{-- JUDUL --}}
+            <div class="judul">KWITANSI</div>
+            <div class="subjudul">
+                Nomor : {{ $header->spp_id ?? '-' }}
+                &nbsp; Tanggal :
+                {{ \App\Utils\Tanggal::tglKwitansi($header->tanggal_transaksi) }}
+            </div>
+
+            @php
+                $total = $spps->isNotEmpty() ? $spps->sum('nominal') : $header->jumlah;
+            @endphp
+
             <table>
-                @php $total = 0; @endphp
-                @foreach ($spps as $spp)
-                    @php $total += $spp->nominal; @endphp
-                    <tr>
-                        <td>{{ Tanggal::namabulan($spp->tanggal) }}</td>
-                        <td class="right">{{ number_format($spp->nominal,0,',','.') }}</td>
-                    </tr>
-                @endforeach
+                <tr>
+                    <td class="label">Telah Diterima Dari</td>
+                    <td class="colon">:</td>
+                    <td class="isi">
+                        {{ $header->siswa->nama }}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">Uang Sebanyak</td>
+                    <td class="colon">:</td>
+                    <td class="isi">
+                        {{ \App\Utils\Terbilang::rupiah($total) }} Rupiah
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="label">Untuk Pembayaran</td>
+                    <td class="colon">:</td>
+                    <td class="isi">
+                        {{ trim(explode(' an.', $header->keterangan)[0]) }}
+                    </td>
+                </tr>
+
+                {{-- <tr>
+                    <td class="label">Kode Akun</td>
+                    <td class="colon">:</td>
+                    <td class="isi">
+                        {{ $header->rekening_debit ?? '-' }}
+                    </td>
+                </tr> --}}
             </table>
-            <br>
-            <div class="line"></div>
-            <table>
+
+            <table width="100%">
                 <tr>
-                    <td><strong>TOTAL</strong></td>
-                    <td class="right"><strong>{{ number_format($total,0,',','.') }}</strong></td>
+                    <td width="50%" style="vertical-align: top;">
+                        <div
+                            style="
+            width:220px;
+            border-top:1px solid #000;
+            border-bottom:1px solid #000;
+            text-align:center;
+            font-weight:bold;
+            margin-top:30px;
+            padding:8px 0;
+            box-sizing:border-box;
+        ">
+                            Rp. {{ number_format($total, 0, ',', '.') }},-
+                        </div>
+                    </td>
+
+                    <td width="50%"
+                        style="
+        vertical-align: top;
+        padding-left:40px;
+        text-align:center;
+    ">
+
+
+
+                        Kecamatan,
+                        {{ \App\Utils\Tanggal::tglIndo($header->tanggal) }}
+                        <br>
+
+                        <div style="text-align:center; margin-top:5px;">
+                            Diterima Oleh,
+                        </div>
+
+                        <div
+                            style="
+                    margin-top:35px;
+                    text-align:center;
+                    font-weight:bold;
+                ">
+                            {{ $header->siswa->nama }}
+
+                        </div>
+                    </td>
                 </tr>
             </table>
-        @else
-            <table>
-                <tr>
-                    <td>Nomor urut</td>
-                    <td>: {{ $header->id }}</td>
-                </tr>
-                <tr>
-                    <td>Jumlah Bayar</td>
-                    <td>: {{ number_format($header->jumlah,0,',','.') }}</td>
-                </tr>
-                <tr>
-                    <td>Keterangan</td>
-                    <td>: {{ $header->keterangan ?? '-' }}</td>
-                </tr>
-            </table>
-        @endif
-        <br>
-        <div class="line"></div>
-        <div class="center">
-            Terima kasih
+
         </div>
-    </div>
-</body>
-</html>
+    </body>
+@endsection
