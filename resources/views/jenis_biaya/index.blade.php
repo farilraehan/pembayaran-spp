@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive" id="tableWrapper">
+                    <div class="table-responsive">
                         <table id="keuangan" class="table align-items-center table-striped">
                             <thead>
                                 <tr>
@@ -96,6 +96,9 @@
                 dom: '<"row mb-3"<"col-md-6"l><"col-md-6">>rt<"row mt-3"<"col-md-5"i><"col-md-7"p>>',
                 processing: true,
                 serverSide: true,
+                scrollX: true,
+                autoWidth: true,
+                responsive: true,
                 language: {
                     emptyTable: "Hello, Maaf! Data kosong"
                 },
