@@ -13,17 +13,17 @@
             </li>
             <li class="nav-item px-3 d-flex align-items-center">
                 <a href="javascript:;" class="nav-link text-body p-0">
-                    <i class="material-symbols-rounded fixed-plugin-button-nav">settings</i>
+                    <span class="material-symbols-rounded fixed-plugin-button-nav">settings</span>
                 </a>
             </li>
             <li class="nav-item dropdown pe-3 d-flex align-items-center">
                 <a href="javascript:;" class="nav-link text-body p-0" data-bs-toggle="dropdown">
-                    <i class="material-symbols-rounded">notifications</i>
+                    <span class="material-symbols-rounded">notifications</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4">
                     <li class="mb-2">
                         <a class="dropdown-item border-radius-md d-flex align-items-center" href="/app/profile">
-                            <i class="material-symbols-rounded me-2">info</i>
+                            <span class="material-symbols-rounded me-2">info</span>
                             <span>Belum ada notifikasi</span>
                         </a>
                     </li>
@@ -31,12 +31,12 @@
             </li>
             <li class="nav-item dropdown pe-3 d-flex align-items-center">
                 <a href="javascript:;" class="nav-link text-body p-0" data-bs-toggle="dropdown">
-                    <i class="material-symbols-rounded">account_circle</i>
+                    <span class="material-symbols-rounded">account_circle</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4">
                     <li class="mb-2">
                         <a class="dropdown-item border-radius-md d-flex align-items-center" href="/app/profile">
-                            <i class="material-symbols-rounded me-2">person</i>
+                            <span class="material-symbols-rounded me-2">person</span>
                             <span>Profil</span>
                         </a>
                     </li>
@@ -45,7 +45,7 @@
                             @csrf
                             <button type="button"
                                 class="dropdown-item border-radius-md d-flex align-items-center btn-logout">
-                                <i class="material-symbols-rounded me-2">logout</i>
+                                <span class="material-symbols-rounded me-2">logout</span>
                                 <span>Logout</span>
                             </button>
                         </form>
@@ -53,7 +53,7 @@
                 </ul>
             </li>
         </ul>
-        <div class="ms-3 w-100 w-md-auto order-1 order-md-0 text-center text-md-start">
+        <div class="ms-3 w-100 w-md-auto order-1 order-md-0 text-center text-md-start mt-4 mt-lg-0">
             <h3 class="mb-0 h4 fw-bold">{{ $title }}</h3>
             <p class="mb-0 text-muted">Management System Pembayaran SPP</p>
         </div>

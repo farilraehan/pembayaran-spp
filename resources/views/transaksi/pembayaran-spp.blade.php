@@ -5,11 +5,11 @@
             <div class="card">
                 <div class="card-body py-2 px-2">
                     <div class="row  align-items-center">
-                        <div class="col-md-9 col-12 ps-4">
+                        <div class="col-md-9 col-12 ps-3 ps-lg-4">
                             <input type="text" id="pembayaranSPP" placeholder="Search NISN / Nama Siswa ...."
                                 class="form-control form-search" autocomplete="off">
                         </div>
-                        <div class="col-md-3 col-12 d-flex align-items-end">
+                        <div class="col-md-3 col-12 d-flex align-items-end mt-4 mt-lg-0">
                             <a href="/app/laporan" class="btn btn-danger mb-0 w-100">Laporan Pembayaran</a>
                         </div>
                     </div>

@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="row mb-2">
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-2">
                             <select name="sumber_dana" id="sumber_dana" class="form-control select2">
                                 <option value="0">Sumber Pembayaran</option>
                                 @foreach ($sumber_dana as $sd)
@@ -42,7 +42,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 mb-2">
                             <select name="jenis_biaya" id="jenis_biaya" class="form-control select2">
                                 <option value="0">Pilih Jenis Biaya</option>
                                 @foreach ($jenis_biaya as $jb)
@@ -58,8 +58,8 @@
                         <div class="col-md-12 mt-2">
                             <div class="d-flex flex-wrap gap-0 mt-1">
                                 @foreach ($spp->sortBy(function ($item) {
-        return \Carbon\Carbon::parse($item->tanggal)->month;
-    }) as $item)
+                                    return \Carbon\Carbon::parse($item->tanggal)->month;
+                                }) as $item)
                                     @php
                                         $bulan = \Carbon\Carbon::parse($item->tanggal)->month;
                                     @endphp
@@ -84,8 +84,8 @@
                         <div class="col-md-12 mt-2">
                             <div class="d-flex flex-wrap gap-0 mt-1">
                                 @foreach ($spp->sortBy(function ($item) {
-        return \Carbon\Carbon::parse($item->tanggal)->month;
-    }) as $item)
+                                        return \Carbon\Carbon::parse($item->tanggal)->month;
+                                    }) as $item)
                                     @php
                                         $bulan = \Carbon\Carbon::parse($item->tanggal)->month;
                                     @endphp
@@ -130,23 +130,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center gap-2 mt-3">
-                        <button type="submit" id="SPPkeringanan" class="btn btn-warning me-auto">
-                            Keringanan
-                        </button>
-                        <button type="button" id="kuitansi" class="btn btn-outline-secondary btn-sm d-none">
-                            Kwitansi
-                        </button>
-                        <button type="button" id="CetakPadaKartu" class="btn btn-outline-secondary btn-sm d-none">
-                            Cetak Pada Kartu
-                        </button>
-                        <button class="btn btn-danger" id="btnDetailSiswa" type="button">
-                            Detail
-                        </button>
-                        <button type="submit" id="SPPsimpan" class="btn btn-info">
-                            Proses Pembayaran
-                        </button>
-                    </div>
+                    <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 mt-3">
+                    <button type="submit" id="SPPkeringanan" class="btn btn-warning w-100 w-md-auto me-md-auto">
+                        Keringanan
+                    </button>
+                    <button type="button" id="kuitansi" class="btn btn-outline-secondary btn-sm d-none w-100 w-md-auto">
+                        Kwitansi
+                    </button>
+                    <button type="button" id="CetakPadaKartu" class="btn btn-outline-secondary btn-sm d-none w-100 w-md-auto">
+                        Cetak Pada Kartu
+                    </button>
+                    <button class="btn btn-danger w-100 w-md-auto" id="btnDetailSiswa" type="button">
+                        Detail
+                    </button>
+                    <button type="submit" id="SPPsimpan" class="btn btn-info w-100 w-md-auto">
+                        Proses Pembayaran
+                    </button>
+                </div>
                 </form>
             </div>
         </div>

@@ -2,14 +2,14 @@
     <ul class="navbar-nav">
         <li class="nav-item">
             <a class="nav-link active bg-gradient-dark text-white" href="/app/dashboard">
-                <i class="material-symbols-rounded opacity-5">dashboard</i>
+                <span class="material-symbols-rounded opacity-5">dashboard</span>
                 <span class="nav-link-text ms-1">Dashboard</span>
             </a>
         </li>
         <li class="nav-item">
             <a data-bs-toggle="collapse" href="#submenusettigs" class="nav-link text-dark py-2 my-1"
-                aria-controls="submenusettigs" role="button" aria-expanded="false"><i
-                    class="material-symbols-rounded opacity-5">settings</i>
+                aria-controls="submenusettigs" role="button" aria-expanded="false">
+                <span class="material-symbols-rounded opacity-5">settings</span>
                 <span class="sidenav-normal ms-1">Pengaturan</span>
             </a>
             <div class="collapse" id="submenusettigs">
@@ -43,7 +43,7 @@
         <li class="nav-item">
             <a data-bs-toggle="collapse" href="#submenuSiswa" class="nav-link text-dark py-2 my-1"
                 aria-controls="submenuSiswa" role="button" aria-expanded="false">
-                <i class="material-symbols-rounded opacity-5">school</i>
+                <span class="material-symbols-rounded opacity-5">school</span>
                 <span class="sidenav-normal ms-1">Siswa</span>
             </a>
             <div class="collapse" id="submenuSiswa">
@@ -67,7 +67,7 @@
         <li class="nav-item">
             <a data-bs-toggle="collapse" href="#submenuTransaksi" class="nav-link text-dark py-2 my-1"
                 aria-controls="submenuTransaksi" role="button" aria-expanded="false">
-                <i class="material-symbols-rounded opacity-5">paid</i>
+                <span class="material-symbols-rounded opacity-5">paid</span>
                 <span class="sidenav-normal ms-1">Transaksi</span>
             </a>
             <div class="collapse" id="submenuTransaksi">
@@ -90,7 +90,7 @@
         </p>
         <li class="nav-item">
             <a class="nav-link text-dark my-1" href="/app/laporan-keuangan">
-                <i class="material-symbols-rounded opacity-5">receipt_long</i>
+                <span class="material-symbols-rounded opacity-5">receipt_long</span>
                 <span class="nav-link-text ms-1">Laporan Keuangan</span>
             </a>
         </li>

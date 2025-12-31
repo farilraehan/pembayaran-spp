@@ -11,21 +11,21 @@
                         <li class="nav-item">
                             <a class="nav-link active d-flex align-items-center justify-content-center gap-1 py-2"
                                 data-bs-toggle="tab" href="#tabSiswa">
-                                <i class="material-symbols-rounded fs-5">school</i>
+                                <span class="material-symbols-rounded fs-5">school</span>
                                 <span>Data Siswa</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center justify-content-center gap-1 py-2"
                                 data-bs-toggle="tab" href="#tabWali">
-                                <i class="material-symbols-rounded fs-5">people</i>
+                                <span class="material-symbols-rounded fs-5">people</span>
                                 <span>Data Orang tua / Wali</span>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link d-flex align-items-center justify-content-center gap-1 py-2"
                                 data-bs-toggle="tab" href="#tabRiwayatPembayaran">
-                                <i class="material-symbols-rounded fs-5">receipt</i>
+                                <span class="material-symbols-rounded fs-5">receipt</span>
                                 <span>Riwayat Pembayaran</span>
                             </a>
                         </li>
@@ -64,7 +64,7 @@
                                     </div>
                                     <div class="card-body p-3">
                                         <h6 class="text-dark mb-3">
-                                            <i class="material-symbols-rounded text-success me-1">person</i>
+                                            <span class="material-symbols-rounded text-success me-1">person</span>
                                             Data Pribadi
                                         </h6>
                                         <div class="row mb-4">
@@ -100,7 +100,7 @@
                                             </div>
                                         </div>
                                         <h6 class="text-dark mb-3">
-                                            <i class="material-symbols-rounded text-primary me-1">badge</i>
+                                            <span class="material-symbols-rounded text-primary me-1">badge</span>
                                             Identitas Dasar
                                         </h6>
                                         <div class="row mb-4">
@@ -142,7 +142,7 @@
                             <div class="col-lg-12">
                                 <div class="card h-100 p-3">
                                     <h6 class="text-dark mb-3">
-                                        <i class="material-symbols-rounded text-primary me-1">location_on</i>
+                                        <span class="material-symbols-rounded text-primary me-1">location_on</span>
                                         Alamat Lengkap
                                     </h6>
                                     <div class="row">
@@ -188,7 +188,7 @@
                                     </div>
 
                                     <h6 class="text-dark mb-3 mt-4">
-                                        <i class="material-symbols-rounded text-warning me-1">info</i>
+                                        <span class="material-symbols-rounded text-warning me-1">info</span>
                                         Lain-lain
                                     </h6>
                                     <div class="row">
@@ -259,7 +259,7 @@
                     </div>
                     <div class="tab-pane fade p-3" id="tabWali">
                         <h6 class="text-dark mb-3">
-                            <i class="material-symbols-rounded text-info me-1">family_restroom</i>
+                            <span class="material-symbols-rounded text-info me-1">family_restroom</span>
                             Data Orang Tua / Wali
                         </h6>
                         <div class="row g-4">
@@ -361,7 +361,7 @@
                     <div class="tab-pane fade p-3" id="tabRiwayatPembayaran">
                         <h6 class="text-dark mb-3 d-flex align-items-center justify-content-between">
                             <span>
-                                <i class="material-symbols-rounded text-info me-1">history</i>
+                                <span class="material-symbols-rounded text-info me-1">history</span>
                                 Riwayat Pembayaran
                             </span>
                             <button class="btn btn-sm btn-primary" data-id="{{ $siswa->id }}" id="btnCetakRiwayat">
@@ -405,24 +405,24 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-12 p-0">
+        </div>        
+        <div class="col-12">
             <div class="card shadow-sm m-0">
-                <div class="card-body d-flex justify-content-between align-items-center p-2">
-                    <div>
+                <div class="card-body d-flex flex-column flex-md-row gap-2 align-items-stretch align-items-md-center justify-content-between p-2">
+                    <div class="w-100 w-md-auto">
                         <a href="{{ route('siswa.index', request()->query()) }}"
-                        class="btn btn-secondary m-0">
+                        class="btn btn-secondary w-100 w-md-auto m-0">
                             Kembali ke halaman siswa
                         </a>
                     </div>
-                    <div class="d-flex gap-1">
+                    <div class="d-flex flex-column flex-md-row gap-2 w-100 w-md-auto">
                         <a href="{{ route('siswa.edit', $siswa->id) }}?{{ http_build_query(request()->query()) }}"
-                        class="btn btn-warning m-0">
-                            <i class="fa-solid fa-pen-to-square"></i> Edit Siswa
+                        class="btn btn-warning w-100 w-md-auto m-0">
+                            <span class="fa-solid fa-pen-to-square"></span> Edit Siswa
                         </a>
-                        <button class="btn btn-danger m-0"
+                        <button class="btn btn-danger w-100 w-md-auto m-0"
                                 data-id="{{ $siswa->id }}" id="btnDelete">
-                            <i class="fa-solid fa-ban"></i> Blokir Siswa
+                            <span class="fa-solid fa-ban"></span> Blokir Siswa
                         </button>
                     </div>
                 </div>

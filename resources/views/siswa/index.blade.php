@@ -4,23 +4,32 @@
         <div class="col-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div
-                        class="bg-gradient-secondary shadow-secondary border-radius-lg pt-3 pb-1 d-flex justify-content-between align-items-center">
-                        <h6 class="text-white text-capitalize ps-3">&nbsp;</h6>
-                        <div class="d-flex align-items-center gap-3 pe-3">
-                            <div class="input-group input-group-outline mb-3" style="width: 220px;">
-                                <select id="tahun_akademik" class="form-control select2 text-white">
+                    <div class="bg-gradient-secondary shadow-secondary border-radius-lg pt-3 pb-3">
+                        <div class="row align-items-center px-3 gy-2">
+                            <div class="col-12 col-md-2">
+                                <h6 class="text-white text-capitalize mb-0">&nbsp;</h6>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <select id="tahun_akademik" class="form-control select2 text-white w-100">
                                     <option value="">Pilih Tahun Akademik</option>
                                 </select>
                             </div>
-                            <div class="input-group input-group-outline mb-3" style="width: 200px;">
-                                <select id="kelas" class="form-control select2 text-white">
+                            <div class="col-12 col-md-3">
+                                <select id="kelas" class="form-control select2 text-white w-100">
                                     <option value="">Kelas</option>
                                 </select>
                             </div>
+                            <div class="col-12 col-md-2 mt-md-4">
+                                <button id="btnFilter" class="btn btn-info text-white w-100">
+                                    Lihat
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-2 mt-md-4">
+                                <button id="btnPrint" class="btn btn-success text-white w-100">
+                                    Cetak Siswa
+                                </button>
+                            </div>
 
-                            <button id="btnFilter" class="btn btn-info text-white px-4">Lihat</button>
-                            <button id="btnPrint" class="btn btn-success text-white px-4 btnPrint">Cetak Siswa</button>
                         </div>
                     </div>
                 </div>

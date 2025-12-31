@@ -12,7 +12,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 
     <link rel="stylesheet" href="/assets/css/nucleo-icons.css">
     <link rel="stylesheet" href="/assets/css/nucleo-svg.css">
@@ -296,6 +296,20 @@
             border-color: #37d17c !important;
             box-shadow: 0 0 0 .25rem rgba(53, 220, 103, 0.25) !important;
         }
+        .material-symbols-rounded {
+            font-family: 'Material Symbols Rounded' !important;
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24;
+            font-size: 20px;
+            line-height: 1;
+            display: inline-flex;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
     </style>
 
 
@@ -335,7 +349,7 @@
     
     <div class="fixed-plugin">
         <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-            <i id="iconSettings" class="material-symbols-rounded py-2">settings</i>
+            <span id="iconSettings" class="material-symbols-rounded py-2">settings</span>
         </a>
         <div class="card shadow-lg">
         <div class="card-header pb-0 pt-3">
@@ -345,7 +359,7 @@
             </div>
             <div class="float-end mt-4">
             <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
-                <i class="material-symbols-rounded">clear</i>
+                <span class="material-symbols-rounded">clear</span>
             </button>
             </div>
         </div>

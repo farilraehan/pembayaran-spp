@@ -2,7 +2,7 @@
 @section('content')
 <style>
 .nav-pills .nav-link.active {
-    background-color: #198754 !important; /* hijau bootstrap */
+    background-color: #198754 !important;
     color: #fff !important;
 }
 .nav-pills .nav-link {
@@ -29,8 +29,9 @@
                                     <h4 class="mb-0 text-center">{{ $siswaCount }}</h4>
                                 </div>
                                 <div
-                                    class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
-                                    <i class="material-symbols-rounded opacity-10">leaderboard</i>
+                                    class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow 
+                                        d-flex align-items-center justify-content-center border-radius-lg">
+                                    <span class="material-symbols-rounded text-white">leaderboard</span>
                                 </div>
                             </div>
                         </div>
@@ -51,8 +52,9 @@
                                     <h4 class="mb-0 text-center">103</h4>
                                 </div>
                                 <div
-                                    class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow text-center border-radius-lg">
-                                    <i class="material-symbols-rounded opacity-10">weekend</i>
+                                    class="icon icon-md icon-shape bg-gradient-dark shadow-dark shadow 
+                                        d-flex align-items-center justify-content-center border-radius-lg">
+                                    <span class="material-symbols-rounded text-white">weekend</span>
                                 </div>
                             </div>
                         </div>
@@ -64,15 +66,14 @@
                     </div>
                 </div>
             </div>
-            <div class="row flex-fill">
-                <div class="col-12 d-flex">
-                    <div class="card flex-fill p-2">
-                        <canvas id="chart-line-tasks" class="h-100"></canvas>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="card p-2 chart-wrapper">
+                        <canvas id="chart-line-tasks"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="col-xl-4 d-flex flex-column">
             <div class="card flex-fill p-3 d-flex flex-column">
                 <div class="mb-3 flex-shrink-0">
