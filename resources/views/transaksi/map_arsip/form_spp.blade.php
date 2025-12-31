@@ -301,3 +301,16 @@
         });
     });
 </script>
+<script>
+    function setTextareaRows() {
+        const textarea = document.getElementById('keterangan');
+        if (window.innerWidth < 768) {
+            textarea.rows = 4; // HP
+        } else {
+            textarea.rows = 1; // Desktop
+        }
+    }
+
+    setTextareaRows();
+    window.addEventListener('resize', setTextareaRows);
+</script>

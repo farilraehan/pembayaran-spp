@@ -494,11 +494,19 @@
             </div>
             <div class="col-12 mb-1">
                 <div class="card my-4 shadow-sm mb-1">
-                    <div class="card-body d-flex justify-content-between align-items-center p-2 pb-1">
+                    <div class="card-body
+                                d-flex
+                                flex-column flex-md-row
+                                align-items-start align-items-md-center
+                                justify-content-between
+                                gap-2
+                                p-2 pb-1">
                         <span class="fw-bold" style="font-size: 14px;">
                             Silakan isi semua data. Jika ada yang kosong, isi dengan 0 atau -
                         </span>
-                        <button type="submit" class="btn btn-info p-2 mb-1" id="simpan">
+                        <button type="submit"
+                                class="btn btn-info w-100 w-md-auto mb-1"
+                                id="simpan">
                             Simpan data Siswa
                         </button>
                     </div>

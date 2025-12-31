@@ -309,7 +309,6 @@
             vertical-align: middle;
             white-space: nowrap;
         }
-
     </style>
 
 

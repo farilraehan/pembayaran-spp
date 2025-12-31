@@ -4,22 +4,34 @@
         <div class="col-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div
-                        class="bg-gradient-secondary shadow-secondary border-radius-lg pt-3 pb-1 d-flex justify-content-between align-items-center">
-                        <h6 class="text-white text-capitalize ps-3" id="headerTitle">
-                            Jenis dan Nominal Pembayaran <span id="titleYear" class="text-muted"></span>
-                        </h6>
-                        <div class="d-flex align-items-center gap-3 pe-3">
-                            <label class="text-white mb-0">Angkatan :</label>
-                            <div class="input-group input-group-static" style="width: 150px;">
-                                <label class="form-label active">Tahun</label>
-                                <input type="number" class="form-control tahun text-white">
+                    <div class="bg-gradient-secondary shadow-secondary border-radius-lg pt-3 pb-3">
+                        <div class="row align-items-center g-2 px-3">
+                            <div class="col-12 col-lg-5">
+                                <h6 class="text-white text-capitalize mb-0" id="headerTitle">
+                                    Jenis dan Nominal Pembayaran
+                                    <span id="titleYear" class="text-muted"></span>
+                                </h6>
                             </div>
-                            <button id="Filter_angkatan" class="btn btn-info text-white px-4">
-                                Lihat
-                            </button>
-                            <a href="/app/Jenis-biaya/create"class="btn btn-primary text-white px-4">Tambah Jenis
-                                Bayar</a>
+                            <div class="col-12 col-lg-7">
+                                <div class="d-flex
+                                            flex-column flex-lg-row
+                                            align-items-stretch align-items-lg-center
+                                            gap-2">
+                                    <label class="text-white mb-0">Angkatan :</label>
+                                    <div class="input-group input-group-static w-100 w-lg-auto">
+                                        <label class="form-label active">Tahun</label>
+                                        <input type="number" class="form-control tahun text-white">
+                                    </div>
+                                    <button id="Filter_angkatan"
+                                            class="btn btn-info text-white w-100 w-lg-auto">
+                                        Lihat
+                                    </button>
+                                    <a href="/app/Jenis-biaya/create"
+                                    class="btn btn-primary text-white w-100 w-lg-auto">
+                                        Tambah Jenis Bayar
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

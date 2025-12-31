@@ -20,7 +20,7 @@
     <div class="row mb-4 d-flex align-items-stretch">
         <div class="col-xl-8 d-flex flex-column">
             <div class="row mb-4">
-                <div class="col-md-6 mb-4">
+                <div class="col-md-6 mb-3">
                     <div class="card h-100">
                         <div class="card-header p-2 ps-3">
                             <div class="d-flex justify-content-between">
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 mb-4">
+                <div class="col-md-6 mb-3">
                     <div class="card h-100">
                         <div class="card-header p-2 ps-3">
                             <div class="d-flex justify-content-between">
