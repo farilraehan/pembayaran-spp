@@ -28,12 +28,12 @@
                         <div class="main-card mb-3 card">
                             <div class="card-body">
                                 <h5 class="card-title">Tanda tangan <b>Pelaporan</b></h5>
-                                <form action="/pengaturan/sop/simpanttdpelaporan" method="post" id="formTtdPelaporan" height>
+                                <form action="/app/pengaturan/simpan/ttd-pelaporan" method="post" id="formTtdPelaporan" height>
                                     @csrf
                     
                                     <input type="hidden" name="field" id="field" value="tanda_tangan_pelaporan">
-                                    <textarea class="tiny-mce-editor" name="tanda_tangan" id="tanda_tangan" rows="20">
-                                        {!! json_decode($ttd->tanda_tangan, true) !!}
+                                    <textarea class="tiny-mce-editor" name="tanda_tangan" id="tanda_tangan">
+                                        {!! $ttd->tanda_tangan ?? '' !!}
                                     </textarea>
                                 </form>
                     
@@ -73,21 +73,42 @@
                 font_family_formats: 'Arial=arial,helvetica,sans-serif; Courier New=courier new,courier,monospace;',
             });
 
-        $(document).on('click', '#simpanTtdPelaporan', function(e) {
-            e.preventDefault()
+        $(document).on('click', '#simpanTtdPelaporan', function (e) {
+            e.preventDefault();
 
-            tinymce.triggerSave()
-            var form = $('#formTtdPelaporan')
+            tinymce.triggerSave();
+
+            let form = document.getElementById('formTtdPelaporan');
+            let actionUrl = form.action;
+            let formData = new FormData(form);
+
             $.ajax({
-                type: form.attr('method'),
-                url: form.attr('action'),
-                data: form.serialize(),
-                success: function(result) {
-                    if (result.success) {
-                        Toastr('success', result.msg)
-                    }
+                url: actionUrl,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json', // 🔴 WAJIB
+                success: function (result) {
+
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+
+                    Toast.fire({
+                        icon: 'success',
+                        title: result.msg
+                    });
+                },
+                error: function (xhr) {
+                    Swal.fire('Error', 'Gagal menyimpan tanda tangan', 'error');
+                    console.log(xhr.responseText);
                 }
-            })
-        })
+            });
+        });
     </script>
 @endsection

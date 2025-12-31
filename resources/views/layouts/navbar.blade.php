@@ -55,7 +55,7 @@
         </ul>
         <div class="ms-3 w-100 w-md-auto order-1 order-md-0 text-center text-md-start mt-4 mt-lg-0">
             <h3 class="mb-0 h4 fw-bold">{{ $title }}</h3>
-            <p class="mb-0 text-muted">Management System Pembayaran SPP</p>
+            <p class="mb-0 text-muted">System Akademik Berbasis ( IT )</p>
         </div>
     </div>
 </div>

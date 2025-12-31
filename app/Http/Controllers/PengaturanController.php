@@ -51,6 +51,31 @@ class PengaturanController extends Controller
         return view('pengaturan.tanda_tangan')->with(compact('title', 'ttd', 'tanggal'));
     }
 
+    public function ttdPelaporanStore(Request $request)
+    {
+        $request->validate([
+            'tanda_tangan' => 'required',
+        ]);
+
+        $ttd = Tanda_tangan::first();
+
+        $data = [
+            'tanda_tangan' => $request->tanda_tangan,
+        ];
+
+        if ($ttd) {
+            $ttd->update($data);
+        } else {
+            Tanda_tangan::create($data);
+        }
+
+        return response()->json([
+            'success' => true,
+            'msg' => 'Tanda tangan pelaporan berhasil disimpan',
+        ]);
+    }
+
+
     public function lembaga(Request $request, $id)
     {
         $request->validate([

@@ -9,19 +9,21 @@ use App\Models\Profil;
 use App\Models\Calk;
 use App\Models\AkunLevel1;
 use App\Models\MasterArusKas;
+use App\Models\Tanda_tangan;
 use App\Utils\Keuangan;
 use App\Utils\Tanggal;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 class LaporanController extends Controller
 {
     public function index()
     {
         $title = 'Laporan Keuangan';
-        $laporan = JenisLaporan::where('file','!=','0')
-            ->orderBy('urut','ASC')
+        $laporan = JenisLaporan::where('file', '!=', '0')
+            ->orderBy('urut', 'ASC')
             ->get();
-        return view('laporan.index', compact('title','laporan'));
+        return view('laporan.index', compact('title', 'laporan'));
     }
 
     public function subLaporan($file)
@@ -42,7 +44,6 @@ class LaporanController extends Controller
                 'type' => 'select',
                 'sub_laporan' => $sub_laporan
             ]);
-
         } elseif ($file == 'calk') {
 
             $tahun = request('tahun');
@@ -56,7 +57,6 @@ class LaporanController extends Controller
                 'type'       => 'textarea',
                 'keterangan' => $calk->catatan ?? ''
             ]);
-
         } else {
 
             return view('laporan.partials.sub_laporan', [
@@ -145,7 +145,7 @@ class LaporanController extends Controller
     }
 
     private function buku_besar(array $data)
-    {   
+    {
         $thn  = $data['tahun'];
         $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
 
@@ -164,21 +164,21 @@ class LaporanController extends Controller
 
         // Saldo Awal Tahun
         $saldo_awal = Transaksi::where(fn($q) => $q
-                ->where('rekening_debit', $rek->id)
-                ->orWhere('rekening_kredit', $rek->id))
+            ->where('rekening_debit', $rek->id)
+            ->orWhere('rekening_kredit', $rek->id))
             ->where('tanggal_transaksi', '<', $tgl_awal_tahun)
             ->get()
             ->reduce(fn($carry, $trx) => $carry + (
                 $trx->rekening_debit == $rek->id
-                    ? ($rek->jenis_mutasi == 'debet' ? $trx->jumlah : -$trx->jumlah)
-                    : ($rek->jenis_mutasi == 'debet' ? -$trx->jumlah : $trx->jumlah)
+                ? ($rek->jenis_mutasi == 'debet' ? $trx->jumlah : -$trx->jumlah)
+                : ($rek->jenis_mutasi == 'debet' ? -$trx->jumlah : $trx->jumlah)
             ), 0);
         $data['saldo_awal'] = $saldo_awal;
 
         // Kumulatif s/d Bulan Lalu
         $transaksi_bulan_lalu = Transaksi::where(fn($q) => $q
-                ->where('rekening_debit', $rek->id)
-                ->orWhere('rekening_kredit', $rek->id))
+            ->where('rekening_debit', $rek->id)
+            ->orWhere('rekening_kredit', $rek->id))
             ->whereBetween('tanggal_transaksi', [$tgl_awal_tahun, date('Y-m-d', strtotime("$tgl_awal_bulan -1 day"))])
             ->get();
 
@@ -222,15 +222,15 @@ class LaporanController extends Controller
             'debit'  => $komulatif_bulan_lalu['debit'] + $total_bulan_ini['debit'],
             'kredit' => $komulatif_bulan_lalu['kredit'] + $total_bulan_ini['kredit'],
             'saldo'  => $komulatif_bulan_lalu['saldo']
-                    + ($rek->jenis_mutasi == 'debet'
-                            ? $total_bulan_ini['debit'] - $total_bulan_ini['kredit']
-                            : $total_bulan_ini['kredit'] - $total_bulan_ini['debit']),
+                + ($rek->jenis_mutasi == 'debet'
+                    ? $total_bulan_ini['debit'] - $total_bulan_ini['kredit']
+                    : $total_bulan_ini['kredit'] - $total_bulan_ini['debit']),
         ];
 
         // Total Kumulatif Tahun (sampai Desember)
         $transaksi_tahun_ini = Transaksi::where(fn($q) => $q
-                ->where('rekening_debit', $rek->id)
-                ->orWhere('rekening_kredit', $rek->id))
+            ->where('rekening_debit', $rek->id)
+            ->orWhere('rekening_kredit', $rek->id))
             ->whereBetween('tanggal_transaksi', [$tgl_awal_tahun, "$thn-12-31"])
             ->get();
 
@@ -294,7 +294,7 @@ class LaporanController extends Controller
             })
             ->orderBy('tanggal_transaksi', 'asc')
             ->get();
-        
+
         $view = view('laporan.views.jurnal_transaksi', $data)->render();
 
         $pdf = Pdf::loadHTML($view)->setOptions([
@@ -319,7 +319,7 @@ class LaporanController extends Controller
         $tgl_akhir_bulan = "{$thn}-{$bln}-" . cal_days_in_month(CAL_GREGORIAN, (int)$bln, (int)$thn);
 
         $data['judul'] = 'Laporan Arus Kas';
-        
+
         $data['tgl_awal_bulan'] = $tgl_awal_bulan;
         $data['tgl_akhir_bulan'] = $tgl_akhir_bulan;
 
@@ -340,11 +340,11 @@ class LaporanController extends Controller
             'child',
             'child.rek_debit.rek.transaksiDebit' => function ($q) use ($tgl_awal_bulan, $tgl_akhir_bulan) {
                 $q->whereBetween('tanggal_transaksi', [$tgl_awal_bulan, $tgl_akhir_bulan])
-                ->where('rekening_kredit', 'like', '1.1.01%');
+                    ->where('rekening_kredit', 'like', '1.1.01%');
             },
             'child.rek_kredit.rek.transaksiKredit' => function ($q) use ($tgl_awal_bulan, $tgl_akhir_bulan) {
                 $q->whereBetween('tanggal_transaksi', [$tgl_awal_bulan, $tgl_akhir_bulan])
-                ->where('rekening_debit', 'like', '1.1.01%');
+                    ->where('rekening_debit', 'like', '1.1.01%');
             }
         ])->where('parent_id', 0)->get();
 
@@ -392,8 +392,6 @@ class LaporanController extends Controller
             ? 'PERIODE ' . $awal . ' S.D. ' . $akhir
             : 'TAHUN ' . $thn;
 
-
-
         $data['pendapatan'] = $lr['pendapatan'];
         $data['beban']      = $lr['beban'];
         $data['bp']         = $lr['bp'];
@@ -404,10 +402,12 @@ class LaporanController extends Controller
 
         $data['title'] = 'Laba Rugi';
         $data['title_bulan'] = 'Tahun ' . Tanggal::tahun($tgl);
-         if (!empty($data['bulan'])) {
+        if (!empty($data['bulan'])) {
             $data['title_bulan'] = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
             $data['tgl']       = Tanggal::namaBulan($tgl) . ' ' . Tanggal::tahun($tgl);
         }
+        $data['ttd'] = Tanda_tangan::first();
+
         $view = view('laporan.views.laba_rugi', $data)->render();
 
         $pdf = Pdf::loadHTML($view)->setOptions([
@@ -440,12 +440,12 @@ class LaporanController extends Controller
         $data['title'] = !empty($data['bulan']) ? $data['judul'] . ' (' . $namaBulan . ' ' . $thn . ')' : $data['judul'] . ' Tahun ' . $thn;
 
         $data['akun1'] = AkunLevel1::where('lev1', '<=', 3)
-        ->with(['akun2.akun3.rek' => function($q) use ($tgl_awal, $tgl_akhir) {
-            $q->whereHas('transaksiDebit', fn($q2) => $q2->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]))
-            ->orWhereHas('transaksiKredit', fn($q2) => $q2->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]));
-        }])
-        ->orderBy('kode_akun', 'ASC')
-        ->get();
+            ->with(['akun2.akun3.rek' => function ($q) use ($tgl_awal, $tgl_akhir) {
+                $q->whereHas('transaksiDebit', fn($q2) => $q2->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]))
+                    ->orWhereHas('transaksiKredit', fn($q2) => $q2->whereBetween('tanggal_transaksi', [$tgl_awal, $tgl_akhir]));
+            }])
+            ->orderBy('kode_akun', 'ASC')
+            ->get();
 
 
         $data['tgl_awal']  = $tgl_awal;
@@ -466,7 +466,7 @@ class LaporanController extends Controller
 
     private function neraca_saldo(array $data)
     {
-                $thn  = $data['tahun'];
+        $thn  = $data['tahun'];
         $bln  = str_pad($data['bulan'], 2, '0', STR_PAD_LEFT);
         $hari = str_pad($data['hari'], 2, '0', STR_PAD_LEFT);
 
@@ -567,6 +567,4 @@ class LaporanController extends Controller
 
         return $pdf->stream();
     }
-
-    
 }

@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <label for="total_beban">Total Beban</label>
+                                <label for="total_beban">Jumlah Bayar</label>
                                 <div class="input-group input-group-outline mb-3">
                                     <label class="form-label"> Masukkan Total Beban</label>
                                     <input type="text" name="total_beban" class="form-control nominal " required>

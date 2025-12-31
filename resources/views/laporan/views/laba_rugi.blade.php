@@ -107,7 +107,17 @@
                 <tr>
                     <td colspan="4" height="6"></td>
                 </tr>
-            @endforeach
+                @endforeach
         </tbody>
     </table>
+    <table class="table table-bordered" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td>
+                <div class="ttd-wrapper">
+                    {!! $ttd->tanda_tangan ?? '' !!}
+                </div>
+            </td>
+        </tr>
+    </table>
+
 @endsection

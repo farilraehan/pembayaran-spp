@@ -26,7 +26,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark py-2" href="/app/Jenis-biaya">
-                            <span class="sidenav-normal">Daftar Biaya</span>
+                            <span class="sidenav-normal">Jenis Pembayaran</span>
                         </a>
                     </li>
                     <li class="nav-item">

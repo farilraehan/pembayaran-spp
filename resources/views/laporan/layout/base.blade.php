@@ -153,6 +153,30 @@
             page-break-before: always;
             break-before: page;
         }
+        .ttd-wrapper table,
+        .ttd-wrapper tr,
+        .ttd-wrapper td {
+            border: none !important;
+            outline: none !important;
+        }
+        .ttd-wrapper table {
+            border-collapse: collapse !important;
+        }
+        .ttd-wrapper table {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            table-layout: fixed;
+        }
+
+        @media print {
+            .ttd-wrapper,
+            .ttd-wrapper table,
+            .ttd-wrapper td {
+                border: none !important;
+                page-break-inside: avoid;
+            }
+        }
     </style>
 </head>
 

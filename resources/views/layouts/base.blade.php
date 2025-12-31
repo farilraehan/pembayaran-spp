@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.snow.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    {{-- <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script> --}}
+    <script src="/assets/tinymce/tinymce.min.js"></script>
 
     <style>
         .modal-fullscreen {

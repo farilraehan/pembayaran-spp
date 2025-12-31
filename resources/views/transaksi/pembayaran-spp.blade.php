@@ -239,119 +239,63 @@
             $('.modal.show').modal('hide');
         });
 
-        //simpan pembayaran spp
-        $(document).on('click', '#SPPsimpan', function (e) {
+        $(document).on('click', '.SPPsimpan', function (e) {
             e.preventDefault();
-
             let $btn = $(this);
-            $btn.prop('disabled', true);
 
-            let form = $('#FormPembayaranSPP')[0];
-            let actionUrl = $('#FormPembayaranSPP').attr('action');
-            let formData = new FormData(form);
-
-            $.ajax({
-                type: 'POST',
-                url: actionUrl,
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (result) {
-                    if (!result.success) return;
-
-                    lastTransaksiIds = Array.isArray(result.id_transaksi)
-                        ? result.id_transaksi.join(',')
-                        : result.id_transaksi;
-
-                    $('#kuitansi').removeClass('d-none');
-                    $('#CetakPadaKartu').removeClass('d-none');
-
-                    let detailHtml = '';
-
-                        if (result.detail_spp && result.detail_spp.length) {
-                            let bulanAwal = result.detail_spp[0].bulan;
-                            let bulanAkhir = result.detail_spp[result.detail_spp.length - 1].bulan;
-
-                            let rangeBulan = bulanAwal === bulanAkhir
-                                ? bulanAwal
-                                : `${bulanAwal} – ${bulanAkhir}`;
-
-                            detailHtml = `
-                                <div class="text-start mb-2">
-                                    <strong>Periode:</strong>
-                                    ${rangeBulan}
-                                </div>
-                            `;
-                        }
-
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Transaksi Berhasil',
-                        html: `
-                            <div class="text-center mb-2">
-                                ${result.keterangan}
-                            </div>
-                            ${detailHtml}
-                        `,
-                        confirmButtonText: 'OK Lanjutkan'
-                    });
-
-                    $('#FormPembayaranSPP')[0].reset();
-                },
-                error: function () {
-                    Swal.fire('Error', 'Cek kembali input yang anda masukkan', 'error');
-                },
-                complete: function () {
-                    $btn.prop('disabled', false);
+            $('.SPPsimpan').each(function () {
+                if (!$(this).data('original-html')) {
+                    $(this).data('original-html', $(this).html());
                 }
             });
-        });
+            $('.SPPsimpan').not($btn)
+                .prop('disabled', true)
+                .attr('aria-disabled', 'true');
+            $btn
+                .prop('disabled', true)
+                .attr('aria-disabled', 'true')
+                .html('<span class="spinner-border spinner-border-sm me-1"></span> Memproses...');
 
-        //Keringanan SPP
-        $(document).on('click', '#SPPkeringanan', function (e) {
-            e.preventDefault();
+                    let sumber_dana = $btn.data('sumber');
+                    let form = $('#FormPembayaranSPP')[0];
+                    let actionUrl = $('#FormPembayaranSPP').attr('action');
+                    let formData = new FormData(form);
+                    formData.append('sumber_dana', sumber_dana);
 
-            let $btn = $(this);
-            $btn.prop('disabled', true);
+                    $.ajax({
+                        type: 'POST',
+                        url: actionUrl,
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (result) {
+                            if (!result.success) return;
+                            lastTransaksiIds = Array.isArray(result.id_transaksi)
+                                ? result.id_transaksi.join(',')
+                                : result.id_transaksi;
 
-            let form = $('#FormPembayaranSPP')[0];
-            let actionUrl = '/app/transaksi/ProsesPembayaran/keringanan';
-            let formData = new FormData(form);
-
-            $.ajax({
-                type: 'POST',
-                url: actionUrl,
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (result) {
-                    if (!result.success) return;
-
-                    lastTransaksiIds = Array.isArray(result.id_transaksi)
-                        ? result.id_transaksi.join(',')
-                        : result.id_transaksi;
-
-                    $('#kuitansi').removeClass('d-none');
-                    $('#CetakPadaKartu').removeClass('d-none');
+                            $('#kuitansi').removeClass('d-none');
+                            $('#CetakPadaKartu').removeClass('d-none');
+                            $('.SPPsimpan')
+                    .prop('disabled', true)
+                    .attr('aria-disabled', 'true')
+                    .each(function () {
+                        $(this).html($(this).data('original-html'));
+                    });
 
                     let detailHtml = '';
-
-                        if (result.detail_spp && result.detail_spp.length) {
-                            let bulanAwal = result.detail_spp[0].bulan;
-                            let bulanAkhir = result.detail_spp[result.detail_spp.length - 1].bulan;
-
-                            let rangeBulan = bulanAwal === bulanAkhir
-                                ? bulanAwal
-                                : `${bulanAwal} – ${bulanAkhir}`;
-
-                            detailHtml = `
-                                <div class="text-start mb-2">
-                                    <strong>Periode:</strong>
-                                    ${rangeBulan}
-                                </div>
-                            `;
-                        }
-
+                    if (result.detail_spp && result.detail_spp.length) {
+                        let bulanAwal = result.detail_spp[0].bulan;
+                        let bulanAkhir = result.detail_spp[result.detail_spp.length - 1].bulan;
+                        let rangeBulan = bulanAwal === bulanAkhir
+                            ? bulanAwal
+                            : `${bulanAwal} – ${bulanAkhir}`;
+                        detailHtml = `
+                            <div class="text-start mb-2">
+                                <strong>Periode:</strong> ${rangeBulan}
+                            </div>
+                        `;
+                    }
                     Swal.fire({
                         icon: 'success',
                         title: 'Transaksi Berhasil',
@@ -361,16 +305,29 @@
                             </div>
                             ${detailHtml}
                         `,
-                        confirmButtonText: 'OK Lanjutkan'
+                        timer: 2500,
+                        showConfirmButton: false
                     });
-
                     $('#FormPembayaranSPP')[0].reset();
                 },
                 error: function () {
-                    Swal.fire('Error', 'Cek kembali input yang anda masukkan', 'error');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Cek kembali input yang anda masukkan',
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
                 },
                 complete: function () {
-                    $btn.prop('disabled', false);
+                    if ($('#kuitansi').hasClass('d-none')) {
+                        $('.SPPsimpan')
+                            .prop('disabled', false)
+                            .removeAttr('aria-disabled')
+                            .each(function () {
+                                $(this).html($(this).data('original-html'));
+                            });
+                    }
                 }
             });
         });

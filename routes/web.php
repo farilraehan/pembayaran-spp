@@ -38,7 +38,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/Transaksi/pembayaran-spp', [TransaksiController::class, 'pembayaranSPP']);
     Route::get('/transaksi/daftar-inventaris', [TransaksiController::class, 'daftarInventaris']);
     Route::post('/transaksi/ProsesPembayaran', [TransaksiController::class, 'pembayaranSPPStore']);
-    Route::post('/transaksi/ProsesPembayaran/keringanan', [TransaksiController::class, 'pembayaranSPPKeringananStore']);
     Route::get('/transaksi/kwitansi-spp', [TransaksiController::class, 'pembayaranSPPPrint']);
     Route::get('/transaksi/pembayaran/printAllSelected', [TransaksiController::class, 'printAllSelected']);
     Route::get('/transaksi/pembayaran/printAll/{id}', [TransaksiController::class, 'pembayaranSPPPrintAll']);
@@ -55,6 +54,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::get('/pengaturan/sop', [PengaturanController::class, 'sop']);
     Route::get('/pengaturan/coa', [PengaturanController::class, 'coa']);
     Route::get('/pengaturan/ttd-pelaporan', [PengaturanController::class, 'ttdPelaporan']);
+    Route::post('/pengaturan/simpan/ttd-pelaporan', [PengaturanController::class, 'ttdPelaporanStore']);
     Route::put('/pengaturan/lembaga/{id}', [PengaturanController::class, 'lembaga']);
     Route::put('/pengaturan/logo/{id}', [PengaturanController::class, 'logo']);
     Route::resource('/pengaturan', PengaturanController::class);

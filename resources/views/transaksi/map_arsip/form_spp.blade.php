@@ -34,7 +34,7 @@
                         </div>
                     </div>
                     <div class="row mb-2">
-                        <div class="col-md-6 mb-2">
+                        <div class="col-md-6 mb-2 d-none">
                             <select name="sumber_dana" id="sumber_dana" class="form-control select2">
                                 <option value="0">Sumber Pembayaran</option>
                                 @foreach ($sumber_dana as $sd)
@@ -42,9 +42,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6 mb-2">
+                        <div class="col-md-12 mb-2">
                             <select name="jenis_biaya" id="jenis_biaya" class="form-control select2">
-                                <option value="0">Pilih Jenis Biaya</option>
+                                <option value="0">Pilih Jenis Pembayaran</option>
                                 @foreach ($jenis_biaya as $jb)
                                     <option value="{{ $jb->kode_akun }}">{{ $jb->nama_akun }}</option>
                                 @endforeach
@@ -130,21 +130,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center gap-2 mt-3">
-                    <button type="submit" id="SPPkeringanan" class="btn btn-warning w-100 w-md-auto me-md-auto">
-                        Keringanan
-                    </button>
-                    <button type="button" id="kuitansi" class="btn btn-outline-secondary btn-sm d-none w-100 w-md-auto">
+                    <div class="d-flex
+                            flex-column flex-md-row
+                            align-items-stretch align-items-md-center
+                            justify-content-md-end
+                            gap-2
+                            p-2 pb-1">
+                    <button type="button" id="kuitansi"
+                        class="btn btn-outline-secondary btn-sm d-none w-100 w-md-auto">
                         Kwitansi
                     </button>
-                    <button type="button" id="CetakPadaKartu" class="btn btn-outline-secondary btn-sm d-none w-100 w-md-auto">
+                    <button type="button" id="CetakPadaKartu"
+                        class="btn btn-outline-info btn-sm d-none w-100 w-md-auto">
                         Cetak Pada Kartu
                     </button>
-                    <button class="btn btn-danger w-100 w-md-auto" id="btnDetailSiswa" type="button">
+                    <button class="btn btn-danger w-100 w-md-auto"
+                        id="btnDetailSiswa" type="button">
                         Detail
                     </button>
-                    <button type="submit" id="SPPsimpan" class="btn btn-info w-100 w-md-auto">
-                        Proses Pembayaran
+                    <button type="submit" id="Tunai"
+                        data-sumber="1.1.01.01"
+                        class="btn btn-warning w-100 w-md-auto SPPsimpan">
+                        Tunai
+                    </button>
+                    <button type="submit" id="TransferBank"
+                        data-sumber="1.1.01.03"
+                        class="btn btn-info w-100 w-md-auto SPPsimpan">
+                        Transfer Bank
                     </button>
                 </div>
                 </form>
@@ -228,6 +240,13 @@
             const nama = $('#siswa_nama').val();
             const namaAkun = $('#jenis_biaya option:selected').text();
 
+            $('.SPPsimpan')
+                .prop('disabled', false)
+                .removeAttr('aria-disabled')
+                .each(function () {
+                    $(this).html($(this).data('original-html'));
+            });
+
             $('#bulanWrapper').toggle(jenis === '4.1.01.01');
             $('.spp-checkbox').prop('checked', false).prop('disabled', false);
             $('#sppIDContainer').empty();
@@ -236,12 +255,12 @@
 
             if (jenis === '4.1.01.01') {
                 $('#nominal').prop('readonly', true);
-                $('#keterangan').val(`Pembayaran ${namaAkun} an. ${nama}`);
+                $('#keterangan').val(`${namaAkun} an. ${nama}`);
                 $('#kuitansi, #CetakPadaKartu').addClass('d-none');
             } else if (jenis.startsWith('4.1.01.')) {
                 $('#nominal').prop('readonly', false).val('');
                 $('#kuitansi, #CetakPadaKartu').addClass('d-none');
-                $('#keterangan').val(`Pembayaran ${namaAkun} an. ${nama}`);
+                $('#keterangan').val(`${namaAkun} an. ${nama}`);
             } else {
                 $('#keterangan').val('');
             }
