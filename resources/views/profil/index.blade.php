@@ -37,7 +37,7 @@
                         <img src="{{ asset('storage/users/' . $user->foto) }}" id="avatarPreview"
                             class="w-100 border-radius-lg shadow-sm">
                         <div class="avatar-overlay">
-                            <i class="material-symbols-rounded">photo_camera</i>
+                            <span class="material-symbols-rounded">photo_camera</span>
                         </div>
                     </label>
                 </div>
@@ -52,13 +52,13 @@
                         <ul class="nav nav-pills nav-fill p-1" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#home" role="tab">
-                                    <i class="material-symbols-rounded text-lg position-relative">home</i>
+                                    <span class="material-symbols-rounded text-lg position-relative">home</span>
                                     <span class="ms-1">Home</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#access" role="tab">
-                                    <i class="material-symbols-rounded text-lg position-relative">email</i>
+                                    <span class="material-symbols-rounded text-lg position-relative">email</span>
                                     <span class="ms-1">Access</span>
                                 </a>
                             </li>
