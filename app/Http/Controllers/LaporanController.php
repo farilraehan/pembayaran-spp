@@ -164,12 +164,12 @@ class LaporanController extends Controller
 
         // Saldo Awal Tahun
         $saldo_awal = Transaksi::where(fn($q) => $q
-            ->where('rekening_debit', $rek->id)
-            ->orWhere('rekening_kredit', $rek->id))
+            ->where('rekening_debit', $rek->kode_akun)
+            ->orWhere('rekening_kredit', $rek->kode_akun))
             ->where('tanggal_transaksi', '<', $tgl_awal_tahun)
             ->get()
             ->reduce(fn($carry, $trx) => $carry + (
-                $trx->rekening_debit == $rek->id
+                $trx->rekening_debit == $rek->kode_akun
                 ? ($rek->jenis_mutasi == 'debet' ? $trx->jumlah : -$trx->jumlah)
                 : ($rek->jenis_mutasi == 'debet' ? -$trx->jumlah : $trx->jumlah)
             ), 0);
@@ -177,16 +177,16 @@ class LaporanController extends Controller
 
         // Kumulatif s/d Bulan Lalu
         $transaksi_bulan_lalu = Transaksi::where(fn($q) => $q
-            ->where('rekening_debit', $rek->id)
-            ->orWhere('rekening_kredit', $rek->id))
+            ->where('rekening_debit', $rek->kode_akun)
+            ->orWhere('rekening_kredit', $rek->kode_akun))
             ->whereBetween('tanggal_transaksi', [$tgl_awal_tahun, date('Y-m-d', strtotime("$tgl_awal_bulan -1 day"))])
             ->get();
 
         $komulatif_bulan_lalu = $transaksi_bulan_lalu->reduce(function ($carry, $trx) use ($rek) {
-            if ($trx->rekening_debit == $rek->id) {
+            if ($trx->rekening_debit == $rek->kode_akun) {
                 $carry['debit'] += $trx->jumlah;
                 $carry['saldo'] += ($rek->jenis_mutasi == 'debet' ? $trx->jumlah : -$trx->jumlah);
-            } elseif ($trx->rekening_kredit == $rek->id) {
+            } elseif ($trx->rekening_kredit == $rek->kode_akun) {
                 $carry['kredit'] += $trx->jumlah;
                 $carry['saldo'] += ($rek->jenis_mutasi == 'debet' ? -$trx->jumlah : $trx->jumlah);
             }
@@ -200,17 +200,17 @@ class LaporanController extends Controller
         // Transaksi Bulan Ini
         $transaksi_bulan_ini = Transaksi::with('user')
             ->where(fn($q) => $q
-                ->where('rekening_debit', $rek->id)
-                ->orWhere('rekening_kredit', $rek->id))
+                ->where('rekening_debit', $rek->kode_akun)
+                ->orWhere('rekening_kredit', $rek->kode_akun))
             ->whereBetween('tanggal_transaksi', [$tgl_awal_bulan, $tgl_akhir_bulan])
             ->orderBy('tanggal_transaksi')
             ->get();
         $data['transaksi'] = $transaksi_bulan_ini;
 
         $total_bulan_ini = $transaksi_bulan_ini->reduce(function ($carry, $trx) use ($rek) {
-            if ($trx->rekening_debit == $rek->id) {
+            if ($trx->rekening_debit == $rek->kode_akun) {
                 $carry['debit'] += $trx->jumlah;
-            } elseif ($trx->rekening_kredit == $rek->id) {
+            } elseif ($trx->rekening_kredit == $rek->kode_akun) {
                 $carry['kredit'] += $trx->jumlah;
             }
             return $carry;
@@ -229,15 +229,15 @@ class LaporanController extends Controller
 
         // Total Kumulatif Tahun (sampai Desember)
         $transaksi_tahun_ini = Transaksi::where(fn($q) => $q
-            ->where('rekening_debit', $rek->id)
-            ->orWhere('rekening_kredit', $rek->id))
+            ->where('rekening_debit', $rek->ikode_akund)
+            ->orWhere('rekening_kredit', $rek->kode_akun))
             ->whereBetween('tanggal_transaksi', [$tgl_awal_tahun, "$thn-12-31"])
             ->get();
 
         $total_tahun_ini = $transaksi_tahun_ini->reduce(function ($carry, $trx) use ($rek) {
-            if ($trx->rekening_debit == $rek->id) {
+            if ($trx->rekening_debit == $rek->ikode_akund) {
                 $carry['debit'] += $trx->jumlah;
-            } elseif ($trx->rekening_kredit == $rek->id) {
+            } elseif ($trx->rekening_kredit == $rek->kode_akun) {
                 $carry['kredit'] += $trx->jumlah;
             }
             return $carry;

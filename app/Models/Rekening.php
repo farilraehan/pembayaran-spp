@@ -29,10 +29,10 @@ class Rekening extends Model
         );
     }
     
-     public function transaksi()
+    public function transaksi()
     {
-        return $this->hasMany(Transaksi::class, 'rekening_debit', 'id')
-            ->orWhere('rekening_kredit', $this->id);
+        return $this->hasMany(Transaksi::class, 'rekening_debit', 'kode_akun')
+            ->orWhere('rekening_kredit', $this->kode_akun);
     }
-    
+   
 }
