@@ -250,6 +250,7 @@ class LaporanController extends Controller
         $data['tgl_akhir_bulan'] = $tgl_akhir_bulan;
         $data['tahun'] = $thn;
         $data['bulan'] = $bln;
+        $data['ttd'] = Tanda_tangan::first();
 
         $view = view('laporan.views.buku_besar', $data)->render();
 
@@ -294,7 +295,7 @@ class LaporanController extends Controller
             })
             ->orderBy('tanggal_transaksi', 'asc')
             ->get();
-
+        $data['ttd'] = Tanda_tangan::first();
         $view = view('laporan.views.jurnal_transaksi', $data)->render();
 
         $pdf = Pdf::loadHTML($view)->setOptions([
@@ -347,6 +348,7 @@ class LaporanController extends Controller
                     ->where('rekening_debit', 'like', '1.1.01%');
             }
         ])->where('parent_id', 0)->get();
+        $data['ttd'] = Tanda_tangan::first();
 
         // hitung saldo kas sampai akhir bulan sebelumnya
         $keuangan = new Keuangan;
@@ -450,6 +452,7 @@ class LaporanController extends Controller
 
         $data['tgl_awal']  = $tgl_awal;
         $data['tgl_akhir'] = $tgl_akhir;
+        $data['ttd'] = Tanda_tangan::first();
 
         $view = view('laporan.views.neraca', $data)->render();
 
@@ -504,6 +507,7 @@ class LaporanController extends Controller
                 $rek->total_kredit = $rek->transaksiKredit->sum('jumlah');
                 return $rek;
             });
+        $data['ttd'] = Tanda_tangan::first();
 
         $view = view('laporan.views.neraca_saldo', $data)->render();
 
@@ -554,6 +558,7 @@ class LaporanController extends Controller
         $calk = Calk::where('tanggal', $tanggal)->first();
 
         $data['catatan'] = $calk ? $calk->catatan : '';
+        $data['ttd'] = Tanda_tangan::first();
 
         $view = view('laporan.views.calk', $data)->render();
 
