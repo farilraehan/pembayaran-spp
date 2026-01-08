@@ -1,3 +1,6 @@
+@php
+    use App\Utils\Tanggal;
+@endphp
 @extends('layouts.base')
 @section('content')
 <style>
@@ -156,7 +159,34 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Detail tunggakan...</p>
+                <div class="table-responsive">
+                    <table id="siswaTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>NISN</th>
+                                <th>Nama</th>
+                                <th>Kode Kelas</th>
+                                <th>Bulan Tunggakan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($tunggakan as $t)
+                            <tr>
+                                <td>{{ $t->nisn }}</td>
+                                <td>{{ $t->nama }}</td>
+                                <td>{{ $t->kode_kelas }}</td>
+                                <td>
+                                    @foreach ($t->getTransaksi as $trx)
+                                        <span class="badge bg-warning rounded-pill">
+                                            {{ Tanggal::namaBulan($trx->spp?->tanggal) }}
+                                        </span>
+                                    @endforeach
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>

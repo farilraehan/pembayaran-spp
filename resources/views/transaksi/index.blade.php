@@ -248,16 +248,6 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12 mt-3 d-none" id="riwayat-transaksi">
-        <div class="card h-100">
-            <div class="card-body pt-4 p-3">
-                <h6 class="text-uppercase text-body text-xs font-weight-bolder mb-3">
-                    Riwayat Transaksi</span>
-                </h6>
-                <ul class="list-group mb-3" id="list-riwayat"></ul>
-            </div>
-        </div>
-    </div>
 </div>
 @endsection
 @section('script')
@@ -371,56 +361,19 @@ $(document).on('submit', '#FormTransaksi', function (e) {
 
             Swal.fire('Berhasil!', r.message, 'success');
 
-            var sd = REKENING.find(i => i.id == $('#sumber_dana').val());
-            var dk = REKENING.find(i => i.id == $('#disimpan_ke').val());
-
-            var nominal = numberUnformat($('#nominal').val());
-            var keterangan = $('#keterangan_transaksi').val();
-
-            var icon = 'swap_horiz';
-            var color = 'info';
-            var sign = '';
-
-            if (sd && dk) {
-                if (sd.lev1 == '1' && dk.lev1 != '1') {
-                    icon = 'south';
-                    color = 'danger';
-                    sign = '-';
-                }
-                if (sd.lev1 != '1' && dk.lev1 == '1') {
-                    icon = 'north';
-                    color = 'success';
-                    sign = '+';
-                }
-            }
-
-            $('#riwayat-transaksi').removeClass('d-none');
-
-            $('#list-riwayat').prepend(`
-                <li class="list-group-item border-0 d-flex justify-content-between ps-0 mb-2 border-radius-lg">
-                    <div class="d-flex align-items-center">
-                        <button class="btn btn-icon-only btn-rounded btn-outline-${color} me-3 p-3 btn-sm d-flex align-items-center justify-content-center">
-                            <i class="material-symbols-rounded text-lg">${icon}</i>
-                        </button>
-                        <div class="d-flex flex-column">
-                            <h6 class="mb-1 text-dark text-sm">${keterangan}</h6>
-                            <span class="text-xs">${sd.nama_akun} → ${dk.nama_akun}</span>
-                        </div>
-                    </div>
-                    <div class="text-${color} text-sm font-weight-bold">
-                        ${sign} Rp ${numberFormat(nominal)}
-                    </div>
-                </li>
-            `);
-
             $('#FormTransaksi')[0].reset();
             $('.select2').val(null).trigger('change');
         },
         error: function (xhr) {
-            Swal.fire('Gagal!', xhr.responseJSON?.error || 'Terjadi kesalahan', 'error');
+            Swal.fire(
+                'Gagal!',
+                xhr.responseJSON?.error || 'Terjadi kesalahan',
+                'error'
+            );
         }
     });
 });
+
 
 function handleFormTransaksi(sd, dk, jt) {
     if (sd.kode_akun.startsWith('1.2.01') && dk.kode_akun.startsWith('5.3.02.01') && jt == '2') {

@@ -76,6 +76,14 @@ class TransaksiController extends Controller
             "hapus_inventaris"
         ]);
 
+        if (!empty($data['sumber_dana'])) {
+            $data['sumber_dana'] = explode('. ', $data['sumber_dana'], 2)[0];
+        }
+
+        if (!empty($data['disimpan_ke'])) {
+            $data['disimpan_ke'] = explode('. ', $data['disimpan_ke'], 2)[0];
+        }
+
         $request->validate([
             'transaksi' => 'required',
             'tanggal' => 'required',
@@ -254,14 +262,6 @@ class TransaksiController extends Controller
         return response()->json([
             'success' => true,
             'message' => $message,
-            'data' => [
-                'keterangan' => $message,
-                'tanggal' => now()->format('d M Y, H:i'),
-                'jumlah' => $data['transaksi'] == 'jurnal_umum'
-                    ? floatval(str_replace(',', '', $form['nominal'] ?? 0))
-                    : ($harga_perolehan ?? $nilai_buku ?? 0),
-                'tipe' => in_array($data['transaksi'], ['beli_inventaris']) ? 'keluar' : 'masuk'
-            ]
         ]);
     }
 

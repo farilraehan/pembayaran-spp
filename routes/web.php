@@ -11,6 +11,7 @@ use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\LaporanSppController;
 use App\Http\Controllers\SppController;
+use App\Http\Controllers\SystemController;
 
 
 Route::get('/', [AuthController::class, 'index'])->name('login');
@@ -34,6 +35,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
 
     Route::put('/profile/update/{id}', [ProfilController::class, 'update']);
     Route::get('/profile', [ProfilController::class, 'index']);
+
+    Route::get('/system/generate-tunggakan/{time}', [SystemController::class, 'GenerateTunggakan']);
 
     Route::get('/Transaksi/pembayaran-spp', [TransaksiController::class, 'pembayaranSPP']);
     Route::get('/transaksi/daftar-inventaris', [TransaksiController::class, 'daftarInventaris']);

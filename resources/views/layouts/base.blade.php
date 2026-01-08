@@ -472,7 +472,21 @@
         });
     </script>
     @if (session('success'))
-        <script>
+<script>
+    (function () {
+        const today = new Date();
+        const day = today.getDate();
+
+        if (day >= 1 && day <= 10) {
+            // Tanggal 1–10
+            Swal.fire({
+                icon: 'success',
+                title: 'Login Berhasil',
+                text: "{{ session('success') }}",
+            }).then(() => {
+                window.open('/app/system/generate-tunggakan/{{ time() }}');
+            });
+        } else {
             Swal.fire({
                 toast: true,
                 position: 'top-end',
@@ -480,9 +494,11 @@
                 title: "{{ session('success') }}",
                 showConfirmButton: false,
                 timer: 3000
-            })
-        </script>
-    @endif
+            });
+        }
+    })();
+</script>
+@endif
 
     <script>
         $('.btn-logout').on('click', function(e) {

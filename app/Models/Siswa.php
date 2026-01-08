@@ -23,7 +23,7 @@ class Siswa extends Model
 
     public function getAnggotaKelas()
     {
-        return $this->belongsTo(Anggota_Kelas::class, '');
+        return $this->hasMany(Anggota_Kelas::class, 'id_siswa', 'id');
     }
     public function getTransaksi()
     {

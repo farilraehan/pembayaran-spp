@@ -13,20 +13,20 @@ class Anggota_Kelas extends Model
 
     public function getTahunAkademik()
     {
-        return $this->belongsTo(Tahun_Akademik::class,'tahun_akademik','nama_tahun');
+        return $this->belongsTo(Tahun_Akademik::class, 'tahun_akademik', 'nama_tahun');
     }
 
     public function getKelas()
     {
-        return $this->belongsTo(Kelas::class,'kode_kelas','kode_kelas');
+        return $this->belongsTo(Kelas::class, 'kode_kelas', 'kode_kelas');
     }
 
     public function getSiswa()
     {
-        return $this->belongsTo(Siswa::class, 'id_siswa');
+        return $this->belongsTo(Siswa::class, 'id_siswa', 'id');
     }
     public function getSpp()
     {
-        return $this->hasMany(Spp::class, 'anggota_kelas');
+        return $this->hasMany(Spp::class, 'anggota_kelas', 'id');
     }
 }
