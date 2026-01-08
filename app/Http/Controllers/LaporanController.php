@@ -511,7 +511,9 @@ class LaporanController extends Controller
 
         $view = view('laporan.views.neraca_saldo', $data)->render();
 
-        $pdf = Pdf::loadHTML($view)->setOptions([
+        $pdf = Pdf::loadHTML($view)
+        ->setPaper('a4', 'landscape')
+        ->setOptions([
             'margin-top'    => 30,
             'margin-bottom' => 15,
             'margin-left'   => 25,
