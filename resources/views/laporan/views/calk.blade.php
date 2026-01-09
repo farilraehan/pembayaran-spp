@@ -181,6 +181,7 @@
                     </tr>
                     @foreach ($akun1 as $lev1)
                         @php $total_lev1 = 0; @endphp
+
                         <tr style="background:#4a4a4a; color:#fff;" align="center">
                             <td colspan="3"><b>{{ $lev1->kode_akun }}. {{ $lev1->nama_akun }}</b></td>
                         </tr>
@@ -192,37 +193,46 @@
                             </tr>
 
                             @foreach ($lev2->akun3 as $lev3)
+                                {{-- 🔑 SALDO LEVEL 3 = NERACA --}}
                                 @php
-                                    $total_lev3 = 0;
+                                    $saldo_lev3 = Keuangan::hitungSaldo($lev3);
+                                    $total_lev1 += $saldo_lev3;
                                 @endphp
 
+                                {{-- AKUN LEVEL 3 --}}
+                                <tr style="background:#d0d0d0; font-weight:bold;">
+                                    <td>{{ $lev3->kode_akun }}.</td>
+                                    <td>{{ $lev3->nama_akun }}</td>
+                                    <td align="right">{{ Keuangan::formatSaldo($saldo_lev3) }}</td>
+                                </tr>
+
+                                {{-- DETAIL REKENING (PENJELASAN SAJA) --}}
                                 @foreach ($lev3->rek as $rek)
                                     @php
-                                        $saldo = Keuangan::hitungSaldoCALK($rek, $tgl_awal, $tgl_akhir);
-                                        $total_lev3 += $saldo;
+                                        $saldo_rek = Keuangan::hitungSaldoCALK($rek, $tgl_awal, $tgl_akhir);
                                     @endphp
                                     <tr style="background: {{ $i % 2 == 0 ? '#e6e6e6' : '#ffffff' }}">
                                         <td>{{ $rek->kode_akun }}.</td>
                                         <td>{{ $rek->nama_akun }}</td>
-                                        <td align="right">{{ Keuangan::formatSaldoCALK($saldo) }}</td>
+                                        <td align="right">{{ Keuangan::formatSaldoCALK($saldo_rek) }}</td>
                                     </tr>
                                     @php $i++; @endphp
                                 @endforeach
 
-                                <tr style="background:#c8c8c8; font-weight:bold;">
+                                {{-- JUMLAH LEVEL 3 (SAMA DENGAN NERACA) --}}
+                                {{-- <tr style="background:#c8c8c8; font-weight:bold;">
                                     <td colspan="2">Jumlah {{ $lev3->nama_akun }}</td>
-                                    <td align="right">{{ Keuangan::formatSaldoCALK($total_lev3) }}</td>
-                                </tr>
-
-                                @php $total_lev1 += $total_lev3; @endphp
+                                    <td align="right">{{ Keuangan::formatSaldo($saldo_lev3) }}</td>
+                                </tr> --}}
                             @endforeach
                         @endforeach
 
                         <tr style="background:#a7a7a7; font-weight:bold;">
                             <td colspan="2">Jumlah {{ $lev1->nama_akun }}</td>
-                            <td align="right">{{ Keuangan::formatSaldoCALK($total_lev1) }}</td>
+                            <td align="right">{{ Keuangan::formatSaldo($total_lev1) }}</td>
                         </tr>
                     @endforeach
+
                 </table>
             </div>
 

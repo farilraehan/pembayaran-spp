@@ -551,7 +551,7 @@ class LaporanController extends Controller
             ->with(['akun2.akun3.rek'])
             ->orderBy('kode_akun', 'ASC')
             ->get();
-
+        
         $data['tgl_awal']  = $tgl_awal;
         $data['tgl_akhir'] = $tgl_akhir;
 

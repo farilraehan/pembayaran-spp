@@ -11,8 +11,10 @@ class AkunLevel3 extends Model
     protected $table = 'akun_level3';
     protected $guarded = [];
 
-    public function rek()
-    {
-        return $this->hasMany(Rekening::class, 'parent_id', 'kode_akun')->orderBy('kode_akun', 'ASC');
-    }
+  public function rek()
+{
+    return $this->hasMany(Rekening::class, 'parent_id', 'id')
+        ->orderBy('kode_akun', 'ASC');
+}
+
 }
