@@ -116,4 +116,17 @@ class PengaturanController extends Controller
             'msg' => 'Logo berhasil diperbarui'
         ]);
     }
+
+    public function jatuhTempo(Request $request, $id)
+    {
+        $request->validate([
+            'jatuh_tempo' => 'required|integer|min:0',
+        ]);
+        Profil::findOrFail($id)->update($request->all());
+
+        return response()->json([
+            'success' => true,
+            'msg' => "Update Jatuh Tempo berhasil diproses!"
+        ]);
+    }
 }

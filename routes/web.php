@@ -60,6 +60,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'app'], function () {
     Route::post('/pengaturan/simpan/ttd-pelaporan', [PengaturanController::class, 'ttdPelaporanStore']);
     Route::put('/pengaturan/lembaga/{id}', [PengaturanController::class, 'lembaga']);
     Route::put('/pengaturan/logo/{id}', [PengaturanController::class, 'logo']);
+    Route::put('/pengaturan/jatuh_tempo/{id}', [PengaturanController::class, 'jatuhTempo']);
     Route::resource('/pengaturan', PengaturanController::class);
 
     Route::get('/siswa/listTahun', [SiswaController::class, 'listTahun']);

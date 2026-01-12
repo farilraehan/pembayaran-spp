@@ -1,3 +1,7 @@
+@php
+    $jatuhTempo = session('profil')->jatuh_tempo ?? null;
+@endphp
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -471,34 +475,39 @@
 
         });
     </script>
-    @if (session('success'))
-<script>
-    (function () {
-        const today = new Date();
-        const day = today.getDate();
+    @if(session('msg') && $jatuhTempo)
+        <script>
+        (function () {
+            const today = new Date();
+            const day = today.getDate();
+            const jatuhTempo = {{ $jatuhTempo }};
 
-        if (day >= 1 && day <= 10) {
-            // Tanggal 1–10
-            Swal.fire({
-                icon: 'success',
-                title: 'Login Berhasil',
-                text: "{{ session('success') }}",
-            }).then(() => {
-                window.open('/app/system/generate-tunggakan/{{ time() }}');
-            });
-        } else {
-            Swal.fire({
-                toast: true,
-                position: 'top-end',
-                icon: 'success',
-                title: "{{ session('success') }}",
-                showConfirmButton: false,
-                timer: 3000
-            });
-        }
-    })();
-</script>
-@endif
+            if (day === jatuhTempo) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Waktunya Generate Tunggakan',
+                    text: "{{ session('msg') }}",
+                    showCancelButton: true,
+                    confirmButtonText: 'Generate Sekarang',
+                    cancelButtonText: 'Nanti'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.open('/app/system/generate-tunggakan/{{ time() }}', '_blank');
+                    }
+                });
+            } else {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: "{{ session('msg') }}",
+                    showConfirmButton: false,
+                    timer: 3000
+                });
+            }
+        })();
+        </script>
+        @endif
 
     <script>
         $('.btn-logout').on('click', function(e) {

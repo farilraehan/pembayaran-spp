@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Profil;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,8 +24,10 @@ class AuthController extends Controller
         ]);
 
         $user = User::where('username', $request->username)
-                    ->where('password', $request->password)
-                    ->first();
+            ->where('password', $request->password)
+            ->first();
+
+        $profil = Profil::first();
 
         if (!$user) {
             return redirect()->back()->with('error', 'Username atau password salah');
@@ -31,19 +35,18 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/app/dashboard')->with(
-            'success',
-            'Selamat datang ' . ($user->nama ?? $user->name ?? 'Pengguna')
-        );
+        return redirect('/app/dashboard')->with([
+            'icon'   => 'success',
+            'msg'    => 'Selamat datang ' . ($user->nama ?? $user->name ?? 'Pengguna'),
+            'profil' => $profil,
+        ]);
     }
 
-
     public function logout()
-{
-    Auth::logout();
-    session()->invalidate();
-    session()->regenerateToken();
-    return redirect('/')->with('success', 'Anda telah berhasil keluar');
-}
-
+    {
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+        return redirect('/')->with('success', 'Anda telah berhasil keluar');
+    }
 }

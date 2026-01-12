@@ -42,6 +42,7 @@
                 <div class="card-body d-grid sop-menu">
                     <a href="#lembaga" class="btn text-start">🏫 Lembaga</a>
                     <a href="#logo" class="btn text-start">🖼️ Logo</a>
+                    <a href="#jatuhTempo" class="btn text-start">⏰ Jatuh Tempo</a>
                 </div>
             </div>
         </div>
@@ -57,6 +58,12 @@
                     <h5 class="mb-0">Pengaturan Logo</h5>
                 </div>
                 <div class="card-body">@include('pengaturan.view.logo')</div>
+            </div>
+            <div class="sop-content card shadow-sm" id="jatuhTempo">
+                <div class="card-header">
+                    <h5 class="mb-0">Pengaturan Jatuh Tempo</h5>
+                </div>
+                <div class="card-body">@include('pengaturan.view.jatuh_tempo')</div>
             </div>
         </div>
     </div>
@@ -159,6 +166,55 @@
             }
         });
     });
+    
+    $(document).on('click', '#SimpanJatuhTempo', function(e) {
+        e.preventDefault();
+        $('small').html('');
 
+        var form = $('#FormJatuhTempo');
+        var actionUrl = form.attr('action');
+
+            $.ajax({
+                type: 'PUT',
+                url: actionUrl,
+                data: form.serialize(),
+                success: function(result) {
+                    if (result.success) {
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: result.msg
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire('Error', 'Cek kembali input yang anda masukkan', 'error');
+
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            $('#' + key)
+                                .closest('.input-group-outline')
+                                .addClass('is-invalid');
+                            $('#msg_' + key).html(value[0]);
+                        });
+                    }
+                }
+            });
+    });
 </script>
 @endsection
