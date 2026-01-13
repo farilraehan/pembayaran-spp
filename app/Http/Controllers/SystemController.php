@@ -21,9 +21,9 @@ class SystemController extends Controller
         $bulanSekarang = (int) $dateNow->format('m');
         $tahunSekarang = (int) $dateNow->format('Y');
 
-        // --- Hapus transaksi lama dengan rekening tertentu ---
         Transaksi::where('rekening_debit', '1.1.03.01')
             ->where('rekening_kredit', '4.1.01.01')
+            ->whereNull('deleted_at')
             ->delete();
 
         $siswa = Siswa::whereHas('getAnggotaKelas', function ($q) {

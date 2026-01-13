@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use Yajra\DataTables\Facades\DataTables;
 use App\Utils\Keuangan;
+use Carbon\Carbon;
 
 
 
@@ -309,7 +310,6 @@ class TransaksiController extends Controller
 
         $transaksiList = [];
         $detailSpp = [];
-        $total = 0;
 
         if ($request->jenis_biaya === '4.1.01.01') {
 
@@ -319,36 +319,37 @@ class TransaksiController extends Controller
                     'msg' => 'Data SPP tidak sinkron'
                 ], 422);
             }
-
             foreach ($sppIds as $i => $sppId) {
 
                 $nilai = (int) str_replace(['.', ','], '', $nominals[$i]);
-                $total += $nilai;
+                $spp   = Spp::findOrFail($sppId);
+
+                $isTunggakan = Carbon::parse($spp->tanggal)
+                    ->lt(Carbon::parse($request->tanggal)->startOfMonth());
+
+                if ($isTunggakan) {
+                    Transaksi::where('spp_id', $sppId)
+                        ->whereNull('deleted_at')
+                        ->update(['deleted_at' => now()]);
+                }
+
+                $rekeningKredit = $isTunggakan ? '1.1.03.01' : '4.1.01.01';
 
                 $transaksi = Transaksi::create([
                     'tanggal_transaksi' => $request->tanggal,
                     'invoice_id' => '0',
                     'rekening_debit' => $request->sumber_dana,
-                    'rekening_kredit' => $request->jenis_biaya,
+                    'rekening_kredit' => $rekeningKredit,
                     'spp_id' => $sppId,
                     'siswa_id' => $request->siswa_id,
                     'jumlah' => $nilai,
-                    'keterangan' => $request->keterangan . '(' . Tanggal::NamaBulan(Spp::find($sppId)->tanggal) . Tanggal::tahun(Spp::find($sppId)->tanggal) . ')',
-                    'urutan' => null,
-                    'deleted_at' => null,
+                    'keterangan' => $request->keterangan . '(' .
+                        Tanggal::NamaBulan($spp->tanggal) . ' ' .
+                        Tanggal::tahun($spp->tanggal) . ')',
                     'user_id' => auth()->user()->id,
                 ]);
 
-                Spp::where('id', $sppId)->update(['status' => 'L']);
-
-                $spp = Spp::find($sppId);
-                $detailSpp[] = [
-                    'bulan' => \App\Utils\Tanggal::NamaBulan($spp->tanggal),
-                    'tanggal' => $spp->tanggal,
-                    'nominal' => $nilai,
-                ];
-
-                $transaksiList[] = $transaksi;
+                $spp->update(['status' => 'L']);
             }
         } else {
             $transaksi = Transaksi::create([
@@ -356,12 +357,10 @@ class TransaksiController extends Controller
                 'invoice_id' => '0',
                 'rekening_debit' => $request->sumber_dana,
                 'rekening_kredit' => $request->jenis_biaya,
-                'spp_id' => '0',
+                'spp_id' => 0,
                 'siswa_id' => $request->siswa_id,
                 'jumlah' => str_replace(',', '', str_replace('.00', '', $request->nominal)),
                 'keterangan' => $request->keterangan,
-                'urutan' => null,
-                'deleted_at' => null,
                 'user_id' => auth()->user()->id,
             ]);
 
@@ -372,7 +371,6 @@ class TransaksiController extends Controller
             'success' => true,
             'msg' => 'Pembayaran berhasil disimpan',
             'keterangan' => $request->keterangan,
-            'tanggal' => $request->tanggal,
             'id_transaksi' => collect($transaksiList)->pluck('id')->toArray(),
             'detail_spp' => $detailSpp,
         ]);
