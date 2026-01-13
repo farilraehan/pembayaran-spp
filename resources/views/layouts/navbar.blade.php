@@ -149,7 +149,7 @@ URL: ${window.location.href}
 
 Terima kasih.`;
 
-    const url = 'https://wa.me/62882006644656?text=' + encodeURIComponent(pesan);
+    const url = 'https://wa.me/6281229248209?text=' + encodeURIComponent(pesan);
     window.open(url, '_blank');
 });
 </script>
