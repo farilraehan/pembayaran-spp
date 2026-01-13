@@ -449,19 +449,19 @@
     <script src="/assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="/assets/js/plugins/chartjs.min.js"></script>
     <script src="/assets/js/material-dashboard.min.js?v=3.2.0"></script>
-   <script>
-    const sideBar = document.querySelector('.sidenav'); 
-    const modals = document.querySelectorAll('.modal-fullscreen');
+    <script>
+        const sideBar = document.querySelector('.sidenav'); 
+        const modals = document.querySelectorAll('.modal-fullscreen');
 
-    modals.forEach(modal => {
-        modal.addEventListener('show.bs.modal', () => {
-            sideBar.style.display = 'none'; // sembunyikan sidebar
+        modals.forEach(modal => {
+            modal.addEventListener('show.bs.modal', () => {
+                sideBar.style.display = 'none'; // sembunyikan sidebar
+            });
+            modal.addEventListener('hidden.bs.modal', () => {
+                sideBar.style.display = ''; // tampilkan lagi
+            });
         });
-        modal.addEventListener('hidden.bs.modal', () => {
-            sideBar.style.display = ''; // tampilkan lagi
-        });
-    });
-</script>
+    </script>
     <script>
         if (navigator.platform.includes('Win') && document.querySelector('#sidenav-scrollbar')) {
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), {
