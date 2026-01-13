@@ -114,7 +114,7 @@
                     </div>
 
                     <div class="col-12 col-md-4 mb-4">
-                        <a href="https://wa.me/6281234567890" target="_blank" class="text-decoration-none text-dark">
+                        <a href="https://wa.me/+62882006644656" target="_blank" class="text-decoration-none text-dark">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body d-flex flex-column justify-content-center align-items-center py-5">
                                     <span class="material-symbols-rounded mb-3" style="font-size:80px;">
