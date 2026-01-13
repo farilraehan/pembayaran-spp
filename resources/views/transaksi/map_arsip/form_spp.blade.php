@@ -175,6 +175,21 @@
         </div>
     </div>
 </div>
+@if($kode_tunggakan->count())
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index:99999">
+        @foreach($kode_tunggakan as $t)
+            <div class="toast show mb-2">
+                <div class="toast-header">
+                    <strong class="me-auto text-danger">Tunggakan SPP</strong>
+                    <button class="btn-close" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">
+                    {{ $t->keterangan }}
+                </div>
+            </div>
+        @endforeach
+    </div>
+@endif
 <script>
     const pieColors = ["#ff6384", "#36a2eb", "#ffcd56"];
     const sppPerBulan = {{ $spp_perbulan ?? 0 }};

@@ -7,6 +7,7 @@ use App\Models\Siswa;
 use App\Models\Rekening;
 use App\Models\Jenis_Biaya;
 use App\Models\Anggota_Kelas;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Utils\Tanggal;
@@ -43,7 +44,7 @@ class SppController extends Controller
             ->with([
                 'getSiswa',
                 'getSpp',
-            ])
+            ])->where('status', 'aktif')
             ->first();
 
         if (!$anggota_kelas) {
@@ -58,6 +59,11 @@ class SppController extends Controller
         $sd_bulan_ini = $anggota_kelas->getSpp->where('status', 'L')->SUM('nominal');
         $sumber_dana = Rekening::where('kode_akun', 'like', '1.1.01.%')->get();
         $jenis_biaya = Rekening::where('kode_akun', 'like', '4.1.01.%')->get();
+        $kode_tunggakan = Transaksi::where('rekening_debit', '1.1.03.01')
+            ->where('rekening_kredit', '4.1.01.01')
+            ->where('siswa_id', $anggota_kelas->getSiswa->id)
+            ->orderBy('tanggal_transaksi')->where('deleted_at', null)
+            ->get();
 
         return response()->json([
             'success' => true,
@@ -69,7 +75,8 @@ class SppController extends Controller
                     'target_bulan'  => $target_bulan,
                     'sd_bulan_ini'  => $sd_bulan_ini,
                     'sumber_dana'   => $sumber_dana,
-                    'jenis_biaya'   => $jenis_biaya
+                    'jenis_biaya'   => $jenis_biaya,
+                    'kode_tunggakan' => $kode_tunggakan,
                 ])
                 ->render(),
         ]);

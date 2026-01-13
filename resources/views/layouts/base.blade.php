@@ -106,7 +106,6 @@
                 height: 310px !important
             }
         }
-
         .twitter-typeahead {
             width: 100%;
             position: relative;
@@ -115,6 +114,7 @@
 
         .twitter-typeahead .tt-input {
             width: 100%;
+            font-size: 13px;
         }
 
         .form-search {
@@ -136,35 +136,49 @@
             width: 100%;
             margin-top: 6px;
             background: #37d17c;
-            max-height: 360px;
+            max-height: 260px;
             z-index: 9999;
             border-radius: 10px;
-            overflow: hidden;
-            padding-bottom: 4px;
+            overflow-y: auto;
+            padding: 4px 0;
         }
 
         .tt-suggestion {
-            width: 100%;
             display: block !important;
-            padding: 2px 5px !important;
-            line-height: normal !important;
-            min-height: 0 !important;
-            height: auto !important;
-            font-size: 13px;
-            color: #000000;
+            width: 100% !important;
+            padding: 4px 8px !important;
+            line-height: 1.25 !important;
+            font-size: 11px !important;
+            color: #000;
             background: #cecece;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .tt-suggestion * {
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.25 !important;
+            font-size: 11px !important;
+        }
+
+        .tt-suggestion.tt-cursor {
+            background: #6d6d6d;
+            color: #fff;
+            border-bottom-color: #37d17c;
+        }
+
+        .tt-suggestion:last-child {
+            border-bottom: none;
         }
 
         @media (max-width: 768px) {
             .tt-suggestion {
-                width: 150% !important;
-            }
-        }
-
-        @media (max-width: 1024px) and (min-width: 769px) {
-            .tt-suggestion {
-                width: 300% !important;
+                font-size: 12px !important;
+                padding: 5px 8px !important;
             }
         }
 
@@ -312,6 +326,17 @@
             display: inline-flex;
             vertical-align: middle;
             white-space: nowrap;
+        }
+        
+        .toast {
+            animation: fadeout 0.9s ease forwards;
+            animation-delay: 4s;
+        }
+        @keyframes fadeout {
+            to {
+                opacity: 0;
+                transform: translateX(20px);
+            }
         }
     </style>
 

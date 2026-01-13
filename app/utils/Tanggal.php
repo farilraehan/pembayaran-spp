@@ -77,20 +77,55 @@ class Tanggal
         $bln = $tgl[1];
 
         switch ($bln) {
-            case '01': return 'Januari';
-            case '02': return 'Februari';
-            case '03': return 'Maret';
-            case '04': return 'April';
-            case '05': return 'Mei';
-            case '06': return 'Juni';
-            case '07': return 'Juli';
-            case '08': return 'Agustus';
-            case '09': return 'September';
-            case '10': return 'Oktober';
-            case '11': return 'November';
-            case '12': return 'Desember';
-            default: return '';
+            case '01':
+                return 'Januari';
+            case '02':
+                return 'Februari';
+            case '03':
+                return 'Maret';
+            case '04':
+                return 'April';
+            case '05':
+                return 'Mei';
+            case '06':
+                return 'Juni';
+            case '07':
+                return 'Juli';
+            case '08':
+                return 'Agustus';
+            case '09':
+                return 'September';
+            case '10':
+                return 'Oktober';
+            case '11':
+                return 'November';
+            case '12':
+                return 'Desember';
+            default:
+                return '';
         }
+    }
+
+    public static function namaBulanNew($bulan)
+    {
+        $bulan = (int) $bulan;
+
+        $map = [
+            1  => 'Januari',
+            2  => 'Februari',
+            3  => 'Maret',
+            4  => 'April',
+            5  => 'Mei',
+            6  => 'Juni',
+            7  => 'Juli',
+            8  => 'Agustus',
+            9  => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+        ];
+
+        return $map[$bulan] ?? '';
     }
 
     public static function hari($tanggal)
@@ -104,14 +139,22 @@ class Tanggal
         $hari = date('D', strtotime($tanggal));
 
         switch ($hari) {
-            case 'Sun': return "Minggu";
-            case 'Mon': return "Senin";
-            case 'Tue': return "Selasa";
-            case 'Wed': return "Rabu";
-            case 'Thu': return "Kamis";
-            case 'Fri': return "Jumat";
-            case 'Sat': return "Sabtu";
-            default: return "Tidak di ketahui";
+            case 'Sun':
+                return "Minggu";
+            case 'Mon':
+                return "Senin";
+            case 'Tue':
+                return "Selasa";
+            case 'Wed':
+                return "Rabu";
+            case 'Thu':
+                return "Kamis";
+            case 'Fri':
+                return "Jumat";
+            case 'Sat':
+                return "Sabtu";
+            default:
+                return "Tidak di ketahui";
         }
     }
 }
