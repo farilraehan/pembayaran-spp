@@ -166,24 +166,42 @@
                                 <th>NISN</th>
                                 <th>Nama</th>
                                 <th>Kode Kelas</th>
+                                <th>total tagihan</th>
                                 <th>Bulan Tunggakan</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($tunggakan as $t)
+                        @foreach($tunggakan as $t)
+                            @php
+                                $total_tagihan = $t->getTransaksi->sum('jumlah');
+                            @endphp
                             <tr>
                                 <td>{{ $t->nisn }}</td>
                                 <td>{{ $t->nama }}</td>
                                 <td>{{ $t->kode_kelas }}</td>
-                                <td>
-                                    @foreach ($t->getTransaksi as $trx)
-                                        <span class="badge bg-warning rounded-pill">
-                                            {{ Tanggal::namaBulan($trx->spp?->tanggal) }}
+                                <td>Rp. {{ number_format($total_tagihan, 0, ',', '.') }}</td>
+                                <td class="text-nowrap">
+                                    @php
+                                        $bulanTunggakan = $t->getTransaksi
+                                            ->map(fn($trx) => Tanggal::namaBulan($trx->spp?->tanggal))
+                                            ->unique()
+                                            ->values();
+                                        $limit = 2;
+                                        $total = $bulanTunggakan->count();
+                                    @endphp
+                                    @foreach ($bulanTunggakan->take($limit) as $bulan)
+                                        <span class="badge bg-warning rounded-pill me-1">
+                                            {{ $bulan }}
                                         </span>
                                     @endforeach
+                                    @if ($total > $limit)
+                                        <span class="badge bg-secondary rounded-pill">
+                                            +{{ $total - $limit }}
+                                        </span>
+                                    @endif
                                 </td>
                             </tr>
-                            @endforeach
+                        @endforeach
                         </tbody>
                     </table>
                 </div>

@@ -67,7 +67,7 @@ class SystemController extends Controller
                         'spp_id' => $spp->id,
                         'siswa_id' => $value->id,
                         'jumlah' => $spp->nominal,
-                        'keterangan' => 'menunggakan spp bulan '
+                        'keterangan' => 'Tagihan spp bulan '
                             . \App\Utils\Tanggal::namaBulanNew(
                                 (int) \Carbon\Carbon::parse($spp->tanggal)->format('m')
                             )

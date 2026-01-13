@@ -1,3 +1,6 @@
+@php
+    $jatuhTempo = session('profil')->jatuh_tempo ?? null;
+@endphp
 <div class="container-fluid py-1 px-3">
     <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4 d-flex flex-wrap"
         id="navbar">
@@ -11,6 +14,13 @@
                     </div>
                 </a>
             </li>
+            @if(session('msg') && $jatuhTempo && now()->day == (int) $jatuhTempo)
+                <button type="button"
+                    onclick="window.open('/app/system/generate-tunggakan/{{ time() }}', '_blank'); return false;"
+                    class="btn btn-danger">
+                    Generate Tunggakan
+                </button>
+            @endif
             <li class="nav-item px-3 d-flex align-items-center">
                 <a href="javascript:;" class="nav-link text-body p-0">
                     <span class="material-symbols-rounded fixed-plugin-button-nav">settings</span>

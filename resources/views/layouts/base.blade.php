@@ -1,4 +1,5 @@
 @php
+    use App\Utils\Tanggal;
     $jatuhTempo = session('profil')->jatuh_tempo ?? null;
 @endphp
 
@@ -327,17 +328,6 @@
             vertical-align: middle;
             white-space: nowrap;
         }
-        
-        .toast {
-            animation: fadeout 0.9s ease forwards;
-            animation-delay: 4s;
-        }
-        @keyframes fadeout {
-            to {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-        }
     </style>
 
 
@@ -505,26 +495,32 @@
         (function () {
             const today = new Date();
             const day = today.getDate();
-            const jatuhTempo = {{ $jatuhTempo }};
+            const jatuhTempo = {{ (int) $jatuhTempo }};
 
             if (day === jatuhTempo) {
                 Swal.fire({
                     icon: 'warning',
-                    title: 'Waktunya Generate Tunggakan',
+                    html: `
+                        <strong>Waktunya Generate Tunggakan</strong><br>
+                        {{ Tanggal::NamaBulan(now()) }} {{ Tanggal::tahun(now()) }}
+                    `,
                     text: "{{ session('msg') }}",
                     showCancelButton: true,
                     confirmButtonText: 'Generate Sekarang',
                     cancelButtonText: 'Nanti'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.open('/app/system/generate-tunggakan/{{ time() }}', '_blank');
+                        window.open(
+                            '/app/system/generate-tunggakan/{{ time() }}',
+                            '_blank'
+                        );
                     }
                 });
             } else {
                 Swal.fire({
                     toast: true,
                     position: 'top-end',
-                    icon: 'success',
+                    icon: 'info',
                     title: "{{ session('msg') }}",
                     showConfirmButton: false,
                     timer: 3000
@@ -532,7 +528,8 @@
             }
         })();
         </script>
-        @endif
+    @endif
+
 
     <script>
         $('.btn-logout').on('click', function(e) {

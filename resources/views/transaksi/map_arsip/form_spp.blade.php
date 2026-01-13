@@ -176,20 +176,42 @@
     </div>
 </div>
 @if($kode_tunggakan->count())
-    <div class="position-fixed bottom-0 end-0 p-3" style="z-index:99999">
-        @foreach($kode_tunggakan as $t)
-            <div class="toast show mb-2">
-                <div class="toast-header">
-                    <strong class="me-auto text-danger">Tunggakan SPP</strong>
-                    <button class="btn-close" data-bs-dismiss="toast"></button>
-                </div>
-                <div class="toast-body">
-                    {{ $t->keterangan }}
-                </div>
+<div id="toast-wrapper"
+     class="position-fixed bottom-0 end-0 p-3"
+     style="z-index:99999">
+    @foreach($kode_tunggakan as $t)
+        <div class="toast mb-2" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto text-danger">Tunggakan SPP</strong>
+                <button class="btn-close" data-bs-dismiss="toast"></button>
             </div>
-        @endforeach
-    </div>
+            <div class="toast-body">
+                {{ $t->keterangan }}
+            </div>
+        </div>
+    @endforeach
+</div>
 @endif
+<script>
+document.querySelectorAll('#toast-wrapper .toast').forEach(el => {
+    const toast = new bootstrap.Toast(el, {
+        delay: 3000,
+        autohide: true
+    });
+
+    toast.show();
+
+    el.addEventListener('hidden.bs.toast', () => {
+        el.remove();
+
+        const wrapper = document.getElementById('toast-wrapper');
+        if (wrapper && wrapper.children.length === 0) {
+            wrapper.remove();
+        }
+    });
+});
+</script>
+
 <script>
     const pieColors = ["#ff6384", "#36a2eb", "#ffcd56"];
     const sppPerBulan = {{ $spp_perbulan ?? 0 }};
