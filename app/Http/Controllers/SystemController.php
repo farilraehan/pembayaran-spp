@@ -67,7 +67,12 @@ class SystemController extends Controller
                         'spp_id' => $spp->id,
                         'siswa_id' => $value->id,
                         'jumlah' => $spp->nominal,
-                        'keterangan' => 'menunggakan spp bulan ' . Tanggal::namaBulanNew((int) \Carbon\Carbon::parse($spp->tanggal)->format('m')) . ' ' . \Carbon\Carbon::parse($spp->tanggal)->format('Y'),
+                        'keterangan' => 'menunggakan spp bulan '
+                            . \App\Utils\Tanggal::namaBulanNew(
+                                (int) \Carbon\Carbon::parse($spp->tanggal)->format('m')
+                            )
+                            . ' '
+                            . \Carbon\Carbon::parse($spp->tanggal)->format('Y'),
                         'urutan' => null,
                         'deleted_at' => null,
                         'user_id' => auth()->user()->id,
